@@ -536,32 +536,39 @@ export const deleteExam = async (
   }
 };
 export async function createLesson(data: any) {
+  // espera: data.subjectId: number, data.teacherId: string, data.classId: number, startTime/endTime: "HH:MM"
+  const toDateTime = (timeStr: string) => {
+    // cria uma Date com data arbitrária + hora (ajuste se quiser outra data/tz)
+    // usa o formato ISO local (sem Z) para manter timezone do servidor
+    return new Date(`1970-01-01T${timeStr}:00`);
+  };
+
   return await prisma.lesson.create({
     data: {
       name: data.name,
       subjectId: Number(data.subjectId),
-      teacherId: data.teacherId,
-      // gradeId: Number(data.gradeId),
+      teacherId: String(data.teacherId),
       classId: Number(data.classId),
       day: data.day,
-      startTime: data.startTime,
-      endTime: data.endTime,
+      startTime: toDateTime(data.startTime),
+      endTime: toDateTime(data.endTime),
     },
   });
 }
 
 export async function updateLesson(data: any) {
+  const toDateTime = (timeStr: string) => new Date(`1970-01-01T${timeStr}:00`);
+
   return await prisma.lesson.update({
     where: { id: Number(data.id) },
     data: {
       name: data.name,
       subjectId: Number(data.subjectId),
-      teacherId: data.teacherId,
-      // gradeId: Number(data.gradeId),
+      teacherId: String(data.teacherId),
       classId: Number(data.classId),
       day: data.day,
-      startTime: data.startTime,
-      endTime: data.endTime,
+      startTime: toDateTime(data.startTime),
+      endTime: toDateTime(data.endTime),
     },
   });
 }

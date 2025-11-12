@@ -4,29 +4,28 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { createLesson, updateLesson } from "@/lib/actions";
 import { Dispatch, SetStateAction } from "react";
+import InputField from "../InputField";
 
 interface LessonFormProps {
-  type: "create" | "update";
+  type: "create" | "update" | "delete";
   setOpen: Dispatch<SetStateAction<boolean>>;
   data?: any;
   relatedData?: {
-    subjects: any[];
-    teachers: any[];
-    grades: any[];
-    classes: any[];
+    subjects?: any[];
+    teachers?: any[];
+    classes?: any[];
   };
 }
 
 interface LessonFormData {
   id?: number;
   name: string;
-  subjectId: number;
-  teacherId: string;
-  gradeId: number;
-  classId: number;
+  subjectId: number; // agora single
+  teacherId: string; // agora single
+  classId: number; // agora single
   day: string;
-  startTime: string;
-  endTime: string;
+  startTime: string; // "14:00"
+  endTime: string; // "16:00"
 }
 
 export default function LessonForm({
@@ -39,6 +38,7 @@ export default function LessonForm({
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<LessonFormData>({
     defaultValues: data || {},
   });
@@ -47,10 +47,10 @@ export default function LessonForm({
     try {
       if (type === "create") {
         await createLesson(formData);
-        toast.success("Turma criada com sucesso!");
+        toast.success("Aula criada com sucesso!");
       } else {
         await updateLesson(formData);
-        toast.success("Turma atualizada com sucesso!");
+        toast.success("Aula atualizada com sucesso!");
       }
       setOpen(false);
     } catch (err) {
@@ -59,39 +59,70 @@ export default function LessonForm({
     }
   };
 
+  const { subjects, teachers, classes } = relatedData || {};
+
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col gap-8 w-full"
-    >
+    <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>
       <h1 className="text-xl font-semibold">
         {type === "create" ? "Criar nova aula" : "Atualizar aula"}
       </h1>
 
-      <div className="flex flex-wrap justify-between gap-4">
-        {/* Nome */}
+      <div className="flex justify-between flex-wrap gap-4">
+        <InputField
+          label="Nome da Aula"
+          name="name"
+          defaultValue={data?.name}
+          register={register}
+          error={errors.name}
+        />
+        {/* DIA DA SEMANA (enum do Prisma) */}
         <div className="flex flex-col gap-2 w-full md:w-[48%]">
-          <label className="text-xs text-gray-500">Nome da Turma</label>
-          <input
-            {...register("name", { required: "Campo obrigatório" })}
-            defaultValue={data?.name}
+          <label className="text-xs text-gray-500">Dia da Semana</label>
+          <select
+            {...register("day", { required: true })}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-          />
-          {errors.name && (
-            <span className="text-xs text-red-400">{errors.name.message}</span>
+            defaultValue={data?.day || ""}
+          >
+            <option value="">Selecione</option>
+            <option value="MONDAY">Segunda-feira</option>
+            <option value="TUESDAY">Terça-feira</option>
+            <option value="WEDNESDAY">Quarta-feira</option>
+            <option value="THURSDAY">Quinta-feira</option>
+            <option value="FRIDAY">Sexta-feira</option>
+          </select>
+          {errors.day && (
+            <span className="text-xs text-red-400">Campo obrigatório</span>
           )}
         </div>
 
-        {/* Disciplina */}
+        <InputField
+          label="Início"
+          name="startTime"
+          type="time"
+          defaultValue={data?.startTime}
+          register={register}
+          error={errors.startTime}
+        />
+
+        <InputField
+          label="Término"
+          name="endTime"
+          type="time"
+          defaultValue={data?.endTime}
+          register={register}
+          error={errors.endTime}
+        />
+
+        {/* DISCIPLINA (single) */}
         <div className="flex flex-col gap-2 w-full md:w-[48%]">
           <label className="text-xs text-gray-500">Disciplina</label>
           <select
-            {...register("subjectId", { required: true })}
-            defaultValue={data?.subjectId || ""}
+            {...register("subjectId", { required: true, valueAsNumber: true })}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+            defaultValue={data?.subjectId ? String(data.subjectId) : ""}
           >
-            <option value="">Selecione...</option>
-            {relatedData?.subjects?.map((s) => (
+            <option value="">Selecione</option>
+            {subjects?.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.name}
               </option>
@@ -102,16 +133,16 @@ export default function LessonForm({
           )}
         </div>
 
-        {/* Professor */}
+        {/* PROFESSOR (single) */}
         <div className="flex flex-col gap-2 w-full md:w-[48%]">
           <label className="text-xs text-gray-500">Professor</label>
           <select
             {...register("teacherId", { required: true })}
-            defaultValue={data?.teacherId || ""}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+            defaultValue={data?.teacherId || ""}
           >
-            <option value="">Selecione...</option>
-            {relatedData?.teachers?.map((t) => (
+            <option value="">Selecione</option>
+            {teachers?.map((t) => (
               <option key={t.id} value={t.id}>
                 {t.name}
               </option>
@@ -122,16 +153,16 @@ export default function LessonForm({
           )}
         </div>
 
-        {/* Turma */}
+        {/* TURMA (single) */}
         <div className="flex flex-col gap-2 w-full md:w-[48%]">
           <label className="text-xs text-gray-500">Turma</label>
           <select
-            {...register("classId", { required: true })}
-            defaultValue={data?.classId || ""}
+            {...register("classId", { required: true, valueAsNumber: true })}
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+            defaultValue={data?.classId ? String(data.classId) : ""}
           >
-            <option value="">Selecione...</option>
-            {relatedData?.classes?.map((c) => (
+            <option value="">Selecione</option>
+            {classes?.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
               </option>
@@ -141,70 +172,8 @@ export default function LessonForm({
             <span className="text-xs text-red-400">Campo obrigatório</span>
           )}
         </div>
-
-        {/* Série */}
-        <div className="flex flex-col gap-2 w-full md:w-[48%]">
-          <label className="text-xs text-gray-500">Série</label>
-          <select
-            {...register("gradeId", { required: true })}
-            defaultValue={data?.gradeId || ""}
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-          >
-            <option value="">Selecione...</option>
-            {relatedData?.grades?.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name}
-              </option>
-            ))}
-          </select>
-          {errors.gradeId && (
-            <span className="text-xs text-red-400">Campo obrigatório</span>
-          )}
-        </div>
-
-        {/* Dia da semana */}
-        <div className="flex flex-col gap-2 w-full md:w-[30%]">
-          <label className="text-xs text-gray-500">Dia da Semana</label>
-          <input
-            {...register("day", { required: "Campo obrigatório" })}
-            defaultValue={data?.day}
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-          />
-          {errors.day && (
-            <span className="text-xs text-red-400">{errors.day.message}</span>
-          )}
-        </div>
-
-        {/* Horário de início */}
-        <div className="flex flex-col gap-2 w-full md:w-[30%]">
-          <label className="text-xs text-gray-500">Início</label>
-          <input
-            type="time"
-            {...register("startTime", { required: true })}
-            defaultValue={data?.startTime}
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-          />
-          {errors.startTime && (
-            <span className="text-xs text-red-400">Campo obrigatório</span>
-          )}
-        </div>
-
-        {/* Horário de término */}
-        <div className="flex flex-col gap-2 w-full md:w-[30%]">
-          <label className="text-xs text-gray-500">Término</label>
-          <input
-            type="time"
-            {...register("endTime", { required: true })}
-            defaultValue={data?.endTime}
-            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
-          />
-          {errors.endTime && (
-            <span className="text-xs text-red-400">Campo obrigatório</span>
-          )}
-        </div>
       </div>
 
-      {/* Botões */}
       <div className="flex justify-end gap-4 mt-4">
         <button
           type="submit"

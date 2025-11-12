@@ -90,15 +90,40 @@ export const examSchema = z.object({
 
 export type ExamSchema = z.infer<typeof examSchema>;
 
- export const lessonSchema = z.object({
-  id: z.coerce.number().optional(),
-  name: z.string().min(1, { message: "O nome da aula é obrigatório!" }),
-  subjectId: z.coerce.number().min(1, { message: "A disciplina é obrigatória!" }),
-  teacherId: z.string().min(1, { message: "O professor é obrigatório!" }),
-  gradeId: z.coerce.number().min(1, { message: "O grau é obrigatório!" }),
+//  export const lessonSchema = z.object({
+//   id: z.coerce.number().optional(),
+//   name: z.string().min(1, { message: "O nome da aula é obrigatório!" }),
+//   subjectId: z.coerce.number().min(1, { message: "A disciplina é obrigatória!" }),
+//   teacherId: z.string().min(1, { message: "O professor é obrigatório!" }),
+//   gradeId: z.coerce.number().min(1, { message: "O grau é obrigatório!" }),
+// });
+
+// export type LessonSchema = z.infer<typeof lessonSchema>;
+  
+
+export const lessonSchema = z.object({
+  id: z.number().optional(),
+  name: z.string().min(2, "O nome é obrigatório"),
+  subjectId: z
+    .union([z.string(), z.number()])
+    .transform((val) => Number(val))
+    .refine((val) => val > 0, "Selecione uma disciplina"),
+  teacherId: z.string().min(1, "Selecione um professor"),
+  gradeId: z
+    .union([z.string(), z.number()])
+    .transform((val) => Number(val))
+    .refine((val) => val > 0, "Selecione uma série"),
+  classId: z
+    .union([z.string(), z.number()])
+    .transform((val) => Number(val))
+    .refine((val) => val > 0, "Selecione uma turma"),
+  day: z.string().min(1, "Informe o dia da semana"),
+  startTime: z.string().min(1, "Informe o horário de início"),
+  endTime: z.string().min(1, "Informe o horário de término"),
 });
 
 export type LessonSchema = z.infer<typeof lessonSchema>;
+
 
 export const gradeSchema = z.object({
   id: z.coerce.number().optional(),

@@ -58,7 +58,7 @@ const ClassForm = ({
 
   useEffect(() => {
     if (state.success) {
-      toast(`A disciplina foi ${type === "create" ? "criada" : "atualizada"}!`);
+      toast(`A turma foi ${type === "create" ? "criada" : "atualizada"}!`);
       setOpen(false);
       router.refresh();
     }
@@ -129,13 +129,13 @@ const ClassForm = ({
             {...register("gradeId")}
             defaultValue={data?.gradeId}
           >
-            {grades.map((grade: { id: number; level: number }) => (
+            {grades.map((grade: { id: number; level: number; description: string }) => (
               <option
                 value={grade.id}
                 key={grade.id}
                 selected={data && grade.id === data.gradeId}
               >
-                {grade.level}
+                {grade.level} - {grade.description}
               </option>
             ))}
           </select>

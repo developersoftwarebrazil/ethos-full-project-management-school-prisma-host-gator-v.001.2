@@ -1,13 +1,14 @@
-import { FieldError } from "react-hook-form";
+import { FieldError, UseFormRegister } from "react-hook-form";
 
 type InputFieldProps = {
   label: string;
   type?: string;
-  register: any;
+  register: UseFormRegister<any>;
   name: string;
   defaultValue?: string;
   error?: FieldError;
   hidden?: boolean;
+  options?: { label: string; value: string | number }[]; // para selects
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 };
 
@@ -20,13 +21,14 @@ const InputField = ({
   error,
   hidden,
   inputProps,
+  options,
 }: InputFieldProps) => {
   return (
     <div className={hidden ? "hidden" : "flex flex-col gap-2 w-full md:w-1/4"}>
       <label className="text-xs text-gray-500">{label}</label>
       <input
         type={type}
-        {...register(name)}
+        {...(register(name, { valueAsNumber: type === "number" }))}
         className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
         {...inputProps}
         defaultValue={defaultValue}
