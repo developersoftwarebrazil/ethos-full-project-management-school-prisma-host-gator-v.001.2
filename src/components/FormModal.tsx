@@ -5,8 +5,11 @@ import {
   deleteExam,
   deleteGrade,
   deleteStudent,
-  deleteSubject,
+  deleteParent,
   deleteTeacher,
+  deleteSubject,
+  deleteLesson,
+  // deleteResult,
 } from "@/lib/actions";
 import dynamic from "next/dynamic";
 import Image from "next/image";
@@ -22,15 +25,11 @@ const deleteActionMap = {
   teacher: deleteTeacher,
   student: deleteStudent,
   exam: deleteExam,
+  parent: deleteParent,
   // TODO: OTHER DELETE ACTIONS
-  parent: deleteSubject,
-  lesson: deleteSubject,
-  assignment: deleteSubject,
-  result: deleteSubject,
-  attendance: deleteSubject,
-  event: deleteSubject,
-  announcement: deleteSubject,
+  lesson: deleteLesson,
   grade: deleteGrade,
+
 };
 
 // USE LAZY LOADING
@@ -42,6 +41,9 @@ const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const ParentForm = dynamic(() => import("./forms/ParentForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
@@ -95,6 +97,14 @@ const forms: {
   ),
   student: (setOpen, type, data, relatedData) => (
     <StudentForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  parent: (setOpen, type, data, relatedData) => (
+    <ParentForm
       type={type}
       data={data}
       setOpen={setOpen}

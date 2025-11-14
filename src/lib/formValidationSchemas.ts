@@ -80,6 +80,20 @@ export const studentSchema = z.object({
 
 export type StudentSchema = z.infer<typeof studentSchema>;
 
+export const parentSchema = z.object({
+  id: z.string().optional(),
+  username: z.string().min(1, "O nome de usuário é obrigatório"),
+  name: z.string().min(1, "O nome é obrigatório"),
+  surname: z.string().min(1, "O sobrenome é obrigatório"),
+  email: z.string().email("E-mail inválido").optional().or(z.literal("")),
+  password: z.string().optional(),
+  phone: z.string().min(1, "O telefone é obrigatório"),
+  address: z.string().min(1, "O endereço é obrigatório"),
+  student: z.array(z.string()).optional(), // student ids
+  img: z.string().optional(),
+});
+export type ParentSchema = z.infer<typeof parentSchema>;
+
 export const examSchema = z.object({
   id: z.coerce.number().optional(),
   title: z.string().min(1, { message: "O título é obrigatório!" }),

@@ -50,7 +50,7 @@ const TeacherForm = ({
 
   useEffect(() => {
     if (state.success) {
-      toast(`Teacher has been ${type === "create" ? "created" : "updated"}!`);
+      toast(`O Professor foi ${type === "create" ? "criado" : "atualizado"}!`);
       setOpen(false);
       router.refresh();
     }
@@ -61,7 +61,7 @@ const TeacherForm = ({
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
-        {type === "create" ? "Create a new teacher" : "Update the teacher"}
+        {type === "create" ? "Criar um novo professor" : "Atualizar o professor"}
       </h1>
       <span className="text-xs text-gray-400 font-medium">
         Informações de autenticação

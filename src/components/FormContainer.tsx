@@ -11,11 +11,11 @@ export type FormContainerProps = {
     | "class"
     | "lesson"
     | "exam"
-    | "assignment"
-    | "result"
-    | "attendance"
-    | "event"
-    | "announcement"
+    // | "assignment"
+    // | "result"
+    // | "attendance"
+    // | "event"
+    // | "announcement"
     | "grade"
     | "lesson";
   type: "create" | "update" | "delete";
@@ -55,12 +55,22 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
         break;
       case "student":
         const studentGrades = await prisma.grade.findMany({
-          select: { id: true, level: true },
+          select: { id: true, level: true, description: true },
         });
+
         const studentClasses = await prisma.class.findMany({
           include: { _count: { select: { students: true } } },
         });
-        relatedData = { classes: studentClasses, grades: studentGrades };
+
+        const studentParents = await prisma.parent.findMany({
+          select: { id: true, name: true, surname: true },
+        });
+
+        relatedData = {
+          classes: studentClasses,
+          grades: studentGrades,
+          parents: studentParents,
+        };
         break;
       case "exam":
         const examLessons = await prisma.lesson.findMany({
@@ -90,6 +100,12 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
           grades: lessonGrades,
           classes: lessonClasses,
         };
+        break;
+      case "parent":
+        const parentStudents = await prisma.student.findMany({
+          select: { id: true, name: true, surname: true },
+        });
+        relatedData = { students: parentStudents };
         break;
       default:
         break;

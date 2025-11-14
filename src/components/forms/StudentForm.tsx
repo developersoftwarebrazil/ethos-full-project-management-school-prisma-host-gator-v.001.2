@@ -5,19 +5,9 @@ import { useForm } from "react-hook-form";
 import InputField from "../InputField";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import {
-  studentSchema,
-  StudentSchema,
-  teacherSchema,
-  TeacherSchema,
-} from "@/lib/formValidationSchemas";
+import { studentSchema, StudentSchema } from "@/lib/formValidationSchemas";
 import { useFormState } from "react-dom";
-import {
-  createStudent,
-  createTeacher,
-  updateStudent,
-  updateTeacher,
-} from "@/lib/actions";
+import { createStudent, updateStudent } from "@/lib/actions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { CldUploadWidget } from "next-cloudinary";
@@ -67,7 +57,7 @@ const StudentForm = ({
     }
   }, [state, router, type, setOpen]);
 
-  const { grades, classes } = relatedData;
+  const { grades, classes, parents } = relatedData;
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
@@ -167,20 +157,38 @@ const StudentForm = ({
           error={errors.bloodType}
         />
         <InputField
-          label="Daya de Nascimento"
+          label="Data de Nascimento"
           name="birthday"
-          defaultValue={data?.birthday.toISOString().split("T")[0]}
+          defaultValue={
+            data?.birthday ? data.birthday.toISOString().split("T")[0] : ""
+          }
           register={register}
           error={errors.birthday}
           type="date"
         />
-        <InputField
-          label="Parent Id"
-          name="parentId"
-          defaultValue={data?.parentId}
-          register={register}
-          error={errors.parentId}
-        />
+        <div className="flex flex-col gap-2 w-full md:w-1/4">
+          <label className="text-xs text-gray-500">Responsável</label>
+          <select
+            className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
+            {...register("parentId")}
+            defaultValue={data?.parentId}
+          >
+            {parents.map(
+              (parent: { id: string; name: string; surname: string }) => (
+                <option key={parent.id} value={parent.id}>
+                  {parent.name} {parent.surname}
+                </option>
+              )
+            )}
+          </select>
+
+          {errors.parentId?.message && (
+            <p className="text-xs text-red-400">
+              {errors.parentId.message.toString()}
+            </p>
+          )}
+        </div>
+
         {data && (
           <InputField
             label="Id"
@@ -192,7 +200,7 @@ const StudentForm = ({
           />
         )}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Sex</label>
+          <label className="text-xs text-gray-500">Sexo</label>
           <select
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
             {...register("sex")}
@@ -214,11 +222,13 @@ const StudentForm = ({
             {...register("gradeId")}
             defaultValue={data?.gradeId}
           >
-            {grades.map((grade: { id: number; level: number }) => (
-              <option value={grade.id} key={grade.id}>
-                {grade.level}
-              </option>
-            ))}
+            {grades.map(
+              (grade: { id: number; level: number; description: string }) => (
+                <option value={grade.id} key={grade.id}>
+                  {`${grade.level} - ${grade.description}`}
+                </option>
+              )
+            )}
           </select>
           {errors.gradeId?.message && (
             <p className="text-xs text-red-400">
@@ -226,6 +236,7 @@ const StudentForm = ({
             </p>
           )}
         </div>
+
         <div className="flex flex-col gap-2 w-full md:w-1/4">
           <label className="text-xs text-gray-500">Classe</label>
           <select
@@ -255,9 +266,7 @@ const StudentForm = ({
           )}
         </div>
       </div>
-      {state.error && (
-        <span className="text-red-500">Algo deu errado!</span>
-      )}
+      {state.error && <span className="text-red-500">Algo deu errado!</span>}
       <button type="submit" className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Criar" : "Atualizar"}
       </button>
