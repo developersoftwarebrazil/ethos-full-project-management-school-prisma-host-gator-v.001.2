@@ -146,3 +146,17 @@ export const gradeSchema = z.object({
 });
 
 export type GradeSchema = z.infer<typeof gradeSchema>;
+
+
+
+export const assignmentSchema = z.object({
+id: z.number().optional(),
+title: z.string().min(1, "O título é obrigatório"),
+description: z.string().optional(),
+startTime: z.coerce.date(),
+endTime: z.coerce.date(),
+lessonId: z.number()
+});
+
+
+export type AssignmentSchema = z.infer<typeof assignmentSchema>;
