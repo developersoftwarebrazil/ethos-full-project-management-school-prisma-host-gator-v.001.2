@@ -9,6 +9,7 @@ import {
   deleteTeacher,
   deleteSubject,
   deleteLesson,
+  deleteAssignment,
   // deleteResult,
 } from "@/lib/actions";
 import dynamic from "next/dynamic";
@@ -29,7 +30,7 @@ const deleteActionMap = {
   // TODO: OTHER DELETE ACTIONS
   lesson: deleteLesson,
   grade: deleteGrade,
-
+  assignment: deleteAssignment,
 };
 
 // USE LAZY LOADING
@@ -60,6 +61,10 @@ const LessonForm = dynamic(() => import("./forms/LessonForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 const GradeForm = dynamic(() => import("./forms/GradeForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+
+const AssignmentForm = dynamic(() => import("./forms/AssignmentForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 
@@ -136,6 +141,15 @@ const forms: {
       relatedData={relatedData}
     />
   ),
+  assignment: (setOpen, type, data, relatedData) => (
+    <AssignmentForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),  
+
 };
 
 const FormModal = ({

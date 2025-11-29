@@ -133,8 +133,8 @@ model Assignment {
   startDate DateTime
   dueDate   DateTime
 
-  lessonId Int
-  lesson   Lesson   @relation(fields: [lessonId], references: [id])
+  lessonId Int?
+  lesson   Lesson?   @relation(fields: [lessonId], references: [id])
   results  Result[]
 }
 

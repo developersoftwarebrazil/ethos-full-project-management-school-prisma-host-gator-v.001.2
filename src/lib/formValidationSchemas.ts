@@ -153,10 +153,13 @@ export const assignmentSchema = z.object({
 id: z.number().optional(),
 title: z.string().min(1, "O título é obrigatório"),
 description: z.string().optional(),
-startTime: z.coerce.date(),
-endTime: z.coerce.date(),
-lessonId: z.number()
+startDate: z.coerce.date(),
+dueDate: z.coerce.date(),
+lessonId: z.coerce.number().optional(),
+
+// lessonId: z.number()
 });
 
 
 export type AssignmentSchema = z.infer<typeof assignmentSchema>;
+
