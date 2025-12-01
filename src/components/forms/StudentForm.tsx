@@ -42,7 +42,6 @@ const StudentForm = ({
   );
 
   const onSubmit = handleSubmit((data) => {
-    console.log("hello");
     console.log(data);
     formAction({ ...data, img: img?.secure_url });
   });
@@ -51,7 +50,7 @@ const StudentForm = ({
 
   useEffect(() => {
     if (state.success) {
-      toast(`Student has been ${type === "create" ? "created" : "updated"}!`);
+      toast(`O estudante foi ${type === "create" ? "criado" : "atualizado"}!`);
       setOpen(false);
       router.refresh();
     }
@@ -83,7 +82,7 @@ const StudentForm = ({
           error={errors?.email}
         />
         <InputField
-          label="Password"
+          label="Senha"
           name="password"
           type="password"
           defaultValue={data?.password}
