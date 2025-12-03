@@ -1,8 +1,12 @@
 import Announcements from "@/components/Announcements";
-import BigCalendarContainer from "@/components/BigCalendarContainer";
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import dynamic from "next/dynamic";
 
+const BigCalendarContainer = dynamic(
+  () => import("@/components/BigCalendarContainer"),
+  { ssr: false }
+);
 
 const ParentPage = async () => {
   const { userId } = auth();

@@ -1,10 +1,13 @@
 import Announcements from "@/components/Announcements";
-import BigCalendarContainer from "@/components/BigCalendarContainer";
-import BigCalendar from "@/components/BigCalender";
 import EventCalendar from "@/components/EventCalendar";
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
+import dynamic from "next/dynamic";
 
+const BigCalendarContainer = dynamic(
+  () => import("@/components/BigCalendarContainer"),
+  { ssr: false }
+);
 const StudentPage = async () => {
   const { userId } = auth();
 
@@ -20,7 +23,9 @@ const StudentPage = async () => {
       {/* LEFT */}
       <div className="w-full xl:w-2/3">
         <div className="h-full bg-white p-4 rounded-md">
-          <h1 className="text-xl font-semibold">Agenda ({classItem[0].name})</h1>
+          <h1 className="text-xl font-semibold">
+            Agenda ({classItem[0].name})
+          </h1>
           <BigCalendarContainer type="classId" id={classItem[0].id} />
         </div>
       </div>
