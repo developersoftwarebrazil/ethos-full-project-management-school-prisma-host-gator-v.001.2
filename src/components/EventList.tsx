@@ -1,66 +1,67 @@
+// EventList.tsx
 import prisma from "@/lib/prisma";
+import { endOfMonth, startOfToday } from "date-fns";
+import EventItem from "./EventItem";
 
-const EventList = async ({ dateParam }: { dateParam: string | undefined }) => {
-  // 🔥 NÃO MODIFICAR O OBJETO DATE ORIGINAL
-  const base = dateParam ? new Date(dateParam) : new Date();
+const EventList = async ({
+  dateParam,
+  mode,
+  search,
+}: {
+  dateParam?: string;
+  mode: "day" | "week" | "future" | "all";
+  search?: string;
+}) => {
+  // ---------------------------
+  // 1) Calcular datas
+  // ---------------------------
+  const today = startOfToday(); // início do dia atual
+  const endMonth = endOfMonth(today); // último dia do mês atual
 
-  // Dia selecionado à meia-noite
-  const startOfDay = new Date(
-    base.getFullYear(),
-    base.getMonth(),
-    base.getDate(),
-    0,
-    0,
-    0,
-    0
-  );
+  // ---------------------------
+  // 2) Base do filtro
+  // ---------------------------
+  let where: any = {};
 
-  // Final do dia selecionado
-  const endOfDay = new Date(
-    base.getFullYear(),
-    base.getMonth(),
-    base.getDate(),
-    23,
-    59,
-    59,
-    999
-  );
+  // ---------------------------
+  // FUTURE = hoje → final do mês
+  // ---------------------------
+  if (mode === "future") {
+    where.startTime = {
+      gte: today,       // maior/igual a hoje
+      lte: endMonth,    // menor/igual ao último dia do mês
+    };
+  }
 
-  const data = await prisma.event.findMany({
-    where: {
-      startTime: {
-        gte: startOfDay,
-        lte: endOfDay,
-      },
-    },
+  // ---------------------------
+  // SEARCH opcional
+  // ---------------------------
+  if (search) {
+    where.title = {
+      contains: search,
+      mode: "insensitive",
+    };
+  }
+
+  // ---------------------------
+  // 3) Buscar eventos
+  // ---------------------------
+  const events = await prisma.event.findMany({
+    where,
     orderBy: { startTime: "asc" },
   });
 
+  // ---------------------------
+  // 4) Render
+  // ---------------------------
+  if (events.length === 0) {
+    return <p className="text-gray-500 text-sm">Nenhum evento encontrado.</p>;
+  }
+
   return (
     <>
-      {data.length === 0 && (
-        <p className="text-gray-400 text-sm">Nenhum evento para este dia.</p>
-      )}
-
-      {data.map((event) => (
-        <div
-          className="p-5 rounded-md border-2 border-gray-100 border-t-4 odd:border-t-lamaSky even:border-t-lamaPurple"
-          key={event.id}
-        >
-          <div className="flex items-center justify-between">
-            <h1 className="font-semibold text-gray-600">{event.title}</h1>
-
-            <span className="text-gray-300 text-xs">
-              {event.startTime.toLocaleTimeString("pt-BR", {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })}
-            </span>
-          </div>
-
-          <p className="mt-2 text-gray-400 text-sm">{event.description}</p>
-        </div>
+      {events.map((event) => (
+        <EventItem key={event.id} event={event} />
       ))}
     </>
   );
