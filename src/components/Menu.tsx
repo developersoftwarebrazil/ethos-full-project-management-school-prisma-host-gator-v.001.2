@@ -75,7 +75,7 @@ const menuItems = [
       {
         icon: "/attendance.png",
         label: "Presença",
-        href: "/list/attendance",
+        href: "/list/attendances",
         visible: ["admin", "teacher", "student", "parent"],
       },
       {

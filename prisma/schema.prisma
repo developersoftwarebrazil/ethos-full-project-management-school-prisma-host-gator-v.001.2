@@ -37,22 +37,22 @@ model Student {
 }
 
 model Teacher {
-  id        String    @id
-  username  String    @unique
-  name      String
-  surname   String
-  email     String?   @unique
-  phone     String?   @unique
-  address   String
+  id          String    @id
+  username    String    @unique
+  name        String
+  surname     String
+  email       String?   @unique
+  phone       String?   @unique
+  address     String
   description String?
-  img       String?
-  bloodType String
-  sex       UserSex
-  createdAt DateTime  @default(now())
-  subjects  Subject[]
-  lessons   Lesson[]
-  classes   Class[]
-  birthday  DateTime
+  img         String?
+  bloodType   String
+  sex         UserSex
+  createdAt   DateTime  @default(now())
+  subjects    Subject[]
+  lessons     Lesson[]
+  classes     Class[]
+  birthday    DateTime
 }
 
 model Parent {
@@ -68,8 +68,8 @@ model Parent {
 }
 
 model Grade {
-  id    Int @id @default(autoincrement())
-  level Int @unique
+  id          Int    @id @default(autoincrement())
+  level       Int    @unique
   description String
 
   students Student[]
@@ -134,7 +134,7 @@ model Assignment {
   dueDate   DateTime
 
   lessonId Int?
-  lesson   Lesson?   @relation(fields: [lessonId], references: [id])
+  lesson   Lesson?  @relation(fields: [lessonId], references: [id])
   results  Result[]
 }
 
@@ -151,9 +151,9 @@ model Result {
 }
 
 model Attendance {
-  id      Int      @id @default(autoincrement())
-  date    DateTime
-  present Boolean
+  id     Int              @id @default(autoincrement())
+  date   DateTime
+  status AttendanceStatus
 
   studentId String
   student   Student @relation(fields: [studentId], references: [id])
@@ -193,4 +193,12 @@ enum Day {
   WEDNESDAY
   THURSDAY
   FRIDAY
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  JUSTIFIED
+  EXCUSED
 }

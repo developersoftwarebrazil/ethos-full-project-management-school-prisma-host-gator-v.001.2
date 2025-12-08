@@ -229,3 +229,16 @@ export const eventSchema = z
   });
 
 export type EventSchema = z.infer<typeof eventSchema>;
+
+export const attendanceSchema = z.object({
+  lessonId: z.coerce.number().min(1, "A aula é obrigatória"),
+  date: z.coerce.date().optional(),
+  records: z.array(
+    z.object({
+      studentId: z.string().min(1, "Aluno obrigatório"),
+      status: z.enum(["PRESENT", "ABSENT", "LATE", "JUSTIFIED", "EXCUSED"]),
+    })
+  ),
+});
+
+export type AttendanceSchema = z.infer<typeof attendanceSchema>;

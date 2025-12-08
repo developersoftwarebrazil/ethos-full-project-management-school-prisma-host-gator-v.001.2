@@ -12,6 +12,7 @@ import {
   deleteAssignment,
   deleteResult,
   deleteEvent,
+  deleteAttendance,
 } from "@/lib/actions";
 
 import dynamic from "next/dynamic";
@@ -34,6 +35,7 @@ const deleteActionMap = {
   assignment: deleteAssignment,
   result: deleteResult,
   event: deleteEvent,
+  attendance: deleteAttendance,
 };
 
 // FORMS (LAZY LOAD)
@@ -73,6 +75,9 @@ const ResultForm = dynamic(() => import("./forms/ResultForm"), {
 const EventForm = dynamic(() => import("./forms/EventForm"), {
   loading: () => <h1>Loading...</h1>,
 });
+const AttendanceForm = dynamic(() => import("./forms/AttendanceForm"), {
+  loading: () => <h1>Loading...</h1>,
+}); 
 
 // FORM REGISTRY
 const forms: {
@@ -168,6 +173,14 @@ const forms: {
 
   event: (setOpen, type, data, relatedData) => (
     <EventForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  attendance: (setOpen, type, data, relatedData) => (
+    <AttendanceForm
       type={type}
       data={data}
       setOpen={setOpen}
