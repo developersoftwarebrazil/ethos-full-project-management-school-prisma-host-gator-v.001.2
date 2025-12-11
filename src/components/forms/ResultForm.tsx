@@ -43,9 +43,26 @@ const ResultForm = ({
     }
   );
 
-  const onSubmit = handleSubmit((formData) => {
-    formAction(formData);
-  });
+  const onSubmit = handleSubmit(async (formData) => {
+  try {
+    const result =
+      type === "create"
+        ? await createResult(state, formData) // currentState opcional
+        : await updateResult(state, formData);
+
+    if (result.success) {
+      toast(`O resultado foi ${type === "create" ? "criado" : "atualizado"}!`);
+      setOpen(false); // fecha o modal
+      router.refresh(); // atualiza a página
+    } else {
+      toast.error("Algo deu errado!");
+    }
+  } catch (err) {
+    console.error(err);
+    toast.error("Erro ao salvar o resultado!");
+  }
+});
+
 
   const router = useRouter();
 

@@ -49,9 +49,30 @@ const ExamForm = ({
     }
   );
 
-  const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    formAction(data);
+  // const onSubmit = handleSubmit((data) => {
+  //   console.log(data);
+  //   formAction(data);
+  // });
+  const onSubmit = handleSubmit(async (formData) => {
+    try {
+      const currentState = { success: false, error: false };
+
+      const result =
+        type === "create"
+          ? await createExam(currentState, formData)
+          : await updateExam(currentState, formData);
+
+      if (result.success) {
+        toast(`A Prova foi ${type === "create" ? "criada" : "atualizada"}!`);
+        setOpen(false); // Fecha o modal
+        router.refresh(); // Atualiza a página
+      } else {
+        toast.error("Algo deu errado!");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao salvar a prova!");
+    }
   });
 
   const router = useRouter();
@@ -126,9 +147,7 @@ const ExamForm = ({
           )}
         </div>
       </div>
-      {state.error && (
-        <span className="text-red-500">Algo deu errado!</span>
-      )}
+      {state.error && <span className="text-red-500">Algo deu errado!</span>}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Criar" : "Atualizar"}
       </button>

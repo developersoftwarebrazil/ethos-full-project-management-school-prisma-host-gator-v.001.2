@@ -13,7 +13,6 @@ import {
   ResultSchema,
   EventSchema,
   AttendanceSchema,
-  AnnouncementSchema,
 } from "./formValidationSchemas";
 
 import prisma from "./prisma";
@@ -446,8 +445,22 @@ export const createExam = async (
   currentState: CurrentState,
   data: ExamSchema
 ) => {
+  // const { userId, sessionClaims } = auth();
+  // const role = (sessionClaims?.metadata as { role?: string })?.role;
 
   try {
+    // if (role === "teacher") {
+    //   const teacherLesson = await prisma.lesson.findFirst({
+    //     where: {
+    //       teacherId: userId!,
+    //       id: data.lessonId,
+    //     },
+    //   });
+
+    //   if (!teacherLesson) {
+    //     return { success: false, error: true };
+    //   }
+    // }
 
     await prisma.exam.create({
       data: {
@@ -458,7 +471,7 @@ export const createExam = async (
       },
     });
 
-   revalidatePath("/list/subjects");
+    // revalidatePath("/list/subjects");
     return { success: true, error: false };
   } catch (err) {
     console.log(err);
@@ -531,63 +544,47 @@ export const deleteExam = async (
     return { success: false, error: true };
   }
 };
-
 export async function createLesson(data: any) {
-  try {
-    // converte "07:00" em um objeto Date válido no formato ISO
-    const startTime = new Date(`1970-01-01T${data.startTime}:00Z`);
-    const endTime = new Date(`1970-01-01T${data.endTime}:00Z`);
-
-    await prisma.lesson.create({
-      data: {
-        name: data.name,
-        subjectId: Number(data.subjectId),
-        teacherId: data.teacherId,
-        classId: Number(data.classId),
-        day: data.day,
-        startTime,
-        endTime,
-      },
-    });
-
-    revalidatePath("/list/subjects"); // opcional, se quiser revalidar
-    return { success: true, error: false };
-  } catch (err) {
-    console.error("Erro ao criar aula:", err);
-    return { success: false, error: true };
-  }
+  // converte "07:00" em um objeto Date válido no formato ISO
+  const startTime = new Date(`1970-01-01T${data.startTime}:00Z`);
+  const endTime = new Date(`1970-01-01T${data.endTime}:00Z`);
+  return await prisma.lesson.create({
+    data: {
+      name: data.name,
+      subjectId: Number(data.subjectId),
+      teacherId: data.teacherId,
+      // gradeId: Number(data.gradeId),
+      classId: Number(data.classId),
+      day: data.day,
+      startTime,
+      endTime,
+    },
+  });
 }
 
 export async function updateLesson(data: any) {
-  try {
-    await prisma.lesson.update({
-      where: { id: Number(data.id) },
-      data: {
-        name: data.name,
-        subjectId: Number(data.subjectId),
-        teacherId: data.teacherId,
-        // gradeId: Number(data.gradeId), // caso queira ativar depois
-        classId: Number(data.classId),
-        day: data.day,
-        startTime: new Date(`1970-01-01T${data.startTime}:00Z`),
-        endTime: new Date(`1970-01-01T${data.endTime}:00Z`),
-      },
-    });
-
-    revalidatePath("/list/subjects"); // revalida cache se necessário
-    return { success: true, error: false };
-  } catch (err) {
-    console.error("Erro ao atualizar aula:", err);
-    return { success: false, error: true };
-  }
+  return await prisma.lesson.update({
+    where: { id: Number(data.id) },
+    data: {
+      name: data.name,
+      subjectId: Number(data.subjectId),
+      teacherId: data.teacherId,
+      // gradeId: Number(data.gradeId),
+      classId: Number(data.classId),
+      day: data.day,
+      startTime: data.startTime,
+      endTime: data.endTime,
+    },
+  });
 }
-
-
 export const deleteLesson = async (
   currentState: CurrentState,
   data: FormData
 ) => {
   const id = data.get("id") as string;
+
+  // const { userId, sessionClaims } = auth();
+  // const role = (sessionClaims?.metadata as { role?: string })?.role;
 
   try {
     await prisma.lesson.delete({
@@ -915,28 +912,33 @@ export const createEvent = async (
   }
 }; 
 // 🟦 Atualizar evento
-export const updateEvent = async (data: EventSchema) => {
+export const updateEvent = async (
+  currentState: { success: boolean; error: boolean },
+  data: EventSchema
+) => {
   try {
+    if (!data.id) {
+      throw new Error("ID é obrigatório para atualização do evento.");
+    }
+
     await prisma.event.update({
-      where: {
-        id: data.id,
-      },
+      where: { id: data.id },
       data: {
         title: data.title,
         description: data.description,
         startTime: data.startTime,
         endTime: data.endTime,
-        classId: data.classId ?? null,
+        classId: data.classId ? Number(data.classId) : null,
       },
     });
 
-    revalidatePath("/list/events");
+    // revalidatePath("/list/events");
+    return { success: true, error: false };
   } catch (err) {
-    console.log(err);
-    throw new Error("Houve um erro ao atualizar o evento!");
+    console.error("❌ Erro ao atualizar evento:", err);
+    return { success: false, error: true };
   }
 };
-
 // 🟥 Deletar evento
 export const deleteEvent = async (
   currentState: { success: boolean; error: boolean },
@@ -959,6 +961,7 @@ export const deleteEvent = async (
     return { success: false, error: true };
   }
 };
+
 
 // CREATE ATTENDANCE (server action compatível com useFormState)
 export const createAttendance = async (
@@ -1067,57 +1070,6 @@ export const deleteAttendance = async (
   } catch (error) {
     console.error("❌ Erro ao deletar presença:", error);
     return { success: false, error: true };
-  }
-};
-
-// 🟩 Criar novo anúncio
-export const createAnnouncement = async (data: AnnouncementSchema) => {
-  try {
-    await prisma.announcement.create({
-      data: {
-        title: data.title,
-        description: data.description,
-        date: data.date,
-        classId: data.classId || null,
-      },
-    });
-
-    revalidatePath("/list/announcements");
-  } catch (err) {
-    console.error(err);
-    throw new Error("Failed to create announcement!");
-  }
-};
-// 🟦 Atualizar anúncio
-export const updateAnnouncement = async (data: AnnouncementSchema) => {
-  try {
-    await prisma.announcement.update({
-      where: { id: data.id },
-      data: {
-        title: data.title,
-        description: data.description,
-        date: data.date,
-        classId: data.classId || null,
-      },
-    });
-
-    revalidatePath("/list/announcements");
-  } catch (err) {
-    console.error(err);
-    throw new Error("Failed to update announcement!");
-  }
-};
-// 🟥 Deletar anúncio
-export const deleteAnnouncement = async (id: number) => {
-  try {
-    await prisma.announcement.delete({
-      where: { id },
-    });
-
-    revalidatePath("/list/announcements");
-  } catch (err) {
-    console.error(err);
-    throw new Error("Failed to delete announcement!");
   }
 };
 

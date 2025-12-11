@@ -200,9 +200,7 @@ export const resultSchema = z
 
 export type ResultSchema = z.infer<typeof resultSchema>;
 
-
-export const eventSchema = z
-  .object({
+export const eventSchema = z.object({
     id: z.coerce.number().optional(),
 
     title: z.string().min(1, { message: "O título é obrigatório!" }),
@@ -227,7 +225,6 @@ export const eventSchema = z
     message: "A hora de início deve ser antes da hora de término!",
     path: ["endTime"],
   });
-
 export type EventSchema = z.infer<typeof eventSchema>;
 
 export const attendanceSchema = z.object({
@@ -240,5 +237,27 @@ export const attendanceSchema = z.object({
     })
   ),
 });
-
 export type AttendanceSchema = z.infer<typeof attendanceSchema>;
+
+export const announcementSchema = z.object({
+  id: z.coerce.number().optional(),
+
+  title: z.string().min(1, {
+    message: "O título é obrigatório!",
+  }),
+
+  description: z.string().min(1, {
+    message: "A descrição é obrigatória!",
+  }),
+
+  date: z.coerce.date({
+    message: "A data é obrigatória!",
+  }),
+
+  classId: z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform((val) => (val ? Number(val) : null))
+    .refine((val) => val === null || val > 0, "Selecione uma turma válida"),
+});
+export type AnnouncementSchema = z.infer<typeof announcementSchema>;

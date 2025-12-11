@@ -55,10 +55,33 @@ const AttendanceForm = ({
       error: false,
     }
   );
+const onSubmit = handleSubmit(async (formData) => {
+  try {
+    const result =
+      type === "create"
+        ? await createAttendance(state, formData) // formData já contém records
+        : await Promise.all(
+            formData.records.map((record: any) =>
+              updateAttendance(state, {
+                id: record.id,      // obrigatório para update
+                status: record.status,
+                date: formData.date,
+                lessonId: formData.lessonId,
+              })
+            )
+          );
 
-  const onSubmit = handleSubmit((formData) => {
-    formAction(formData);
-  });
+    toast(
+      `A presença foi ${type === "create" ? "registrada" : "atualizada"}!`
+    );
+    setOpen(false);
+    router.refresh();
+  } catch (err) {
+    console.error(err);
+    toast.error("Erro ao salvar a presença!");
+  }
+});
+
 
   const router = useRouter();
 
