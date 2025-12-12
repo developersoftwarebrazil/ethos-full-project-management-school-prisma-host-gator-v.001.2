@@ -65,7 +65,7 @@ export default function AttendanceTable({
     _state: DeleteState,
     formData: FormData
   ): Promise<DeleteState> => {
-    const res = await deleteAttendance(formData);
+    const res = await deleteAttendance({ success: false, error: false }, formData);
 
     return {
       success: false,

@@ -1,44 +1,14 @@
 "use client";
 
-import {
-  deleteClass,
-  deleteExam,
-  deleteGrade,
-  deleteStudent,
-  deleteParent,
-  deleteTeacher,
-  deleteSubject,
-  deleteLesson,
-  deleteAssignment,
-  deleteResult,
-  deleteEvent,
-  deleteAttendance,
-  deleteAnnouncement,
-} from "@/lib/actions";
-
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
-import { FormContainerProps } from "./FormContainer";
 
-const deleteActionMap = {
-  subject: deleteSubject,
-  class: deleteClass,
-  teacher: deleteTeacher,
-  student: deleteStudent,
-  exam: deleteExam,
-  parent: deleteParent,
-  lesson: deleteLesson,
-  grade: deleteGrade,
-  assignment: deleteAssignment,
-  result: deleteResult,
-  event: deleteEvent,
-  attendance: deleteAttendance,
-  announcement: deleteAnnouncement,
-};
+import { deleteActionMap } from "@/lib/actionsWrapper";
+import { FormContainerProps } from "./FormContainer";
 
 // FORMS (LAZY LOAD)
 const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
@@ -68,23 +38,18 @@ const GradeForm = dynamic(() => import("./forms/GradeForm"), {
 const AssignmentForm = dynamic(() => import("./forms/AssignmentForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-
-// ⭐ NEW ⭐
 const ResultForm = dynamic(() => import("./forms/ResultForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-
 const EventForm = dynamic(() => import("./forms/EventForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 const AttendanceForm = dynamic(() => import("./forms/AttendanceForm"), {
   loading: () => <h1>Loading...</h1>,
-}); 
-const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"),
-  {
-    loading: () => <h1>Loading...</h1>,
-  }
-);
+});
+const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
 
 // FORM REGISTRY
 const forms: {
@@ -96,113 +61,44 @@ const forms: {
   ) => JSX.Element;
 } = {
   subject: (setOpen, type, data, relatedData) => (
-    <SubjectForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <SubjectForm {...{ type, data, setOpen, relatedData }} />
   ),
   class: (setOpen, type, data, relatedData) => (
-    <ClassForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <ClassForm {...{ type, data, setOpen, relatedData }} />
   ),
   teacher: (setOpen, type, data, relatedData) => (
-    <TeacherForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <TeacherForm {...{ type, data, setOpen, relatedData }} />
   ),
   student: (setOpen, type, data, relatedData) => (
-    <StudentForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <StudentForm {...{ type, data, setOpen, relatedData }} />
   ),
   parent: (setOpen, type, data, relatedData) => (
-    <ParentForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <ParentForm {...{ type, data, setOpen, relatedData }} />
   ),
   exam: (setOpen, type, data, relatedData) => (
-    <ExamForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <ExamForm {...{ type, data, setOpen, relatedData }} />
   ),
   lesson: (setOpen, type, data, relatedData) => (
-    <LessonForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <LessonForm {...{ type, data, setOpen, relatedData }} />
   ),
   grade: (setOpen, type, data, relatedData) => (
-    <GradeForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <GradeForm {...{ type, data, setOpen, relatedData }} />
   ),
   assignment: (setOpen, type, data, relatedData) => (
-    <AssignmentForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <AssignmentForm {...{ type, data, setOpen, relatedData }} />
   ),
-
-  // ⭐ NEW ⭐
   result: (setOpen, type, data, relatedData) => (
-    <ResultForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <ResultForm {...{ type, data, setOpen, relatedData }} />
   ),
-
   event: (setOpen, type, data, relatedData) => (
-    <EventForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <EventForm {...{ type, data, setOpen, relatedData }} />
   ),
   attendance: (setOpen, type, data, relatedData) => (
-    <AttendanceForm
-      type={type}
-      data={data}
-      setOpen={setOpen}
-      relatedData={relatedData}
-    />
+    <AttendanceForm {...{ type, data, setOpen, relatedData }} />
   ),
   announcement: (setOpen, type, data, relatedData) => (
-  <AnnouncementForm
-    type={type}
-    data={data}
-    setOpen={setOpen}
-    relatedData={relatedData}
-  />
-),
-
+    <AnnouncementForm {...{ type, data, setOpen, relatedData }} />
+  ),
 };
 
 const FormModal = ({
@@ -240,10 +136,10 @@ const FormModal = ({
 
     return type === "delete" && id ? (
       <form action={formAction} className="p-4 flex flex-col gap-4">
-        <input type="text | number" name="id" value={id} hidden />
+        <input type="text" name="id" value={id} hidden readOnly />
         <span className="text-center font-medium">
-          Todos os dados serão perdidos. Você tem certeza que deseja deletar
-          este {table}?
+          Todos os dados serão perdidos. Você tem certeza que deseja deletar este{" "}
+          {table}?
         </span>
         <button className="bg-red-700 text-white py-2 px-4 rounded-md border-none w-max self-center">
           Deletar

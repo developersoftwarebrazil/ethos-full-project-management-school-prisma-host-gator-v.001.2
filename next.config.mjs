@@ -15,11 +15,6 @@ const nextConfig = {
     ],
   },
 
-  // 👇 adiciona o runtime Node.js (evita erro 500 no Clerk)
-  experimental: {
-    runtime: "nodejs",
-  },
-
   // 👇 injeta variáveis do Clerk em produção
   env: {
     NEXT_PUBLIC_CLERK_FRONTEND_API: process.env.NEXT_PUBLIC_CLERK_FRONTEND_API,

@@ -582,29 +582,27 @@ export async function updateLesson(data: any) {
   }
 }
 
-
+// 🟥 Deletar lesson
 export const deleteLesson = async (
   currentState: CurrentState,
-  data: FormData
+  formData: FormData
 ) => {
-  const id = data.get("id") as string;
+  const id = Number(formData.get("id"));
 
   try {
     await prisma.lesson.delete({
-      where: {
-        id: parseInt(id),
-        // ...(role === "teacher" ? { lesson: { teacherId: userId! } } : {}),
-      },
+      where: { id },
     });
 
-    // revalidatePath("/list/subjects");
     return { success: true, error: false };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return { success: false, error: true };
   }
 };
 
+
+// 🟩 Criar novo parent
 export const createParent = async (
   currentState: CurrentState,
   data: ParentSchema
@@ -644,6 +642,7 @@ export const createParent = async (
   }
 };
 
+// 🟦 Atualizar parent
 export const updateParent = async (
   currentState: CurrentState,
   data: ParentSchema
@@ -685,29 +684,28 @@ export const updateParent = async (
     return { success: false, error: true };
   }
 };
-
+// 🟥 Deletar parent
 export const deleteParent = async (
   currentState: CurrentState,
-  data: FormData
+  formData: FormData
 ) => {
-  const id = data.get("id") as string;
+  const id = formData.get("id") as string;
+
   try {
     await clerkClient.users.deleteUser(id);
 
-    await prisma.teacher.delete({
-      where: {
-        id: id,
-      },
+    await prisma.parent.delete({
+      where: { id },
     });
 
-    // revalidatePath("/list/teachers");
     return { success: true, error: false };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return { success: false, error: true };
   }
 };
 
+// 🟩 Criar novo assignment
 export const createAssignment = async (
   currentState: CurrentState,
   data: AssignmentSchema
@@ -746,7 +744,7 @@ export const createAssignment = async (
   }
 };
 
-
+// 🟦 Atualizar assignment
 export const updateAssignment = async (
   currentState: CurrentState,
   data: AssignmentSchema
@@ -786,32 +784,25 @@ export const updateAssignment = async (
     return { success: false, error: true };
   }
 };
-
-
+// 🟥 Deletar assignment
 export const deleteAssignment = async (
   currentState: CurrentState,
-  data: FormData
+  formData: FormData
 ) => {
-  const id = data.get("id") as string;
-
-  // const { userId, sessionClaims } = auth();
-  // const role = (sessionClaims?.metadata as { role?: string })?.role;
+  const id = Number(formData.get("id"));
 
   try {
     await prisma.assignment.delete({
-      where: {
-        id: parseInt(id),
-        // ...(role === "teacher" ? { lesson: { teacherId: userId! } } : {}),
-      },
+      where: { id },
     });
 
-    // revalidatePath("/list/subjects");
     return { success: true, error: false };
   } catch (err) {
-    console.log(err);
+    console.error(err);
     return { success: false, error: true };
   }
 };
+
 // 🟩 Criar novo resultado
 export const createResult = async (
   currentState: CurrentState,
@@ -915,40 +906,37 @@ export const createEvent = async (
   }
 }; 
 // 🟦 Atualizar evento
-export const updateEvent = async (data: EventSchema) => {
+export const updateEvent = async (
+  currentState: { success: boolean; error: boolean },
+  data: EventSchema
+) => {
   try {
     await prisma.event.update({
-      where: {
-        id: data.id,
-      },
+      where: { id: data.id },
       data: {
         title: data.title,
         description: data.description,
         startTime: data.startTime,
         endTime: data.endTime,
-        classId: data.classId ?? null,
+        classId: data.classId ? Number(data.classId) : null,
       },
     });
 
-    revalidatePath("/list/events");
+    return { success: true, error: false };
   } catch (err) {
-    console.log(err);
-    throw new Error("Houve um erro ao atualizar o evento!");
+    console.error("❌ Erro ao atualizar evento:", err);
+    return { success: false, error: true };
   }
 };
 
 // 🟥 Deletar evento
 export const deleteEvent = async (
   currentState: { success: boolean; error: boolean },
-  data: FormData
+  formData: FormData
 ) => {
+  const id = Number(formData.get("id"));
+
   try {
-    const id = Number(data.get("id"));
-
-    if (!id || isNaN(id)) {
-      throw new Error("ID inválido para exclusão de evento");
-    }
-
     await prisma.event.delete({
       where: { id },
     });
