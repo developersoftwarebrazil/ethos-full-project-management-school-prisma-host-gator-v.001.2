@@ -8,11 +8,10 @@ const matchers = Object.keys(routeAccessMap).map((route) => ({
 }));
 
 export default clerkMiddleware((auth, req) => {
-  // 🔐 Clerk cuida do redirect corretamente
+  // Clerk controla login / redirect
   auth().protect();
 
   const { sessionClaims } = auth();
-
   const role =
     (sessionClaims?.publicMetadata as { role?: string })?.role ?? "";
 
@@ -29,6 +28,6 @@ export default clerkMiddleware((auth, req) => {
 
 export const config = {
   matcher: [
-    "/((?!_next|sign-in|sign-up|unauthorized|api|trpc).*)",
+    "/((?!_next|sign-in|sign-up|unauthorized|api|trpc|clerk).*)",
   ],
 };
