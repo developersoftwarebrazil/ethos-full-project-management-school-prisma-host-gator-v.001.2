@@ -1,48 +1,46 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { routeAccessMap } from "./lib/settings";
 import { NextResponse } from "next/server";
+import { routeAccessMap } from "./lib/settings";
 
-const authDisabled = process.env.DISABLED_AUTH === "true";
+// Flag para desativar autenticação
+const AUTH_DISABLED = process.env.DISABLE_AUTH === "true";
 
-const matchers = Object.keys(routeAccessMap).map((route) => ({
-  matcher: createRouteMatcher([route]),
-  allowedRoles: routeAccessMap[route],
-}));
+// Cria os matchers com roles permitidas
+const matchers = Object.entries(routeAccessMap).map(
+  ([route, allowedRoles]) => ({
+    matcher: createRouteMatcher([route]),
+    allowedRoles,
+  })
+);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (authDisabled) {
-    console.log("⚠️ Middleware de autenticação está desativado.");
+  // BYPASS TOTAL
+  if (AUTH_DISABLED) {
+    console.log(
+      "AUTH DESATIVADO - liberando rota:",
+      req.nextUrl.pathname
+    );
     return NextResponse.next();
   }
-  // const { sessionClaims, userId } = auth();
 
-
-const { userId, sessionClaims } = authDisabled
-  ? { userId: "dev-user", sessionClaims: { metadata: { role: "admin" } } }
-  : auth();
-
+  // Autenticação normal
+  const { userId, sessionClaims } = auth();
 
   const role =
-    (sessionClaims?.metadata as { role?: string })?.role?.toString() ?? "";
+    (sessionClaims?.metadata as { role?: string })?.role ?? "";
 
-  // Debug logs
-  console.log("### MIDDLEWARE DEBUG ###");
+  // Debug
+  console.log("MIDDLEWARE DEBUG");
   console.log("URL:", req.nextUrl.pathname);
-  console.log("Role:", role);
-  console.log("SessionClaims:", sessionClaims);
   console.log("UserID:", userId);
+  console.log("Role:", role);
 
-  // Loop through route matchers
+  // Verificação de acesso
   for (const { matcher, allowedRoles } of matchers) {
     if (matcher(req)) {
-      // Rota bateu → verificar permissões
       if (!allowedRoles.includes(role)) {
-        const redirectTo = role ? `/${role}` : "/unauthorized";
-        console.log("🔒 Acesso negado! Redirecionando para:", redirectTo);
-
         const url = req.nextUrl.clone();
-        url.pathname = redirectTo;
-
+        url.pathname = role ? `/${role}` : "/unauthorized";
         return NextResponse.redirect(url);
       }
     }
@@ -53,8 +51,7 @@ const { userId, sessionClaims } = authDisabled
 
 export const config = {
   matcher: [
-    // protege todas as rotas exceto assets
-    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|png|jpg|jpeg|svg|gif|webp|ico|woff2?|ttf)).*)",
     "/(api|trpc)(.*)",
   ],
 };
