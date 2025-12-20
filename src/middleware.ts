@@ -18,7 +18,7 @@ export default clerkMiddleware(async (auth, req) => {
 
 
 const { userId, sessionClaims } = authDisabled
-  ? { userId: "dev-user", sessionClaims: { metadata: { role: "ADMIN" } } }
+  ? { userId: "dev-user", sessionClaims: { metadata: { role: "admin" } } }
   : auth();
 
 
