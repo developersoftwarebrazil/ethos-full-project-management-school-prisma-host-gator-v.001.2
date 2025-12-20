@@ -1,58 +1,38 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 import { routeAccessMap } from "./lib/settings";
+import { NextResponse } from "next/server";
 
-// Cria matchers por rota protegida
-const protectedRoutes = Object.keys(routeAccessMap).map((route) => ({
+const matchers = Object.keys(routeAccessMap).map((route) => ({
   matcher: createRouteMatcher([route]),
   allowedRoles: routeAccessMap[route],
 }));
 
 export default clerkMiddleware(async (auth, req) => {
-  const { userId, sessionClaims } = auth();
-  const pathname = req.nextUrl.pathname;
+  const { sessionClaims, userId } = auth();
 
-  /* ----------------------------------------
-   * 1️⃣ ROTAS PÚBLICAS — NUNCA PROTEGER
-   * --------------------------------------*/
-  const publicRoutes = [
-    "/sign-in",
-    "/sign-up",
-    "/unauthorized",
-  ];
-
-  if (publicRoutes.some((route) => pathname.startsWith(route))) {
-    return NextResponse.next();
-  }
-
-  /* ----------------------------------------
-   * 2️⃣ USUÁRIO NÃO LOGADO
-   * --------------------------------------*/
-  if (!userId) {
-    const url = req.nextUrl.clone();
-    url.pathname = "/sign-in";
-    return NextResponse.redirect(url);
-  }
-
-  /* ----------------------------------------
-   * 3️⃣ ROLE (vem do publicMetadata)
-   * --------------------------------------*/
   const role =
-    (sessionClaims?.publicMetadata as { role?: string })?.role ?? "";
+    (sessionClaims?.metadata as { role?: string })?.role?.toString() ?? "";
 
+  // Debug logs
   console.log("### MIDDLEWARE DEBUG ###");
-  console.log("PATH:", pathname);
-  console.log("USER:", userId);
-  console.log("ROLE:", role);
+  console.log("URL:", req.nextUrl.pathname);
+  console.log("Role:", role);
+  console.log("SessionClaims:", sessionClaims);
+  console.log("UserID:", userId);
 
-  /* ----------------------------------------
-   * 4️⃣ CONTROLE DE ACESSO POR ROLE
-   * --------------------------------------*/
-  for (const { matcher, allowedRoles } of protectedRoutes) {
-    if (matcher(req) && !allowedRoles.includes(role)) {
-      const url = req.nextUrl.clone();
-      url.pathname = "/unauthorized";
-      return NextResponse.redirect(url);
+  // Loop through route matchers
+  for (const { matcher, allowedRoles } of matchers) {
+    if (matcher(req)) {
+      // Rota bateu → verificar permissões
+      if (!allowedRoles.includes(role)) {
+        const redirectTo = role ? `/${role}` : "/unauthorized";
+        console.log("🔒 Acesso negado! Redirecionando para:", redirectTo);
+
+        const url = req.nextUrl.clone();
+        url.pathname = redirectTo;
+
+        return NextResponse.redirect(url);
+      }
     }
   }
 
@@ -61,7 +41,8 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    // Protege tudo MENOS assets e rotas públicas
-    "/((?!_next|favicon.ico|sign-in|sign-up|unauthorized).*)",
+    // protege todas as rotas exceto assets
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
   ],
 };
