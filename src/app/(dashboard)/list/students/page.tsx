@@ -18,9 +18,10 @@ const StudentListPage = async ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const { sessionClaims } = auth();
-  const role = (sessionClaims?.metadata as { role?: string })?.role;
+  // const { sessionClaims } = auth();
+  // const role = (sessionClaims?.metadata as { role?: string })?.role;
 
+  const role = "admin"; // TODO: remove this line after auth setup
   const columns = [
     {
       header: "Info",
