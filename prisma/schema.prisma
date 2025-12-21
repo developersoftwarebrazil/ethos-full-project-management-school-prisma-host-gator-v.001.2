@@ -196,10 +196,10 @@ enum AttendanceStatus {
 
 model User {
   id        String   @id @default(uuid())
+  name      String
+  email     String?  @unique
   username  String   @unique
   password  String
-  email     String?  @unique
-  name      String
   role      Role
   createdAt DateTime @default(now())
 }
