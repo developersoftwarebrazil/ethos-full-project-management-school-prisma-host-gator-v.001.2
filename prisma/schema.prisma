@@ -193,18 +193,18 @@ enum AttendanceStatus {
   JUSTIFIED
   EXCUSED
 }
+
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
+  id        String   @id @default(cuid())
   email     String   @unique
-  password  String
-  role      Role
+  name      String
+  role      Role     @default(ADMIN)
   createdAt DateTime @default(now())
 }
 
 enum Role {
-  admin
-  teacher
-  student
-  parent
+  ADMIN
+  TEACHER
+  STUDENT
+  PARENT
 }
