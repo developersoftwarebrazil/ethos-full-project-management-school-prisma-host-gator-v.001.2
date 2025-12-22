@@ -1,4 +1,6 @@
-"use client";
+import Image from "next/image";
+import Link from "next/link";
+import { cookies } from "next/headers";
 
 /**
  * ================================
@@ -10,11 +12,6 @@
  */
 
 // import { currentUser } from "@clerk/nextjs/server";
-
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
 
 const menuItems = [
   {
@@ -52,37 +49,37 @@ type SessionData = {
   [key: string]: any;
 };
 
-const Menu = () => {
-  const [role, setRole] = useState<string | null>(null);
+const Menu = async () => {
+  let role: string | null = null;
 
-  useEffect(() => {
-    /**
-     * ================================
-     * 🔐 AUTH LOCAL
-     * ================================
-     * Lê o role do cookie de sessão criado no login local
-     */
-    const session = Cookies.get("session");
-    if (session) {
-      try {
-        const parsed: SessionData = JSON.parse(session);
+  /**
+   * ================================
+   * 🔐 AUTH LOCAL
+   * ================================
+   * Lê o role do cookie de sessão criado no login local
+   */
+  const cookieStore = cookies();
+  const sessionCookie = cookieStore.get("session")?.value;
 
-        // 🔁 Converter role para string minúscula
-        setRole(parsed.role?.toLowerCase() ?? null);
-      } catch (err) {
-        console.error("Erro ao ler cookie de sessão:", err);
-      }
+  if (sessionCookie) {
+    try {
+      const parsed: SessionData = JSON.parse(sessionCookie);
+      role = parsed.role?.toLowerCase() ?? null;
+    } catch (err) {
+      console.error("Erro ao ler cookie de sessão:", err);
     }
+  }
 
-    /**
-     * ================================
-     * 🔁 CLERK (DESATIVADO)
-     * ================================
-     * Caso queira voltar ao Clerk:
-     * const user = await currentUser();
-     * setRole(user?.publicMetadata.role?.toLowerCase() ?? null);
-     */
-  }, []);
+  /**
+   * ================================
+   * 🔁 CLERK (DESATIVADO)
+   * ================================
+   * Caso queira voltar ao Clerk:
+   * const user = await currentUser();
+   * role = user?.publicMetadata.role?.toLowerCase() ?? null;
+   */
+
+  if (!role) return null;
 
   return (
     <div className="mt-4 text-sm">
@@ -91,22 +88,18 @@ const Menu = () => {
           <span className="hidden lg:block text-gray-400 font-light my-4">
             {section.title}
           </span>
-          {section.items.map((item) => {
-            if (!role) return null;
-            if (item.visible.includes(role)) {
-              return (
-                <Link
-                  href={item.href}
-                  key={item.label}
-                  className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
-                >
-                  <Image src={item.icon} alt="" width={20} height={20} />
-                  <span className="hidden lg:block">{item.label}</span>
-                </Link>
-              );
-            }
-            return null;
-          })}
+          {section.items
+            .filter((item) => item.visible.includes(role!))
+            .map((item) => (
+              <Link
+                href={item.href}
+                key={item.label}
+                className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
+              >
+                <Image src={item.icon} alt="" width={20} height={20} />
+                <span className="hidden lg:block">{item.label}</span>
+              </Link>
+            ))}
         </div>
       ))}
     </div>
