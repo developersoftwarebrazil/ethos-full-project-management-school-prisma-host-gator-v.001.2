@@ -1,20 +1,8 @@
-"use client";
-
-/**
- * ================================
- * 🔁 CLERK (DESATIVADO TEMPORARIAMENTE)
- * Quando voltar a usar Clerk:
- * 1) Descomente os imports abaixo
- * 2) Comente a lógica de auth local
- * ================================
- */
-
-// import { currentUser } from "@clerk/nextjs/server";
-
+import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import Cookies from "js-cookie";
+
+const AUTH_DISABLED = process.env.DISABLE_AUTH === "true";
 
 const menuItems = [
   {
@@ -47,35 +35,18 @@ const menuItems = [
   },
 ];
 
-const Menu = () => {
-  const [role, setRole] = useState<string | null>(null);
+const Menu = async () => {
+  let role: string | undefined;
 
-  useEffect(() => {
-    /**
-     * ================================
-     * 🔐 AUTH LOCAL
-     * ================================
-     * Lê o role do cookie de sessão criado no login local
-     */
-    const session = Cookies.get("session");
-    if (session) {
-      try {
-        const parsed = JSON.parse(session);
-        setRole(parsed.role ?? null);
-      } catch (err) {
-        console.error("Erro ao ler cookie de sessão:", err);
-      }
-    }
+  if (AUTH_DISABLED) {
+    // 🔓 bypass total
+    role = "admin";
+  } else {
+    const user = await currentUser();
+    role = user?.publicMetadata?.role as string | undefined;
+  }
 
-    /**
-     * ================================
-     * 🔁 CLERK (DESATIVADO)
-     * ================================
-     * Caso queira voltar ao Clerk:
-     * const user = await currentUser();
-     * setRole(user?.publicMetadata.role ?? null);
-     */
-  }, []);
+  if (!role) return null;
 
   return (
     <div className="mt-4 text-sm">
@@ -84,22 +55,19 @@ const Menu = () => {
           <span className="hidden lg:block text-gray-400 font-light my-4">
             {section.title}
           </span>
-          {section.items.map((item) => {
-            if (!role) return null;
-            if (item.visible.includes(role.toLowerCase())) {
-              return (
-                <Link
-                  href={item.href}
-                  key={item.label}
-                  className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
-                >
-                  <Image src={item.icon} alt="" width={20} height={20} />
-                  <span className="hidden lg:block">{item.label}</span>
-                </Link>
-              );
-            }
-            return null;
-          })}
+
+          {section.items
+            .filter((item) => item.visible.includes(role!))
+            .map((item) => (
+              <Link
+                href={item.href}
+                key={item.label}
+                className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
+              >
+                <Image src={item.icon} alt="" width={20} height={20} />
+                <span className="hidden lg:block">{item.label}</span>
+              </Link>
+            ))}
         </div>
       ))}
     </div>

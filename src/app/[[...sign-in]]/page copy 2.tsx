@@ -50,23 +50,20 @@ const LoginPage = () => {
       }
 
       /**
-       * 🔐 Cookie de sessão já foi setado no backend
        * Backend retorna:
        * {
-       *   id: string,
-       *   username: string,
-       *   role: "ADMIN" | "TEACHER" | "STUDENT" | "PARENT"
+       *   id: string;
+       *   username: string;
+       *   role: "ADMIN" | "TEACHER" | "STUDENT" | "PARENT";
        * }
        */
       if (data?.role) {
-        // Redireciona para rota baseada no role
         router.push(`/${data.role}`);
       } else {
         router.push("/"); // fallback de segurança
       }
     } catch (err) {
       setError("Erro ao tentar fazer login");
-      console.error("🔥 [LOGIN_ERROR]", err);
     } finally {
       setLoading(false);
     }

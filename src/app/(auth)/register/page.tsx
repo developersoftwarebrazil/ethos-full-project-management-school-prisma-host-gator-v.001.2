@@ -43,7 +43,7 @@ const RegisterPage = () => {
           name,
           username,
           password,
-          role: "ADMIN", // 🔥 SUPERUSUÁRIO
+          role: "admin", // 🔥 SUPERUSUÁRIO
         }),
       });
 

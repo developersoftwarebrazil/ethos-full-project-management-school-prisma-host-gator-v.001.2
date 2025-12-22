@@ -205,8 +205,8 @@ enum AttendanceStatus {
 }
 
 enum Role {
-  ADMIN
-  TEACHER
-  STUDENT
-  PARENT
+  admin
+  teacher
+  student
+  parent
 }

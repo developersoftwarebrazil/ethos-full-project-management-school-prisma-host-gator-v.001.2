@@ -1,28 +1,92 @@
+"use client";
+
+/**
+ * ================================
+ * 🔁 CLERK (DESATIVADO TEMPORARIAMENTE)
+ * Quando voltar a usar Clerk:
+ * 1) Descomente os imports abaixo
+ * 2) Comente a lógica de auth local
+ * ================================
+ */
+
+// import { auth } from "@clerk/nextjs/server";
+
 import prisma from "@/lib/prisma";
-import { auth } from "@clerk/nextjs/server";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
-const Announcements = async () => {
-  const { userId, sessionClaims } = auth();
-  const role = (sessionClaims?.metadata as { role?: string })?.role;
+type Announcement = {
+  id: string;
+  title: string;
+  description: string;
+  date: Date;
+  classId: string | null;
+};
 
-  const roleConditions = {
-    teacher: { lessons: { some: { teacherId: userId! } } },
-    student: { students: { some: { id: userId! } } },
-    parent: { students: { some: { parentId: userId! } } },
-  };
+const Announcements = () => {
+  const [role, setRole] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [data, setData] = useState<Announcement[]>([]);
 
-  const data = await prisma.announcement.findMany({
-    take: 3,
-    orderBy: { date: "desc" },
-    where: {
-      ...(role !== "admin" && {
-        OR: [
-          { classId: null },
-          { class: roleConditions[role as keyof typeof roleConditions] || {} },
-        ],
-      }),
-    },
-  });
+  useEffect(() => {
+    /**
+     * 🔐 AUTH LOCAL
+     * Lê cookie de sessão criado no login local
+     */
+    const session = Cookies.get("session");
+    if (session) {
+      try {
+        const parsed = JSON.parse(session);
+        setRole(parsed.role ?? "guest");
+        setUserId(parsed.id ?? null);
+      } catch (err) {
+        console.error("Erro ao ler cookie de sessão:", err);
+      }
+    }
+
+    /**
+     * 🔁 CLERK (DESATIVADO)
+     * const { userId, sessionClaims } = auth();
+     * const role = sessionClaims?.metadata?.role;
+     */
+  }, []);
+
+  useEffect(() => {
+    if (!role) return;
+
+    const fetchAnnouncements = async () => {
+      try {
+        const roleConditions: any = {
+          teacher: { lessons: { some: { teacherId: userId! } } },
+          student: { students: { some: { id: userId! } } },
+          parent: { students: { some: { parentId: userId! } } },
+        };
+
+        const announcements = await prisma.announcement.findMany({
+          take: 3,
+          orderBy: { date: "desc" },
+          where: {
+            ...(role !== "admin" && {
+              OR: [
+                { classId: null },
+                { class: roleConditions[role as keyof typeof roleConditions] || {} },
+              ],
+            }),
+          },
+        });
+
+        setData(announcements);
+      } catch (err) {
+        console.error("Erro ao buscar anúncios:", err);
+      }
+    };
+
+    fetchAnnouncements();
+  }, [role, userId]);
+
+  if (!role) return null;
+
+  const colors = ["bg-lamaSkyLight", "bg-lamaPurpleLight", "bg-lamaYellowLight"];
 
   return (
     <div className="bg-white p-4 rounded-md">
@@ -31,39 +95,17 @@ const Announcements = async () => {
         <span className="text-xs text-gray-400">Ver Todos</span>
       </div>
       <div className="flex flex-col gap-4 mt-4">
-        {data[0] && (
-          <div className="bg-lamaSkyLight rounded-md p-4">
+        {data.map((item, idx) => (
+          <div key={item.id} className={`${colors[idx % colors.length]} rounded-md p-4`}>
             <div className="flex items-center justify-between">
-              <h2 className="font-medium">{data[0].title}</h2>
+              <h2 className="font-medium">{item.title}</h2>
               <span className="text-xs text-gray-400 bg-white rounded-md px-1 py-1">
-                {new Intl.DateTimeFormat("en-GB").format(data[0].date)}
+                {new Intl.DateTimeFormat("en-GB").format(new Date(item.date))}
               </span>
             </div>
-            <p className="text-sm text-gray-400 mt-1">{data[0].description}</p>
+            <p className="text-sm text-gray-400 mt-1">{item.description}</p>
           </div>
-        )}
-        {data[1] && (
-          <div className="bg-lamaPurpleLight rounded-md p-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-medium">{data[1].title}</h2>
-              <span className="text-xs text-gray-400 bg-white rounded-md px-1 py-1">
-                {new Intl.DateTimeFormat("en-GB").format(data[1].date)}
-              </span>
-            </div>
-            <p className="text-sm text-gray-400 mt-1">{data[1].description}</p>
-          </div>
-        )}
-        {data[2] && (
-          <div className="bg-lamaYellowLight rounded-md p-4">
-            <div className="flex items-center justify-between">
-              <h2 className="font-medium">{data[2].title}</h2>
-              <span className="text-xs text-gray-400 bg-white rounded-md px-1 py-1">
-                {new Intl.DateTimeFormat("en-GB").format(data[2].date)}
-              </span>
-            </div>
-            <p className="text-sm text-gray-400 mt-1">{data[2].description}</p>
-          </div>
-        )}
+        ))}
       </div>
     </div>
   );
