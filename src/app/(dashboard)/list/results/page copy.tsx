@@ -6,18 +6,8 @@ import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Prisma } from "@prisma/client";
 import Image from "next/image";
-import { getAuthRole, getCurrentUserId } from "@/lib/auth";
 
-/**
- * ================================
- * 🔁 CLERK (DESATIVADO)
- * Para reativar:
- * 1) importar auth() de @clerk/nextjs/server
- * 2) pegar role de sessionClaims.metadata
- * 3) pegar userId de auth()
- * ================================
- */
-// import { auth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 
 type ResultList = {
   id: number;
@@ -36,26 +26,19 @@ const ResultListPage = async ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  /**
-   * ================================
-   * 🔐 AUTH LOCAL (ATIVO)
-   * ================================
-   */
-  const role = await getAuthRole();
-  const currentUserId = await getCurrentUserId();
-
-  /**
-   * ================================
-   * 🔁 CLERK (DESATIVADO)
-   * ================================
-   */
-  // const { userId, sessionClaims } = auth();
-  // const role = (sessionClaims?.metadata as { role?: string })?.role;
-  // const currentUserId = userId;
+  const { userId, sessionClaims } = auth();
+  const role = (sessionClaims?.metadata as { role?: string })?.role;
+  const currentUserId = userId;
 
   const columns = [
-    { header: "Título", accessor: "title" },
-    { header: "Aluno", accessor: "student" },
+    {
+      header: "Título",
+      accessor: "title",
+    },
+    {
+      header: "Aluno",
+      accessor: "student",
+    },
     {
       header: "Nota",
       accessor: "score",
@@ -77,7 +60,12 @@ const ResultListPage = async ({
       className: "hidden md:table-cell",
     },
     ...(role === "admin" || role === "teacher"
-      ? [{ header: "Ações", accessor: "action" }]
+      ? [
+          {
+            header: "Ações",
+            accessor: "action",
+          },
+        ]
       : []),
   ];
 
@@ -86,60 +74,62 @@ const ResultListPage = async ({
       key={item.id}
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
     >
-      <td className="p-4">{item.title}</td>
+      <td className="flex items-center gap-4 p-4">{item.title}</td>
       <td>{`${item.studentName} ${item.studentSurname}`}</td>
       <td className="hidden md:table-cell">{item.score}</td>
       <td className="hidden md:table-cell">
-        {`${item.teacherName} ${item.teacherSurname}`}
+        {`${item.teacherName} |${item.teacherSurname}`}
       </td>
       <td className="hidden md:table-cell">{item.className}</td>
       <td className="hidden md:table-cell">
-        {new Intl.DateTimeFormat("pt-BR").format(item.startTime)}
+        {new Intl.DateTimeFormat("en-US").format(item.startTime)}
       </td>
       <td>
-        {(role === "admin" || role === "teacher") && (
-          <div className="flex items-center gap-2">
-            <FormContainer table="result" type="update" data={item} />
-            <FormContainer table="result" type="delete" id={item.id} />
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {(role === "admin" || role === "teacher") && (
+            <>
+              <FormContainer table="result" type="update" data={item} />
+              <FormContainer table="result" type="delete" id={item.id} />
+            </>
+          )}
+        </div>
       </td>
     </tr>
   );
 
   const { page, ...queryParams } = searchParams;
+
   const p = page ? parseInt(page) : 1;
 
-  /**
-   * ================================
-   * 🔍 QUERY PARAMS
-   * ================================
-   */
+  // URL PARAMS CONDITION
+
   const query: Prisma.ResultWhereInput = {};
 
-  for (const [key, value] of Object.entries(queryParams)) {
-    if (!value) continue;
-
-    switch (key) {
-      case "studentId":
-        query.studentId = value;
-        break;
-
-      case "search":
-        query.OR = [
-          { exam: { title: { contains: value, mode: "insensitive" } } },
-          { student: { name: { contains: value, mode: "insensitive" } } },
-        ];
-        break;
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "studentId":
+            query.studentId = value;
+            break;
+          case "search":
+            query.OR = [
+              { exam: { title: { contains: value, mode: "insensitive" } } },
+              { student: { name: { contains: value, mode: "insensitive" } } },
+            ];
+            break;
+          default:
+            break;
+        }
+      }
     }
   }
 
-  /**
-   * ================================
-   * 🔐 ROLE CONDITIONS
-   * ================================
-   */
+  // ROLE CONDITIONS
+
   switch (role) {
+    case "admin":
+      break;
     case "teacher":
       query.OR = [
         { exam: { lesson: { teacherId: currentUserId! } } },
@@ -152,7 +142,11 @@ const ResultListPage = async ({
       break;
 
     case "parent":
-      query.student = { parentId: currentUserId! };
+      query.student = {
+        parentId: currentUserId!,
+      };
+      break;
+    default:
       break;
   }
 
@@ -188,26 +182,25 @@ const ResultListPage = async ({
     prisma.result.count({ where: query }),
   ]);
 
-  const data = dataRes
-    .map((item) => {
-      const assessment = item.exam || item.assignment;
-      if (!assessment) return null;
+  const data = dataRes.map((item) => {
+    const assessment = item.exam || item.assignment;
 
-      const isExam = "startTime" in assessment;
+    if (!assessment) return null;
 
-      return {
-        id: item.id,
-        title: assessment.title,
-        studentName: item.student.name,
-        studentSurname: item.student.surname,
-        teacherName: assessment.lesson?.teacher?.name ?? "",
-        teacherSurname: assessment.lesson?.teacher?.surname ?? "",
-        score: item.score,
-        className: assessment.lesson?.class?.name ?? "",
-        startTime: isExam ? assessment.startTime : assessment.startDate,
-      };
-    })
-    .filter(Boolean);
+    const isExam = "startTime" in assessment;
+
+    return {
+      id: item.id,
+      title: assessment.title,
+      studentName: item.student.name,
+      studentSurname: item.student.surname,
+      teacherName: assessment.lesson?.teacher?.name ?? "",
+      teacherSurname: assessment.lesson?.teacher?.surname ?? "",
+      score: item.score,
+      className: assessment.lesson?.class?.name ?? "",
+      startTime: isExam ? assessment.startTime : assessment.startDate,
+    };
+  });
 
   return (
     <div className="bg-white p-4 rounded-md flex-1 m-4 mt-0">
@@ -216,27 +209,23 @@ const ResultListPage = async ({
         <h1 className="hidden md:block text-lg font-semibold">
           Todos os Resultados
         </h1>
-
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 rounded-full bg-lamaYellow">
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/filter.png" alt="" width={14} height={14} />
             </button>
-            <button className="w-8 h-8 rounded-full bg-lamaYellow">
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-
             {(role === "admin" || role === "teacher") && (
               <FormContainer table="result" type="create" />
             )}
           </div>
         </div>
       </div>
-
       {/* LIST */}
       <Table columns={columns} renderRow={renderRow} data={data} />
-
       {/* PAGINATION */}
       <Pagination page={p} count={count} />
     </div>

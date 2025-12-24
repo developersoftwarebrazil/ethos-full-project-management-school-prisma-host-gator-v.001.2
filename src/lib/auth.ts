@@ -128,3 +128,34 @@ export async function requireAuth(): Promise<AuthUser> {
 
   return user;
 }
+/**
+ * Retorna apenas o ID do usuário autenticado
+ */
+export async function getCurrentUserId(): Promise<string | null> {
+  /**
+   * ================================
+   * 🔁 CLERK (DESATIVADO)
+   * ================================
+   */
+  // const { userId } = auth();
+  // return userId ?? null;
+
+  /**
+   * ================================
+   * 🔐 LOCAL AUTH
+   * ================================
+   */
+  return getLocalSession()?.userId ?? null;
+}
+/**
+ * Retorna o ID do usuário ou lança erro se não autenticado
+ */
+export async function requireUserId(): Promise<string> {
+  const userId = await getCurrentUserId();
+
+  if (!userId) {
+    throw new Error("UNAUTHORIZED");
+  }
+
+  return userId;
+}
