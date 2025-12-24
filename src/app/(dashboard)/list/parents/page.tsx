@@ -8,6 +8,7 @@ import { Parent, Prisma, Student } from "@prisma/client";
 import Image from "next/image";
 
 import { auth } from "@clerk/nextjs/server";
+import { getAuthRole } from "@/lib/auth";
 
 type ParentList = Parent & { students: Student[] };
 
@@ -16,11 +17,22 @@ const ParentListPage = async ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
+  /**
+     * ================================
+     * 🔐 AUTH LOCAL (ATIVO)
+     * ================================
+     */
+    const role = await getAuthRole();
+
+  /**
+   * ================================
+   * 🔁 CLERK (DESATIVADO)
+   * ================================
+   */
 
 // const { sessionClaims } = auth();
 // const role = (sessionClaims?.metadata as { role?: string })?.role;
 
-const role = "admin"; // TODO: remove this line after auth setup
 const columns = [
   {
     header: "Info",
