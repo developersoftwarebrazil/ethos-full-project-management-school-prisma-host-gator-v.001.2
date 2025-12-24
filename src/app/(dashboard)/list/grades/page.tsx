@@ -7,14 +7,28 @@ import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Grade, Prisma } from "@prisma/client";
 import Image from "next/image";
 import { auth } from "@clerk/nextjs/server";
+import { getAuthRole } from "@/lib/auth";
 
 const GradeListPage = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const { sessionClaims } = auth();
-  const role = (sessionClaims?.metadata as { role?: string })?.role;
+  /**
+     * ================================
+     * 🔐 AUTH LOCAL (ATIVO)
+     * ================================
+     */
+    const role = await getAuthRole();
+
+  /**
+   * ================================
+   * 🔁 CLERK (DESATIVADO)
+   * ================================
+   */
+  //
+  // const { sessionClaims } = auth();
+  // const role = (sessionClaims?.metadata as { role?: string })?.role;
 
   const columns = [
     {
