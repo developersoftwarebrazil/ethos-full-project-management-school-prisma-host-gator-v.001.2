@@ -1,19 +1,6 @@
 import prisma from "@/lib/prisma";
 import FormModal from "./FormModal";
-import { getAuthUser, getAuthRole } from "@/lib/auth";
-
-/**
- * ================================
- * 🔁 CLERK (DESATIVADO)
- * Para reativar no futuro:
- *
- * import { auth } from "@clerk/nextjs/server";
- *
- * const { userId, sessionClaims } = auth();
- * const role = (sessionClaims?.metadata as { role?: string })?.role;
- * const currentUserId = userId;
- * ================================
- */
+import { auth } from "@clerk/nextjs/server";
 
 export type FormContainerProps = {
   table:
@@ -36,22 +23,12 @@ export type FormContainerProps = {
 };
 
 const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
-  let relatedData: Record<string, any> = {};
+  let relatedData = {};
 
-  /**
-   * ================================
-   * 🔐 AUTH CENTRALIZADO (LOCAL)
-   * ================================
-   */
-  const role = await getAuthRole();
-  const user = await getAuthUser();
-  const currentUserId = user?.id;
+  const { userId, sessionClaims } = auth();
+  const role = (sessionClaims?.metadata as { role?: string })?.role;
+  const currentUserId = userId;
 
-  /**
-   * ================================
-   * 🔍 DADOS RELACIONADOS
-   * ================================
-   */
   if (type !== "delete") {
     switch (table) {
       case "subject":
@@ -98,10 +75,7 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
       case "exam":
         relatedData = {
           lessons: await prisma.lesson.findMany({
-            where:
-              role === "teacher" && currentUserId
-                ? { teacherId: currentUserId }
-                : {},
+            where: role === "teacher" ? { teacherId: currentUserId! } : {},
             select: { id: true, name: true },
           }),
         };
@@ -180,13 +154,7 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
 
   return (
     <div>
-      <FormModal
-        table={table}
-        type={type}
-        data={data}
-        id={id}
-        relatedData={relatedData}
-      />
+      <FormModal table={table} type={type} data={data} id={id} relatedData={relatedData} />
     </div>
   );
 };
