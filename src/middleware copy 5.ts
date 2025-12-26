@@ -24,16 +24,6 @@ import { routeAccessMap } from "./lib/settings";
 // Flag global (Railway / env)
 const AUTH_DISABLED = process.env.DISABLE_AUTH === "true";
 
-/**
- * =========================================================
- * 📦 TIPOS
- * =========================================================
- */
-type LocalSession = {
-  userId: string;
-  role: string;
-};
-
 // Cria os matchers com base no routeAccessMap
 const matchers = Object.entries(routeAccessMap).map(
   ([route, allowedRoles]) => ({
@@ -64,18 +54,16 @@ export default async function middleware(req: NextRequest) {
    * (cookie setado no /api/auth/login)
    * =====================================================
    */
-  const rawSession = req.cookies.get("session")?.value;
+  const session = req.cookies.get("session")?.value;
 
   let role = "";
-  let userId: string | null = null;
 
-  if (rawSession) {
+  if (session) {
     try {
-      const parsed = JSON.parse(rawSession) as Partial<LocalSession>;
+      const parsed = JSON.parse(session);
       role = parsed.role ?? "";
-      userId = parsed.userId ?? null;
     } catch (err) {
-      console.error("❌ Erro ao fazer parse do cookie de sessão", err);
+      console.error("Erro ao ler cookie de sessão", err);
     }
   }
 
@@ -86,22 +74,8 @@ export default async function middleware(req: NextRequest) {
    */
   console.log("### MIDDLEWARE DEBUG ###");
   console.log("URL:", pathname);
-  console.log("Role:", role || "NONE");
-  console.log("UserId:", userId || "NONE");
-  console.log("Session:", rawSession ? "OK" : "NULL");
-
-  /**
-   * =====================================================
-   * 🔒 Redireciona se não houver sessão
-   * =====================================================
-   */
-  if (!rawSession && pathname !== "/login") {
-    const url = req.nextUrl.clone();
-    url.pathname = "/login";
-
-    console.log("🔒 Sem sessão → redirecionando para /login");
-    return NextResponse.redirect(url);
-  }
+  console.log("Role:", role);
+  console.log("Session:", session ? "OK" : "NULL");
 
   /**
    * =====================================================
