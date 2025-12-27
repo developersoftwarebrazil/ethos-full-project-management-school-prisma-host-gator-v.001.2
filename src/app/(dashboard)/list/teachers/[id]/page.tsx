@@ -1,5 +1,5 @@
 import { getAuthRole } from "@/app/api/auth/login/route copy 3";
-import Announcements from "@/components/Announcements";
+import Announcements from "@/components/Announcements-funcionando";
 import BigCalendarContainer from "@/components/BigCalendarContainer";
 import BigCalendar from "@/components/BigCalender";
 import FormContainer from "@/components/FormContainer";
@@ -16,15 +16,14 @@ const SingleTeacherPage = async ({
 }: {
   params: { id: string };
 }) => {
-   /**
-     * ================================
-     * 🔐 AUTH LOCAL (ATIVO)
-     * ================================
-     */
-    const role = await getAuthRole();
-  
+  /**
+   * ================================
+   * 🔐 AUTH LOCAL (ATIVO)
+   * ================================
+   */
+  const role = await getAuthRole();
 
-    /**
+  /**
    * ================================
    * 🔁 CLERK (DESATIVADO)
    * ================================
@@ -180,7 +179,7 @@ const SingleTeacherPage = async ({
         <div className="bg-white p-4 rounded-md">
           <h1 className="text-xl font-semibold">Atalhos</h1>
           <div className="mt-4 flex gap-4 flex-wrap text-xs text-gray-500">
-           <Link
+            <Link
               className="p-3 rounded-md bg-lamaSkyLight"
               href={`/list/classes?supervisorId=${teacher.id}`}
             >

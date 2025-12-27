@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-import Announcements from "@/components/Announcements";
+import Announcements from "@/components/Announcements-funcionando";
 import AttendanceChartContainer from "@/components/AttendanceChartContainer";
 import CountChartContainer from "@/components/CountChartContainer";
 import EventCalendarContainer from "@/components/EventCalendarContainer";

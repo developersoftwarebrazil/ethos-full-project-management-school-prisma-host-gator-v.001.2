@@ -1,4 +1,4 @@
-import Announcements from "@/components/Announcements";
+import Announcements from "@/components/Announcements-funcionando";
 // import BigCalendarContainer from "@/components/BigCalendarContainer";
 import { auth } from "@clerk/nextjs/server";
 import dynamic from "next/dynamic";

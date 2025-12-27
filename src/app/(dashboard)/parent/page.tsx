@@ -1,4 +1,4 @@
-import Announcements from "@/components/Announcements";
+import Announcements from "@/components/Announcements-funcionando";
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
 import dynamic from "next/dynamic";
@@ -11,7 +11,7 @@ const BigCalendarContainer = dynamic(
 const ParentPage = async () => {
   const { userId } = auth();
   const currentUserId = userId;
-  
+
   const students = await prisma.student.findMany({
     where: {
       parentId: currentUserId!,

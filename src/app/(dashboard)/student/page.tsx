@@ -1,4 +1,4 @@
-import Announcements from "@/components/Announcements";
+import Announcements from "@/components/Announcements-funcionando";
 import EventCalendar from "@/components/EventCalendar";
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";

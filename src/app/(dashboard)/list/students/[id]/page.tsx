@@ -1,5 +1,5 @@
 // import { getAuthRole } from "@/app/api/auth/login/route copy 3";
-import Announcements from "@/components/Announcements";
+import Announcements from "@/components/Announcements-funcionando";
 import BigCalendarContainer from "@/components/BigCalendarContainer";
 import FormContainer from "@/components/FormContainer";
 import Performance from "@/components/Performance";
