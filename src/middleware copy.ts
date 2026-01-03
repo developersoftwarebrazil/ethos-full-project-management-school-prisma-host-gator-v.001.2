@@ -5,8 +5,14 @@ import { routeAccessMap } from "./lib/settings";
 /**
  * =========================================================
  * 🔁 CLERK (DESATIVADO TEMPORARIAMENTE)
+ * Quando voltar a usar Clerk:
+ *
+ * 1) Descomente os imports abaixo
+ * 2) Descomente o bloco clerkMiddleware
+ * 3) Comente o bloco AUTH LOCAL
  * =========================================================
  */
+
 // import { clerkMiddleware } from "@clerk/nextjs/server";
 
 /**
@@ -15,7 +21,7 @@ import { routeAccessMap } from "./lib/settings";
  * =========================================================
  */
 
-// Flags globais (.env / Railway)
+// Flags globais (Railway / .env)
 const AUTH_DISABLED = process.env.DISABLE_AUTH === "true";
 const ENABLE_REGISTER = process.env.ENABLE_REGISTER === "true";
 
@@ -31,21 +37,10 @@ type LocalSession = {
 
 /**
  * =========================================================
- * 🌍 ROTAS PÚBLICAS (GUEST)
- * =========================================================
- */
-const PUBLIC_ROUTES = [
-  "/",               // landing page
-  "/login",          // alias
-  "/auth/login",     // login real
-];
-
-/**
- * =========================================================
  * 🧭 ROTAS COM CONTROLE DE ROLE
  * =========================================================
  */
-const protectedRoutes = Object.entries(routeAccessMap).map(
+const matchers = Object.entries(routeAccessMap).map(
   ([route, allowedRoles]) => ({
     route,
     allowedRoles,
@@ -54,11 +49,16 @@ const protectedRoutes = Object.entries(routeAccessMap).map(
 
 /**
  * =========================================================
- * 🔐 MIDDLEWARE
+ * 🔐 MIDDLEWARE LOCAL
  * =========================================================
  */
-export default function middleware(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+export default async function middleware(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
+
+  const publicRoutes = [
+  "/login",
+  "/auth/login",
+];
 
   /**
    * =====================================================
@@ -72,16 +72,8 @@ export default function middleware(req: NextRequest) {
 
   /**
    * =====================================================
-   * 🔍 VERIFICA SE ROTA É PÚBLICA
-   * =====================================================
-   */
-  const isPublicRoute = PUBLIC_ROUTES.some(
-    (route) => pathname === route || pathname.startsWith(route + "/")
-  );
-
-  /**
-   * =====================================================
-   * 🔐 RECUPERA COOKIE DE SESSÃO
+   * 🔐 Recupera sessão local
+   * Cookie setado no /api/auth/login
    * =====================================================
    */
   const rawSession = req.cookies.get("session")?.value;
@@ -95,13 +87,13 @@ export default function middleware(req: NextRequest) {
       role = parsed.role ?? "";
       userId = parsed.userId ?? null;
     } catch (err) {
-      console.error("❌ Erro ao parsear cookie de sessão", err);
+      console.error("❌ Erro ao fazer parse do cookie de sessão", err);
     }
   }
 
   /**
    * =====================================================
-   * 🧪 DEBUG (REMOVER SE QUISER)
+   * 🧪 DEBUG
    * =====================================================
    */
   console.log("### MIDDLEWARE DEBUG ###");
@@ -117,28 +109,33 @@ export default function middleware(req: NextRequest) {
    * =====================================================
    */
   if (pathname === "/register") {
+    // Se register estiver desativado → bloqueia geral
     if (!ENABLE_REGISTER) {
+      console.log("🚫 REGISTER DESATIVADO");
       const url = req.nextUrl.clone();
-      url.pathname = "/auth/login";
+      url.pathname = "/login";
       return NextResponse.redirect(url);
     }
 
+    // Se já estiver logado → não pode registrar de novo
     if (rawSession) {
+      console.log("🔁 Usuário logado tentando acessar /register");
       const url = req.nextUrl.clone();
-      url.pathname = `/${role}`;
+      url.pathname = `/${role || ""}`;
       return NextResponse.redirect(url);
     }
 
+    // Register liberado e usuário não logado
     return NextResponse.next();
   }
 
   /**
    * =====================================================
-   * 🔒 GUEST EM ROTA PROTEGIDA → LOGIN
+   * 🔒 Sem sessão → redireciona para login
    * =====================================================
    */
-  if (!rawSession && !isPublicRoute) {
-    console.log("🔒 Guest em rota protegida → /auth/login");
+  if (!rawSession && pathname !== "/auth/login") {
+    console.log("🔒 Sem sessão → redirecionando para /login");
     const url = req.nextUrl.clone();
     url.pathname = "/auth/login";
     return NextResponse.redirect(url);
@@ -146,24 +143,14 @@ export default function middleware(req: NextRequest) {
 
   /**
    * =====================================================
-   * 🔁 LOGADO TENTANDO ACESSAR LOGIN
+   * 🔐 Verificação de acesso por ROLE
    * =====================================================
    */
-  if (rawSession && (pathname === "/login" || pathname === "/auth/login")) {
-    const url = req.nextUrl.clone();
-    url.pathname = `/${role}`;
-    return NextResponse.redirect(url);
-  }
-
-  /**
-   * =====================================================
-   * 🎭 CONTROLE DE ACESSO POR ROLE
-   * =====================================================
-   */
-  for (const { route, allowedRoles } of protectedRoutes) {
+  for (const { route, allowedRoles } of matchers) {
     if (pathname.startsWith(route)) {
       if (!allowedRoles.includes(role)) {
-        console.log("⛔ Acesso negado:", route);
+        console.log("⛔ Acesso negado à rota:", route);
+
         const url = req.nextUrl.clone();
         url.pathname = role ? `/${role}` : "/auth/login";
         return NextResponse.redirect(url);
@@ -176,11 +163,37 @@ export default function middleware(req: NextRequest) {
 
 /**
  * =========================================================
- * ⚙️ CONFIG DO MATCHER
+ * 🔁 VERSÃO CLERK (DESATIVADA)
+ * =========================================================
+ */
+/*
+export default clerkMiddleware(async (auth, req) => {
+  const { userId, sessionClaims } = auth();
+
+  const role =
+    (sessionClaims?.metadata as { role?: string })?.role ?? "";
+
+  for (const { matcher, allowedRoles } of matchers) {
+    if (matcher(req)) {
+      if (!allowedRoles.includes(role)) {
+        const url = req.nextUrl.clone();
+        url.pathname = "/unauthorized";
+        return NextResponse.redirect(url);
+      }
+    }
+  }
+
+  return NextResponse.next();
+});
+*/
+
+/**
+ * =========================================================
+ * ⚙️ CONFIG
  * =========================================================
  */
 export const config = {
   matcher: [
-    "/((?!_next|unauthorized|api|trpc|.*\\.(?:png|jpg|jpeg|svg|css|js|ico|woff2?|ttf)).*)",
+    "/((?!_next|login|register|unauthorized|api|trpc|.*\\.(?:png|jpg|jpeg|svg|css|js|ico|woff2?|ttf)).*)",
   ],
 };
