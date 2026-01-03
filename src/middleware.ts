@@ -33,6 +33,8 @@ type LocalSession = {
  * =========================================================
  * 🌍 ROTAS PÚBLICAS (GUEST)
  * =========================================================
+ * OBS:
+ * "/" aponta para src/app/(public)/page.tsx (landing)
  */
 const PUBLIC_ROUTES = [
   "/",               // landing page
@@ -101,7 +103,7 @@ export default function middleware(req: NextRequest) {
 
   /**
    * =====================================================
-   * 🧪 DEBUG (REMOVER SE QUISER)
+   * 🧪 DEBUG
    * =====================================================
    */
   console.log("### MIDDLEWARE DEBUG ###");
@@ -119,7 +121,7 @@ export default function middleware(req: NextRequest) {
   if (pathname === "/register") {
     if (!ENABLE_REGISTER) {
       const url = req.nextUrl.clone();
-      url.pathname = "/auth/login";
+      url.pathname = "/";
       return NextResponse.redirect(url);
     }
 
@@ -134,13 +136,13 @@ export default function middleware(req: NextRequest) {
 
   /**
    * =====================================================
-   * 🔒 GUEST EM ROTA PROTEGIDA → LOGIN
+   * 🔒 GUEST EM ROTA PROTEGIDA → LANDING PAGE
    * =====================================================
    */
   if (!rawSession && !isPublicRoute) {
-    console.log("🔒 Guest em rota protegida → /auth/login");
+    console.log("🔒 Guest em rota protegida → landing page");
     const url = req.nextUrl.clone();
-    url.pathname = "/auth/login";
+    url.pathname = "/";
     return NextResponse.redirect(url);
   }
 
@@ -165,7 +167,7 @@ export default function middleware(req: NextRequest) {
       if (!allowedRoles.includes(role)) {
         console.log("⛔ Acesso negado:", route);
         const url = req.nextUrl.clone();
-        url.pathname = role ? `/${role}` : "/auth/login";
+        url.pathname = role ? `/${role}` : "/";
         return NextResponse.redirect(url);
       }
     }
