@@ -17,9 +17,17 @@ const inter = localFont({
   display: "swap",
 });
 
+// export const metadata: Metadata = {
+//   title: "Plataforma Ethos CPAC Escola de Psícologia",
+//   description: "Ethos CPAC Escola de psicologia",
+// };
 export const metadata: Metadata = {
-  title: "Plataforma Ethos CPAC Escola de Psícologia",
-  description: "Ethos CPAC Escola de psicologia",
+  title: {
+    default: "ETHOS CPAC – Gestão Escolar",
+    template: "%s | ETHOS",
+  },
+  description:
+    "Sistema de gestão escolar para administração de alunos, professores, turmas e comunicação institucional.",
 };
 
 export default function RootLayout({
