@@ -1,4 +1,4 @@
-import { getAuthRole } from "@/app/api/auth/login/route copy 3";
+import { getAuthRole } from "@/src/descartes/login/route copy 3";
 import Announcements from "@/components/Announcements-funcionando";
 import BigCalendarContainer from "@/components/BigCalendarContainer";
 import BigCalendar from "@/components/BigCalender";

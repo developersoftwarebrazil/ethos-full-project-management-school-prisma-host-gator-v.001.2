@@ -55,6 +55,11 @@ const matchers = Object.entries(routeAccessMap).map(
 export default async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
 
+  const publicRoutes = [
+  "/login",
+  "/auth/login",
+];
+
   /**
    * =====================================================
    * 🔓 BYPASS TOTAL (DEV / EMERGÊNCIA)
@@ -129,10 +134,10 @@ export default async function middleware(req: NextRequest) {
    * 🔒 Sem sessão → redireciona para login
    * =====================================================
    */
-  if (!rawSession && pathname !== "/login") {
+  if (!rawSession && pathname !== "/auth/login") {
     console.log("🔒 Sem sessão → redirecionando para /login");
     const url = req.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = "/auth/login";
     return NextResponse.redirect(url);
   }
 
@@ -147,7 +152,7 @@ export default async function middleware(req: NextRequest) {
         console.log("⛔ Acesso negado à rota:", route);
 
         const url = req.nextUrl.clone();
-        url.pathname = role ? `/${role}` : "/login";
+        url.pathname = role ? `/${role}` : "/auth/login";
         return NextResponse.redirect(url);
       }
     }
