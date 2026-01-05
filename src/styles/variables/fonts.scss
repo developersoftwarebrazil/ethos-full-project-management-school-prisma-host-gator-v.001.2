@@ -1,0 +1,290 @@
+// _fonts.scss
+
+// 1) Stack de famílias
+$font-stack-display: "Chathura", cursive;
+$font-stack-primary: "Roboto", sans-serif;
+$font-stack-secondary: "Open Sans", sans-serif;
+
+// 2) Map principal com todas as configurações
+$fonts: (
+  // Chathura 400 64/72 – display extra-extra-grande
+  font-0-xxxl:
+    (
+      family: $font-stack-display,
+      weight: 400,
+      size: 128px,
+      line: 132px,
+      caps: false,
+      spacing: 20px,
+    ),
+  // Chathura 400 64/72 – display extra-extra-grande
+  font-0-xxl:
+    (
+      family: $font-stack-display,
+      weight: 400,
+      size: 64px,
+      line: 72px,
+      caps: true,
+      spacing: 20px,
+    ),
+
+  // Roboto 600 64/72 – título XXL
+  font-1-xxl:
+    (
+      family: $font-stack-primary,
+      weight: 600,
+      size: 64px,
+      line: 72px,
+      caps: false,
+      spacing: null,
+    ),
+  // Open Sans 600 64/72 – título XXL
+  font-2-xxl:
+    (
+      family: $font-stack-secondary,
+      weight: 600,
+      size: 64px,
+      line: 72px,
+      caps: false,
+      spacing: null,
+    ),
+  // Roboto 400 32/40 – título XL
+  font-1-xl:
+    (
+      family: $font-stack-primary,
+      weight: 400,
+      size: 32px,
+      line: 40px,
+      caps: false,
+      spacing: 1.5%,
+    ),
+
+  // Open Sans 400 32/40 – título XL
+  font-2-xl:
+    (
+      family: $font-stack-secondary,
+      weight: 400,
+      size: 32px,
+      line: 40px,
+      caps: false,
+      spacing: 1.5%,
+    ),
+
+  // Roboto 600 32/40 – título XL
+  font-1-xl-b:
+    (
+      family: $font-stack-primary,
+      weight: 600,
+      size: 32px,
+      line: 40px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // Open Sans 600 32/40 – título XL
+  font-2-xl-b:
+    (
+      family: $font-stack-secondary,
+      weight: 600,
+      size: 32px,
+      line: 40px,
+      caps: false,
+      spacing: null,
+    ),
+  // Roboto 400 24/36 – título L
+  font-1-l:
+    (
+      family: $font-stack-primary,
+      weight: 400,
+      size: 24px,
+      line: 36px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // ROBOTO 500 24/36 1.5% ALL CAPS – título L bold caps
+  font-1-l-b:
+    (
+      family: $font-stack-primary,
+      weight: 500,
+      size: 24px,
+      line: 36px,
+      caps: true,
+      spacing: 1.5%,
+    ),
+
+  // Open Sans 400 24/36 – subtítulo L
+  font-2-l:
+    (
+      family: $font-stack-secondary,
+      weight: 400,
+      size: 24px,
+      line: 36px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // OPEN SANS 600 24/36 1.5% ALL CAPS – subtítulo L bold caps
+  font-2-l-b:
+    (
+      family: $font-stack-secondary,
+      weight: 600,
+      size: 24px,
+      line: 36px,
+      caps: true,
+      spacing: 1.5%,
+    ),
+
+  // Roboto 500 18/24 – texto M
+  font-1-m:
+    (
+      family: $font-stack-primary,
+      weight: 500,
+      size: 18px,
+      line: 24px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // Roboto 600 18/24 – texto M bold
+  font-1-m-b:
+    (
+      family: $font-stack-primary,
+      weight: 600,
+      size: 18px,
+      line: 24px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // Open Sans 500 18/24 – secundário M
+  font-2-m:
+    (
+      family: $font-stack-secondary,
+      weight: 500,
+      size: 18px,
+      line: 24px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // Open Sans 600 24/36 – secundário M bold
+  font-2-m-b:
+    (
+      family: $font-stack-secondary,
+      weight: 600,
+      size: 24px,
+      line: 36px,
+      caps: false,
+      spacing: null,
+    ),
+  // Open Sans 600 20/24 – secundário M italic
+  font-2-m-i:
+    (
+      family: $font-stack-secondary,
+      weight: 600,
+      // Semibold
+      size: 20px,
+      line: 24px,
+      style: italic,// Itálico
+      caps: false,
+      spacing: 1.5px,
+    ),
+
+  // Roboto 400 16/24 – texto S
+  font-1-s:
+    (
+      family: $font-stack-primary,
+      weight: 400,
+      size: 16px,
+      line: 24px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // Open Sans 400 16/24 – secundário S
+  font-2-s:
+    (
+      family: $font-stack-secondary,
+      weight: 400,
+      size: 16px,
+      line: 24px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // Roboto 400 14/20 – texto XS
+  font-1-xs:
+    (
+      family: $font-stack-primary,
+      weight: 400,
+      size: 14px,
+      line: 20px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // Open Sans 400 14/20 – secundário XS
+  font-2-xs:
+    (
+      family: $font-stack-secondary,
+      weight: 400,
+      size: 14px,
+      line: 20px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // Open Sans 400 14/20 i – itálico
+  font-2-i-xs:
+    (
+      family: $font-stack-secondary,
+      weight: 400,
+      size: 14px,
+      line: 20px,
+      caps: false,
+      spacing: null,
+      style: italic,
+    ),
+
+  // Roboto 400 12/18 – texto XXS
+  font-1-xxs:
+    (
+      family: $font-stack-primary,
+      weight: 400,
+      size: 12px,
+      line: 18px,
+      caps: false,
+      spacing: null,
+    ),
+
+  // Open Sans 400 12/18 – secundário XXS
+  font-2-xxs:
+    (
+      family: $font-stack-secondary,
+      weight: 400,
+      size: 12px,
+      line: 18px,
+      caps: false,
+      spacing: null,
+    )
+);
+
+// 3) Mixin para aplicar qualquer token de forma simples
+@mixin font-token($token) {
+  $cfg: map-get($fonts, $token);
+
+  font-family: map-get($cfg, family);
+  font-weight: map-get($cfg, weight);
+  font-size: map-get($cfg, size);
+  line-height: map-get($cfg, line);
+  @if map-get($cfg, caps) {
+    text-transform: uppercase;
+  }
+  @if map-get($cfg, spacing) {
+    letter-spacing: map-get($cfg, spacing);
+  }
+  @if map-has-key($cfg, style) and map-get($cfg, style) == italic {
+    font-style: italic;
+  }
+}

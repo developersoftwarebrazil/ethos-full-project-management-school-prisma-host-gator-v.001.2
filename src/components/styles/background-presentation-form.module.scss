@@ -1,0 +1,131 @@
+@import "@/styles/variables/index.scss";
+
+.right {
+  flex: 2;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background: none;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    display: none;
+    padding: 1rem;
+    justify-content: center;
+  }
+}
+.presenterImage {
+  position: absolute;
+  right: -10rem;
+  bottom: 0;
+  height: 80%;
+  min-width: 70%;
+  background: url("/assets/foto-apresentador.png") no-repeat bottom right;
+  background-size: contain;
+  opacity: 1;
+  z-index: 2;
+}
+.presentation {
+  position: relative;
+  z-index: 5;
+  min-height: 100vh;
+  width: 100%;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.8);
+  h2 {
+    @include font-token(font-0-xxxl);
+    text-transform: uppercase;
+    color: $bl11;
+  }
+
+  h3 {
+    @include font-token(font-0-xxl);
+  }
+
+  p {
+    @include font-token(font-2-xl);
+    color: $bl08;
+    text-transform: uppercase;
+  }
+
+  p,
+  h3,
+  blockquote {
+    margin: $space-008 0;
+  }
+
+  .cpac {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+
+    span {
+      @include font-token(font-0-xxl);
+      background-color: $bl06;
+      color: $grl01;
+      width: 5rem;
+      height: 5rem;
+      border-radius: 50%;
+      border: .025rem solid #fb1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+  }
+
+  .blockquote {
+    display: flex;
+    justify-content: center;
+
+    blockquote {
+      display: block;
+      @include font-token(font-2-m-i);
+      text-align: center;
+      margin: $space-040 0;
+      position: relative;
+
+      span {
+        display: block;
+        line-height: 1.5;
+
+        &:last-child {
+          text-indent: 16px;
+        }
+
+        &::before,
+        &::after {
+          content: "";
+          position: absolute;
+          width: 1.5rem;
+          height: 1.5rem;
+          background-size: contain;
+          background-repeat: no-repeat;
+        }
+
+        &::before {
+          top: -0.5rem;
+          left: -1.5rem;
+          background-image: url("/assets/aspas-left.svg");
+        }
+
+        &::after {
+          bottom: -0.5rem;
+          right: -2rem;
+          background-image: url("/assets/aspas-right.svg");
+        }
+      }
+    }
+  }
+}
+
+

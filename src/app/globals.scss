@@ -1,0 +1,257 @@
+/* =====================================================
+   TAILWIND (BASE DO PROJETO)
+===================================================== */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* =====================================================
+   VARIÁVEIS SCSS (LAYOUT ANTIGO)
+===================================================== */
+@import "../styles/variables/index.scss";
+
+/* =====================================================
+   RESET GLOBAL
+===================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* =====================================================
+   BODY / TIPOGRAFIA
+===================================================== */
+body {
+  padding-top: 4rem; // espaço para o Header
+  background: $grl01;
+  color: $bl08;
+
+  --type-logo: var(--font-chathura);
+  --type-first: var(--font-roboto), Arial, sans-serif;
+  --type-second: var(--font-open-sans), sans-serif;
+
+  font-family: var(--type-first);
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =====================================================
+   ELEMENTOS GLOBAIS
+===================================================== */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  height: auto;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+/* =====================================================
+   LAYOUT BASE (SEM SIDEBAR)
+===================================================== */
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.AppBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.AppContent {
+  flex: 1;
+}
+
+/* =====================================================
+   UTILITÁRIOS DO LAYOUT ANTIGO
+===================================================== */
+.container {
+  max-width: 50rem;
+  padding: 0 1rem;
+  margin: 0 auto;
+}
+
+.mainContainer {
+  margin-top: 2rem;
+}
+
+.title {
+  font-family: var(--type-first);
+  line-height: 1;
+  font-size: 3rem;
+  margin: 1rem 0;
+  position: relative;
+  z-index: 1;
+}
+
+.title::after {
+  content: "";
+  display: block;
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #e41226;
+  position: absolute;
+  bottom: 5px;
+  left: -5px;
+  border-radius: 0.2rem;
+  z-index: -1;
+}
+
+/* =====================================================
+   ANIMAÇÃO
+===================================================== */
+.animeLeft {
+  opacity: 0;
+  transform: translateX(-20px);
+  animation: animeLeft 0.3s forwards;
+}
+
+@keyframes animeLeft {
+  to {
+    opacity: 1;
+    transform: initial;
+  }
+}
+
+/* =====================================================
+   BOTÃO PADRÃO
+===================================================== */
+.button {
+  cursor: pointer;
+  border: none;
+  border-radius: 0.4rem;
+  background: #ffbb11;
+  padding: 0.8rem 1.2rem;
+  transition: 0.1s;
+  width: fit-content;
+}
+
+.button:hover,
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #ffefaa, 0 0 0 4px #ffbb11;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+/* =====================================================
+   REACT CALENDAR
+===================================================== */
+.react-calendar {
+  width: 100% !important;
+  border: none !important;
+  font-family: "Inter", sans-serif !important;
+}
+
+.react-calendar__navigation__label__labelText {
+  font-weight: 600;
+}
+
+.react-calendar__tile--active {
+  background-color: #c3ebfa !important;
+  color: black !important;
+}
+
+/* =====================================================
+   REACT BIG CALENDAR
+===================================================== */
+.rbc-btn-group:first-child {
+  display: none !important;
+}
+
+.rbc-toolbar-label {
+  text-align: right !important;
+  padding: 0 20px !important;
+}
+
+.rbc-btn-group:last-child {
+  font-size: 13px !important;
+}
+
+.rbc-btn-group:last-child button {
+  border: none !important;
+  background-color: #f1f0ff !important;
+  margin-left: 2px !important;
+}
+
+.rbc-toolbar button.rbc-active {
+  background-color: #dbdafe !important;
+  box-shadow: none !important;
+}
+
+.rbc-time-view {
+  border-color: #eee !important;
+}
+
+.rbc-time-header {
+  display: none !important;
+}
+
+.rbc-time-content {
+  border: none !important;
+}
+
+.rbc-time-gutter.rbc-time-column {
+  font-size: 12px !important;
+}
+
+.rbc-time-gutter.rbc-time-column .rbc-timeslot-group {
+  padding: 0 20px !important;
+}
+
+.rbc-timeslot-group {
+  background-color: #f7fdff !important;
+}
+
+.rbc-day-slot {
+  font-size: 14px !important;
+}
+
+.rbc-event {
+  border: none !important;
+  color: black !important;
+  padding: 10px !important;
+  margin: 10px !important;
+  width: 99% !important;
+}
+
+.rbc-event:nth-child(1) { background-color: #e2f8ff !important; }
+.rbc-event:nth-child(2) { background-color: #fefce8 !important; }
+.rbc-event:nth-child(3) { background-color: #f2f1ff !important; }
+.rbc-event:nth-child(4) { background-color: #fdf2fb !important; }
+.rbc-event:nth-child(5) { background-color: #e2f8ff !important; }
+.rbc-event:nth-child(6) { background-color: #fefce8 !important; }
+.rbc-event:nth-child(7) { background-color: #f2f1ff !important; }
+.rbc-event:nth-child(8) { background-color: #fdf2fb !important; }
+
+.rbc-event-label {
+  color: gray !important;
+  margin-bottom: 5px;
+}
