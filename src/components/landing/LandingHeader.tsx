@@ -21,7 +21,7 @@ export default function LandingHeader() {
           <Link href="#">Quem somos</Link>
           <Link href="#">Fale conosco</Link>
         </nav>
-        <div className="styles.area">
+        <div className={styles.area}>
           <Link href="/auth/login" className={styles.areaAluno}>
             Área do aluno
           </Link>
