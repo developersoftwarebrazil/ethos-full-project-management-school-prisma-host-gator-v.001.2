@@ -6,8 +6,8 @@ import AttendanceChartContainer from "@/components/AttendanceChartContainer";
 import CountChartContainer from "@/components/CountChartContainer";
 import EventCalendarContainer from "@/components/EventCalendarContainer";
 import FinanceChart from "@/components/FinanceChart";
-import UserCard from "@/components/UserCard";
 
+import UserCard from "@/components/dashboards/cards/UserCard";
 const AdminPage = ({
   searchParams,
 }: {
