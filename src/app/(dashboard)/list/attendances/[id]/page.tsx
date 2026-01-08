@@ -1,6 +1,6 @@
 // src/app/list/attendance/[id]/page.tsx
 import prisma from "@/lib/prisma";
-import AttendanceCard from "@/components/dashboards/charts/AttendanceCard";
+import AttendanceCard from "@/components/dashboards/attendance/AttendanceCard";
 
 type Props = { params: { id: string } };
 

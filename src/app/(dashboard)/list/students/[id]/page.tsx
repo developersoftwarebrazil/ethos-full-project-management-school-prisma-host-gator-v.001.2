@@ -1,9 +1,9 @@
 // import { getAuthRole } from "@/app/api/auth/login/route copy 3";
-import Announcements from "@/components/Announcements-funcionando";
+import Announcements from "@/components/dashboards/announcements/Announcements";
 import BigCalendarContainer from "@/components/BigCalendarContainer";
 import FormContainer from "@/components/FormContainer";
 import Performance from "@/components/Performance";
-import StudentAttendanceCard from "@/components/StudentAttendanceCard";
+import StudentAttendanceCard from "@/components/dashboards/attendance/StudentAttendanceCard";
 import { getAuthRole } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { Class, Student } from "@prisma/client";
