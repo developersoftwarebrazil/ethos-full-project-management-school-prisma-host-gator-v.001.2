@@ -1,7 +1,7 @@
-import { getAuthRole } from "@/src/descartes/login/route copy 3";
-import Announcements from "@/components/Announcements-funcionando";
-import BigCalendarContainer from "@/components/BigCalendarContainer";
-import BigCalendar from "@/components/BigCalender";
+import { getAuthRole } from "@/lib/auth";
+import Announcements from "@/components/dashboards/announcements/Announcements";
+import BigCalendarContainer from "@/components/dashboards/calendar/BigCalendarContainer";
+import BigCalendar from "@/components/dashboards/calendar/BigCalender";
 import FormContainer from "@/components/FormContainer";
 import Performance from "@/components/Performance";
 import prisma from "@/lib/prisma";
@@ -58,7 +58,7 @@ const SingleTeacherPage = async ({
         {/* TOP */}
         <div className="flex flex-col lg:flex-row gap-4">
           {/* USER INFO CARD */}
-          <div className="bg-lamaSky py-6 px-4 rounded-md flex-1 flex gap-4">
+          <div className="bg-ethosSky py-6 px-4 rounded-md flex-1 flex gap-4">
             <div className="w-1/3">
               <Image
                 src={teacher.img || "/noAvatar.png"}
@@ -180,19 +180,19 @@ const SingleTeacherPage = async ({
           <h1 className="text-xl font-semibold">Atalhos</h1>
           <div className="mt-4 flex gap-4 flex-wrap text-xs text-gray-500">
             <Link
-              className="p-3 rounded-md bg-lamaSkyLight"
+              className="p-3 rounded-md bg-ethosSkyLight"
               href={`/list/classes?supervisorId=${teacher.id}`}
             >
               Turmas do Professor
             </Link>
             <Link
-              className="p-3 rounded-md bg-lamaPurpleLight"
+              className="p-3 rounded-md bg-ethosPurpleLight"
               href={`/list/students?teacherId=${teacher.id}`}
             >
               Alunos do Professor
             </Link>
             <Link
-              className="p-3 rounded-md bg-lamaYellowLight"
+              className="p-3 rounded-md bg-ethosYellowLight"
               href={`/list/lessons?teacherId=${teacher.id}`}
             >
               Aulas do Professor
@@ -204,7 +204,7 @@ const SingleTeacherPage = async ({
               Provas do Professor
             </Link>
             <Link
-              className="p-3 rounded-md bg-lamaSkyLight"
+              className="p-3 rounded-md bg-ethosSkyLight"
               href={`/list/assignments?teacherId=${teacher.id}`}
             >
               Tarefas do Professor

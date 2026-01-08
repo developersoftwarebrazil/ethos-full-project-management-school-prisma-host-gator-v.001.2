@@ -9,14 +9,14 @@
 // import { auth } from "@clerk/nextjs/server";
 
 import Announcements from "@/components/dashboards/announcements/Announcements";
-import EventCalendar from "@/components/EventCalendar";
+import EventCalendar from "@/components/dashboards/calendar/EventCalendar";
 import prisma from "@/lib/prisma";
 import dynamic from "next/dynamic";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 const BigCalendarContainer = dynamic(
-  () => import("@/components/BigCalendarContainer"),
+  () => import("@/components/dashboards/calendar/BigCalendarContainer"),
   { ssr: false }
 );
 

@@ -11,7 +11,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 const BigCalendarContainer = dynamic(
-  () => import("@/components/BigCalendarContainer"),
+  () => import("@/components/dashboards/calendar/BigCalendarContainer"),
   { ssr: false }
 );
 

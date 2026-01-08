@@ -52,7 +52,7 @@ const GradeListPage = async ({
   const renderRow = (item: Grade) => (
     <tr
       key={item.id}
-      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
+      className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-ethosPurpleLight"
     >
       <td className="p-4">{item.level}</td>
       <td className="hidden md:table-cell">{item.description}</td>
@@ -112,10 +112,10 @@ const GradeListPage = async ({
         <div className="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
           <TableSearch />
           <div className="flex items-center gap-4 self-end">
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-ethosYellow">
               <Image src="/filter.png" alt="Filtrar" width={14} height={14} />
             </button>
-            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
+            <button className="w-8 h-8 flex items-center justify-center rounded-full bg-ethosYellow">
               <Image src="/sort.png" alt="Ordenar" width={14} height={14} />
             </button>
             {role === "admin" && <FormContainer table="grade" type="create" />}

@@ -4,7 +4,7 @@ export const revalidate = 0;
 import Announcements from "@/components/dashboards/announcements/Announcements";
 import AttendanceChartContainer from "@/components/dashboards/charts/AttendanceChartContainer";
 import CountChartContainer from "@/components/dashboards/charts/CountChartContainer";
-import EventCalendarContainer from "@/components/EventCalendarContainer";
+import EventCalendarContainer from "@/components/dashboards/calendar/EventCalendarContainer";
 import FinanceChart from "@/components/dashboards/charts/FinanceChart";
 
 import UserCard from "@/components/ui/cards/UserCard";

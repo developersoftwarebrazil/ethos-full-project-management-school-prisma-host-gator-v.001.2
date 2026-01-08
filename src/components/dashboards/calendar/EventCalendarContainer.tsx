@@ -26,7 +26,7 @@ const EventCalendarContainer = async ({
         {/* Passa search e modo para a lista */}
         {/* mode default: future */}
         {/* EventList é server component e fará a query */}
-      
+
         <EventList dateParam={date} mode={effectiveMode} search={search} />
       </div>
     </div>

@@ -8,13 +8,13 @@
  */
 // import { auth } from "@clerk/nextjs/server";
 
-import Announcements from "@/components/Announcements-funcionando";
+import Announcements from "@/components/dashboards/announcements/Announcements";
 import prisma from "@/lib/prisma";
 import dynamic from "next/dynamic";
 import { cookies } from "next/headers";
 
 const BigCalendarContainer = dynamic(
-  () => import("@/components/BigCalendarContainer"),
+  () => import("@/components/dashboards/calendar/BigCalendarContainer"),
   { ssr: false }
 );
 
@@ -76,10 +76,7 @@ const ParentPage = async () => {
             </h1>
 
             {student.classId && (
-              <BigCalendarContainer
-                type="classId"
-                id={student.classId}
-              />
+              <BigCalendarContainer type="classId" id={student.classId} />
             )}
           </div>
         ))}

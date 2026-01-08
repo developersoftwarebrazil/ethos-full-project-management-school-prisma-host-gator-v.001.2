@@ -1,6 +1,6 @@
 // import { getAuthRole } from "@/app/api/auth/login/route copy 3";
 import Announcements from "@/components/dashboards/announcements/Announcements";
-import BigCalendarContainer from "@/components/BigCalendarContainer";
+import BigCalendarContainer from "@/components/dashboards/calendar/BigCalendarContainer";
 import FormContainer from "@/components/FormContainer";
 import Performance from "@/components/Performance";
 import StudentAttendanceCard from "@/components/dashboards/attendance/StudentAttendanceCard";
@@ -55,7 +55,7 @@ const SingleStudentPage = async ({
         {/* TOP */}
         <div className="flex flex-col lg:flex-row gap-4">
           {/* USER INFO CARD */}
-          <div className="bg-lamaSky py-6 px-4 rounded-md flex-1 flex gap-4">
+          <div className="bg-ethosSky py-6 px-4 rounded-md flex-1 flex gap-4">
             <div className="w-1/3">
               <Image
                 src={student.img || "/noAvatar.png"}
@@ -174,13 +174,13 @@ const SingleStudentPage = async ({
           <h1 className="text-xl font-semibold">Atalhos</h1>
           <div className="mt-4 flex gap-4 flex-wrap text-xs text-gray-500">
             <Link
-              className="p-3 rounded-md bg-lamaSkyLight"
+              className="p-3 rounded-md bg-ethosSkyLight"
               href={`/list/lessons?classId=${student.class.id}`}
             >
               Aulas do aluno
             </Link>
             <Link
-              className="p-3 rounded-md bg-lamaPurpleLight"
+              className="p-3 rounded-md bg-ethosPurpleLight"
               href={`/list/teachers?classId=${student.class.id}`}
             >
               Professores do aluno
@@ -192,13 +192,13 @@ const SingleStudentPage = async ({
               Provas do aluno
             </Link>
             <Link
-              className="p-3 rounded-md bg-lamaSkyLight"
+              className="p-3 rounded-md bg-ethosSkyLight"
               href={`/list/assignments?classId=${student.class.id}`}
             >
               Tarefas do aluno
             </Link>
             <Link
-              className="p-3 rounded-md bg-lamaYellowLight"
+              className="p-3 rounded-md bg-ethosYellowLight"
               href={`/list/results?studentId=${student.id}`}
             >
               Resultados do aluno

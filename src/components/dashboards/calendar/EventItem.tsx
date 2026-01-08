@@ -4,13 +4,13 @@ import { ptBR } from "date-fns/locale";
 import Image from "next/image";
 import clsx from "clsx";
 
-// Cores do tema LAMA
+// Cores do tema ETHOS
 const TYPE_COLORS: Record<string, string> = {
-  aula: "bg-lamaGreen text-white",
-  prova: "bg-lamaRed text-white",
-  aviso: "bg-lamaSky text-white",
-  reuniao: "bg-lamaPurple text-white",
-  geral: "bg-lamaYellow text-black",
+  aula: "bg-ethosGreen text-white",
+  prova: "bg-ethosRed text-white",
+  aviso: "bg-ethosSky text-white",
+  reuniao: "bg-ethosPurple text-white",
+  geral: "bg-ethosYellow text-black",
 };
 
 // Caso seu evento tenha "type" no banco
@@ -31,7 +31,7 @@ const EventItem = ({ event }: { event: Event }) => {
       className={clsx(
         "p-4 rounded-lg border-2 shadow-sm transition flex flex-col gap-2",
         "border-gray-100 bg-white",
-        "hover:shadow-md hover:border-lamaSky/40"
+        "hover:shadow-md hover:border-ethosSky/40"
       )}
     >
       {/* Header */}
