@@ -3,7 +3,7 @@ import Announcements from "@/components/dashboards/announcements/Announcements";
 import BigCalendarContainer from "@/components/dashboards/calendar/BigCalendarContainer";
 import BigCalendar from "@/components/dashboards/calendar/BigCalender";
 import FormContainer from "@/components/FormContainer";
-import Performance from "@/components/Performance";
+import Performance from "@/components/dashboards/performance/Performance";
 import prisma from "@/lib/prisma";
 // import { auth } from "@clerk/nextjs/server";
 import { Teacher } from "@prisma/client";

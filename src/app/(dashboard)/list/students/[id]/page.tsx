@@ -2,7 +2,7 @@
 import Announcements from "@/components/dashboards/announcements/Announcements";
 import BigCalendarContainer from "@/components/dashboards/calendar/BigCalendarContainer";
 import FormContainer from "@/components/FormContainer";
-import Performance from "@/components/Performance";
+import Performance from "@/components/dashboards/performance/Performance";
 import StudentAttendanceCard from "@/components/dashboards/attendance/StudentAttendanceCard";
 import { getAuthRole } from "@/lib/auth";
 import prisma from "@/lib/prisma";
