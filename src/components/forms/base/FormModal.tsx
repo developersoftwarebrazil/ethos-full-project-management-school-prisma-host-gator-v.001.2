@@ -11,43 +11,43 @@ import { deleteActionMap } from "@/lib/actionsWrapper";
 import { FormContainerProps } from "./FormContainer";
 
 // FORMS (LAZY LOAD)
-const TeacherForm = dynamic(() => import("./forms/TeacherForm"), {
+const TeacherForm = dynamic(() => import("../TeacherForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const StudentForm = dynamic(() => import("./forms/StudentForm"), {
+const StudentForm = dynamic(() => import("../StudentForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const ParentForm = dynamic(() => import("./forms/ParentForm"), {
+const ParentForm = dynamic(() => import("../ParentForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const SubjectForm = dynamic(() => import("./forms/SubjectForm"), {
+const SubjectForm = dynamic(() => import("../SubjectForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const ClassForm = dynamic(() => import("./forms/ClassForm"), {
+const ClassForm = dynamic(() => import("../ClassForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const ExamForm = dynamic(() => import("./forms/ExamForm"), {
+const ExamForm = dynamic(() => import("../ExamForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const LessonForm = dynamic(() => import("./forms/LessonForm"), {
+const LessonForm = dynamic(() => import("../LessonForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const GradeForm = dynamic(() => import("./forms/GradeForm"), {
+const GradeForm = dynamic(() => import("../GradeForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const AssignmentForm = dynamic(() => import("./forms/AssignmentForm"), {
+const AssignmentForm = dynamic(() => import("../AssignmentForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const ResultForm = dynamic(() => import("./forms/ResultForm"), {
+const ResultForm = dynamic(() => import("../ResultForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const EventForm = dynamic(() => import("./forms/EventForm"), {
+const EventForm = dynamic(() => import("../EventForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const AttendanceForm = dynamic(() => import("./forms/AttendanceForm"), {
+const AttendanceForm = dynamic(() => import("../AttendanceForm"), {
   loading: () => <h1>Loading...</h1>,
 });
-const AnnouncementForm = dynamic(() => import("./forms/AnnouncementForm"), {
+const AnnouncementForm = dynamic(() => import("../AnnouncementForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 
@@ -138,8 +138,8 @@ const FormModal = ({
       <form action={formAction} className="p-4 flex flex-col gap-4">
         <input type="text" name="id" value={id} hidden readOnly />
         <span className="text-center font-medium">
-          Todos os dados serão perdidos. Você tem certeza que deseja deletar este{" "}
-          {table}?
+          Todos os dados serão perdidos. Você tem certeza que deseja deletar
+          este {table}?
         </span>
         <button className="bg-red-700 text-white py-2 px-4 rounded-md border-none w-max self-center">
           Deletar

@@ -1,4 +1,4 @@
-import FormContainer from "@/components/FormContainer";
+import FormContainer from "@/components/forms/base/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
@@ -29,7 +29,6 @@ const ClassListPage = async ({
    */
   // const { sessionClaims } = auth();
   // const role = (sessionClaims?.metadata as { role?: string })?.role;
-
 
   const columns = [
     {

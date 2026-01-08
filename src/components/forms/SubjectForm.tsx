@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import InputField from "../InputField";
+import InputField from "./base/InputField";
 import { subjectSchema, SubjectSchema } from "@/lib/formValidationSchemas";
 import { createSubject, updateSubject } from "@/lib/actions";
 import { useFormState } from "react-dom";
@@ -59,7 +59,9 @@ const SubjectForm = ({
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
-        {type === "create" ? "Criar uma nova disciplina" : "Atualizar a disciplina"}
+        {type === "create"
+          ? "Criar uma nova disciplina"
+          : "Atualizar a disciplina"}
       </h1>
 
       <div className="flex justify-between flex-wrap gap-4">
@@ -103,9 +105,7 @@ const SubjectForm = ({
           )}
         </div>
       </div>
-      {state.error && (
-        <span className="text-red-500">Algo deu errado!</span>
-      )}
+      {state.error && <span className="text-red-500">Algo deu errado!</span>}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Criar" : "Atualizar"}
       </button>

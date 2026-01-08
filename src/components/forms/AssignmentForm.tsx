@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { createAssignment, updateAssignment } from "@/lib/actions";
 import { Dispatch, SetStateAction } from "react";
-import InputField from "../InputField";
+import InputField from "./base/InputField";
 
 interface AssignmentFormProps {
   type: "create" | "update";
@@ -20,7 +20,7 @@ interface AssignmentFormData {
   id?: number;
   title: string;
   startDate: string; // datetime-local → string
-  dueDate: string;   // datetime-local → string
+  dueDate: string; // datetime-local → string
   lessonId: number;
 }
 
@@ -89,7 +89,6 @@ export default function AssignmentForm({
       </h1>
 
       <div className="flex justify-between flex-wrap gap-4">
-
         {/* Title */}
         <InputField
           label="Título"

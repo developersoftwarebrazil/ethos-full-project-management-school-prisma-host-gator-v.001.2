@@ -2,15 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import InputField from "../InputField";
-import {
-  resultSchema,
-  ResultSchema,
-} from "@/lib/formValidationSchemas";
-import {
-  createResult,
-  updateResult,
-} from "@/lib/actions";
+import InputField from "./base/InputField";
+import { resultSchema, ResultSchema } from "@/lib/formValidationSchemas";
+import { createResult, updateResult } from "@/lib/actions";
 import { useFormState } from "react-dom";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -44,25 +38,26 @@ const ResultForm = ({
   );
 
   const onSubmit = handleSubmit(async (formData) => {
-  try {
-    const result =
-      type === "create"
-        ? await createResult(state, formData) // currentState opcional
-        : await updateResult(state, formData);
+    try {
+      const result =
+        type === "create"
+          ? await createResult(state, formData) // currentState opcional
+          : await updateResult(state, formData);
 
-    if (result.success) {
-      toast(`O resultado foi ${type === "create" ? "criado" : "atualizado"}!`);
-      setOpen(false); // fecha o modal
-      router.refresh(); // atualiza a página
-    } else {
-      toast.error("Algo deu errado!");
+      if (result.success) {
+        toast(
+          `O resultado foi ${type === "create" ? "criado" : "atualizado"}!`
+        );
+        setOpen(false); // fecha o modal
+        router.refresh(); // atualiza a página
+      } else {
+        toast.error("Algo deu errado!");
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao salvar o resultado!");
     }
-  } catch (err) {
-    console.error(err);
-    toast.error("Erro ao salvar o resultado!");
-  }
-});
-
+  });
 
   const router = useRouter();
 
@@ -84,7 +79,6 @@ const ResultForm = ({
       </h1>
 
       <div className="flex justify-between flex-wrap gap-4">
-
         {/* SCORE */}
         <InputField
           label="Nota"
@@ -183,12 +177,9 @@ const ResultForm = ({
             </p>
           )}
         </div>
-
       </div>
 
-      {state.error && (
-        <span className="text-red-500">Algo deu errado!</span>
-      )}
+      {state.error && <span className="text-red-500">Algo deu errado!</span>}
 
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Criar" : "Atualizar"}

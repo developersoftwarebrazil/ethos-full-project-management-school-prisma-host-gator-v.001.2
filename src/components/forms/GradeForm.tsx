@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import InputField from "../InputField";
+import InputField from "./base/InputField";
 import { createGrade, updateGrade } from "@/lib/actions";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -58,7 +58,9 @@ export default function GradeForm({ type, data, setOpen }: GradeFormProps) {
         await updateGrade({ ...formData, id: data.id });
       }
 
-      toast.success(`A série foi ${type === "create" ? "criada" : "atualizada"}!`);
+      toast.success(
+        `A série foi ${type === "create" ? "criada" : "atualizada"}!`
+      );
       setOpen(false);
       router.refresh();
     } catch (err) {

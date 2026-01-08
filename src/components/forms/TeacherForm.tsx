@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import InputField from "../InputField";
+import InputField from "./base/InputField";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { teacherSchema, TeacherSchema } from "@/lib/formValidationSchemas";
@@ -61,7 +61,9 @@ const TeacherForm = ({
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
       <h1 className="text-xl font-semibold">
-        {type === "create" ? "Criar um novo professor" : "Atualizar o professor"}
+        {type === "create"
+          ? "Criar um novo professor"
+          : "Atualizar o professor"}
       </h1>
       <span className="text-xs text-gray-400 font-medium">
         Informações de autenticação
@@ -122,7 +124,7 @@ const TeacherForm = ({
           register={register}
           error={errors.address}
         />
-         <InputField
+        <InputField
           label="Descrição"
           name="description"
           defaultValue={data?.description}
@@ -210,9 +212,7 @@ const TeacherForm = ({
           }}
         </CldUploadWidget>
       </div>
-      {state.error && (
-        <span className="text-red-500">Algo deu errado!</span>
-      )}
+      {state.error && <span className="text-red-500">Algo deu errado!</span>}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Criar" : "Atualizar"}
       </button>

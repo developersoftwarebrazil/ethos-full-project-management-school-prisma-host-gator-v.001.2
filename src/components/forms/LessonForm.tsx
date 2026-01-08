@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { createLesson, updateLesson } from "@/lib/actions";
 import { Dispatch, SetStateAction } from "react";
-import InputField from "../InputField";
+import InputField from "./base/InputField";
 
 interface LessonFormProps {
   type: "create" | "update" | "delete";

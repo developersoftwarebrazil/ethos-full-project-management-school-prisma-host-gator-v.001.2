@@ -4,7 +4,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "react-toastify";
 import { createAnnouncement, updateAnnouncement } from "@/lib/actions";
 import { Dispatch, SetStateAction } from "react";
-import InputField from "../InputField";
+import InputField from "./base/InputField";
 
 interface AnnouncementFormProps {
   type: "create" | "update";
@@ -56,30 +56,30 @@ export default function AnnouncementForm({
     },
   });
 
-const onSubmit: SubmitHandler<AnnouncementFormData> = async (formData) => {
-  try {
-    const payload = {
-      id: formData.id,
-      title: formData.title,
-      description: formData.description,
-      date: new Date(formData.date),
-      classId: formData.classId ? Number(formData.classId) : null, // ⭐ CORREÇÃO IMPORTANTE
-    };
+  const onSubmit: SubmitHandler<AnnouncementFormData> = async (formData) => {
+    try {
+      const payload = {
+        id: formData.id,
+        title: formData.title,
+        description: formData.description,
+        date: new Date(formData.date),
+        classId: formData.classId ? Number(formData.classId) : null, // ⭐ CORREÇÃO IMPORTANTE
+      };
 
-    if (type === "create") {
-      await createAnnouncement(payload);
-      toast.success("Anúncio criado com sucesso!");
-    } else {
-      await updateAnnouncement(payload);
-      toast.success("Anúncio atualizado com sucesso!");
+      if (type === "create") {
+        await createAnnouncement(payload);
+        toast.success("Anúncio criado com sucesso!");
+      } else {
+        await updateAnnouncement(payload);
+        toast.success("Anúncio atualizado com sucesso!");
+      }
+
+      setOpen(false);
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao salvar anúncio");
     }
-
-    setOpen(false);
-  } catch (err) {
-    console.error(err);
-    toast.error("Erro ao salvar anúncio");
-  }
-};
+  };
 
   return (
     <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit)}>

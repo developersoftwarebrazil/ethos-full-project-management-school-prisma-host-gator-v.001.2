@@ -1,4 +1,4 @@
-import FormContainer from "@/components/FormContainer";
+import FormContainer from "@/components/forms/base/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
@@ -15,11 +15,11 @@ const GradeListPage = async ({
   searchParams: { [key: string]: string | undefined };
 }) => {
   /**
-     * ================================
-     * 🔐 AUTH LOCAL (ATIVO)
-     * ================================
-     */
-    const role = await getAuthRole();
+   * ================================
+   * 🔐 AUTH LOCAL (ATIVO)
+   * ================================
+   */
+  const role = await getAuthRole();
 
   /**
    * ================================

@@ -1,4 +1,4 @@
-import FormModal from "@/components/FormModal";
+import FormModal from "@/components/forms/base/FormModal";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
@@ -160,8 +160,7 @@ const AssignmentListPage = async ({
    * LESSONS (MODAL)
    * ================================
    */
-  const lessonWhere =
-    role === "teacher" ? { teacherId: currentUserId } : {};
+  const lessonWhere = role === "teacher" ? { teacherId: currentUserId } : {};
 
   const lessons = await prisma.lesson.findMany({
     where: lessonWhere,

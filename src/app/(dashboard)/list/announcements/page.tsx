@@ -1,4 +1,4 @@
-import FormContainer from "@/components/FormContainer";
+import FormContainer from "@/components/forms/base/FormContainer";
 import Pagination from "@/components/Pagination";
 import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
@@ -8,7 +8,7 @@ import { Announcement, Class, Prisma } from "@prisma/client";
 import Image from "next/image";
 
 //import { auth } from "@clerk/nextjs/server";
-import {getAuthRole, getCurrentUserId, } from "@/lib/auth";
+import { getAuthRole, getCurrentUserId } from "@/lib/auth";
 
 type AnnouncementList = Announcement & { class: Class };
 const AnnouncementListPage = async ({
@@ -16,8 +16,7 @@ const AnnouncementListPage = async ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-
-   /**
+  /**
    * ================================
    * 🔐 AUTH LOCAL (ATIVO)
    * ================================
@@ -25,7 +24,7 @@ const AnnouncementListPage = async ({
   const currentUserId = await getCurrentUserId();
   const role = await getAuthRole();
 
-    /**
+  /**
    * ================================
    * 🔁 CLERK (DESATIVADO)
    * ================================
@@ -33,7 +32,7 @@ const AnnouncementListPage = async ({
   // const { userId, sessionClaims } = auth();
   // const role = (sessionClaims?.metadata as { role?: string })?.role;
   // const currentUserId = userId;
-  
+
   const columns = [
     {
       header: "Título",
@@ -57,7 +56,7 @@ const AnnouncementListPage = async ({
         ]
       : []),
   ];
-  
+
   const renderRow = (item: AnnouncementList) => (
     <tr
       key={item.id}

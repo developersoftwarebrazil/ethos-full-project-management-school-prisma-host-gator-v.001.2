@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import InputField from "../InputField";
+import InputField from "./base/InputField";
 import {
   classSchema,
   ClassSchema,
@@ -129,15 +129,17 @@ const ClassForm = ({
             {...register("gradeId")}
             defaultValue={data?.gradeId}
           >
-            {grades.map((grade: { id: number; level: number; description: string }) => (
-              <option
-                value={grade.id}
-                key={grade.id}
-                selected={data && grade.id === data.gradeId}
-              >
-                {grade.level} - {grade.description}
-              </option>
-            ))}
+            {grades.map(
+              (grade: { id: number; level: number; description: string }) => (
+                <option
+                  value={grade.id}
+                  key={grade.id}
+                  selected={data && grade.id === data.gradeId}
+                >
+                  {grade.level} - {grade.description}
+                </option>
+              )
+            )}
           </select>
           {errors.gradeId?.message && (
             <p className="text-xs text-red-400">
@@ -146,9 +148,7 @@ const ClassForm = ({
           )}
         </div>
       </div>
-      {state.error && (
-        <span className="text-red-500">Algo deu errado!</span>
-      )}
+      {state.error && <span className="text-red-500">Algo deu errado!</span>}
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Criar" : "Atualizar"}
       </button>

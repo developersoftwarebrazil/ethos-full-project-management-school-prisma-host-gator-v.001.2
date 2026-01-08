@@ -1,7 +1,7 @@
 // import { getAuthRole } from "@/app/api/auth/login/route copy 3";
 import Announcements from "@/components/dashboards/announcements/Announcements";
 import BigCalendarContainer from "@/components/dashboards/calendar/BigCalendarContainer";
-import FormContainer from "@/components/FormContainer";
+import FormContainer from "@/components/forms/base/FormContainer";
 import Performance from "@/components/dashboards/performance/Performance";
 import StudentAttendanceCard from "@/components/dashboards/attendance/StudentAttendanceCard";
 import { getAuthRole } from "@/lib/auth";
