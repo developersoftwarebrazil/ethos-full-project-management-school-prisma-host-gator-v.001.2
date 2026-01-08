@@ -1,8 +1,8 @@
 import Image from "next/image";
 import prisma from "@/lib/prisma";
-import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
-import Pagination from "@/components/Pagination";
+import Table from "@/components/ui/tables/Table";
+import TableSearch from "@/components/ui/tables/TableSearch";
+import Pagination from "@/components/ui/tables/Pagination";
 import FormModal from "@/components/forms/base/FormModal";
 import AttendanceChartContainer from "@/components/dashboards/charts/AttendanceChartContainer";
 import { ITEM_PER_PAGE } from "@/lib/settings";

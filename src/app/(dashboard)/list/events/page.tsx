@@ -1,7 +1,7 @@
 import FormContainer from "@/components/forms/base/FormContainer";
-import Pagination from "@/components/Pagination";
-import Table from "@/components/Table";
-import TableSearch from "@/components/TableSearch";
+import Pagination from "@/components/ui/tables/Pagination";
+import Table from "@/components/ui/tables/Table";
+import TableSearch from "@/components/ui/tables/TableSearch";
 import { getAuthRole, getCurrentUserId } from "@/lib/auth";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
