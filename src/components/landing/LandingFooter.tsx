@@ -15,7 +15,7 @@ export default function LandingFooter() {
           <p>
             Telefone: (19) 99287-1931
             <br />
-            E-mail: direitosadm@gmail.com
+            E-mail: direthosadm@gmail.com
           </p>
         </div>
 

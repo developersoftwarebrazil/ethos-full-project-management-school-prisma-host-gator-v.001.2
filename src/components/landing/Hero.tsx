@@ -42,7 +42,7 @@ export default function Hero() {
           <div className={styles.heroImageWrapper}>
             <div className={styles.heroImage}>
               <div className={styles.heroCaption}>
-                <strong>Dr. Wagner Mendes de Toledo</strong>
+                <strong>Dr. Wagner Ferreira de Toledo</strong>
                 <span>Diretor Acadêmico e Fundador · ETHOS CPAC</span>
               </div>
             </div>
