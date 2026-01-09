@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "./landing.module.scss";
 
-
 export default function Hero() {
   return (
     <section className={styles.hero}>
@@ -15,14 +14,14 @@ export default function Hero() {
         <div className={styles.heroGrid}>
           <div className={styles.textContainer}>
             <p className={styles.subtitle}>
-              Formação sólida em Psicanálise, com ensino EAD acessível,
+              Formação sólida em nossos cursos, com ensino EAD acessível,
               flexível e comprometido com a prática clínica.
             </p>
 
             <p className={styles.description}>
               A <span>Ethos CPAC</span> oferece formação baseada na teoria
-              psicanalítica de matriz Freudiana, com foco na autorização
-              do aluno para o exercício da Psicanálise e Análises Clínicas.
+              psicanalítica de matriz Freudiana, com foco na autorização do
+              aluno para o exercício da Psicanálise e Análises Clínicas.
             </p>
 
             <p className={styles.description}>
@@ -40,8 +39,14 @@ export default function Hero() {
               </a>
             </div>
           </div>
+          <div className={styles.heroImageWrapper}>
+            <div className={styles.heroImage}></div>
 
-          <div className={styles.heroImage} />
+            <div className={styles.heroCaption}>
+              <strong>Dr. Wagner Mendes de Toledo</strong>
+              <span>Diretor Acadêmico e Fundador · ETHOS CPAC</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
