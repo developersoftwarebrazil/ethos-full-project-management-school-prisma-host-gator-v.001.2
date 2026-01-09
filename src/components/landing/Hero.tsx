@@ -40,11 +40,11 @@ export default function Hero() {
             </div>
           </div>
           <div className={styles.heroImageWrapper}>
-            <div className={styles.heroImage}></div>
-
-            <div className={styles.heroCaption}>
-              <strong>Dr. Wagner Mendes de Toledo</strong>
-              <span>Diretor Acadêmico e Fundador · ETHOS CPAC</span>
+            <div className={styles.heroImage}>
+              <div className={styles.heroCaption}>
+                <strong>Dr. Wagner Mendes de Toledo</strong>
+                <span>Diretor Acadêmico e Fundador · ETHOS CPAC</span>
+              </div>
             </div>
           </div>
         </div>
