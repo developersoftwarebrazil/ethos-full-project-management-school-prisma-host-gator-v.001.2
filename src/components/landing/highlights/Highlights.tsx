@@ -3,7 +3,7 @@ import styles from "./Highlights.module.scss";
 export default function Highlights() {
   return (
     <section className={styles.pricing}>
-      <span className={styles.pricingBadge}>valores</span>
+      <span className={styles.pricingBadge}>Nossos preços</span>
       <h2 className={styles.sectionTitle}>Planos de Acesso</h2>
       <p className={styles.sectionSubtitle}>
         Escolha o plano ideal para sua formação em Psicanálise ou em outro de
