@@ -1,0 +1,176 @@
+.about{
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+.aboutSection {
+  background: #ffffff;
+  padding: 6rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+.aboutSection::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: url("/assets/ethos-icon.svg");
+  background-repeat: no-repeat;
+  background-position: right -160px center;
+  background-size: clamp(300px, 45vw, 460px);
+
+  opacity: 0.025;
+  filter: blur(0.3px);
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+.aboutContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.aboutBadge {
+  display: inline-block;
+  background: #fef9c3;
+  color: #92400e;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.aboutTitle {
+  font-size: 2.3rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  color: #020617;
+
+  span {
+    color: #0e0e55;
+  }
+}
+
+.aboutText {
+  max-width: 720px;
+  margin: 0 auto 3rem;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: #475569;
+
+  span {
+    color: #0e0e55;
+    font-weight: 600;
+  }
+
+  strong {
+    color: #020617;
+  }
+}
+
+.aboutGrid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.aboutCard {
+  background: #f8fafc;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: left;
+  transition: all 0.3s ease;
+
+  h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0e0e55;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.6;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(2, 6, 23, 0.08);
+    border-color: #c7d2fe;
+  }
+}
+// RESPONSIVE
+@media (max-width: 1200px) {
+  .aboutSection {
+    padding: 5rem 2rem;
+  }
+
+  .aboutTitle {
+    font-size: 2.1rem;
+  }
+
+  .aboutText {
+    font-size: 1.05rem;
+  }
+}
+@media (max-width: 1024px) {
+  .aboutSection::before {
+    background-position: center top 120px;
+    background-size: 360px;
+    opacity: 0.02;
+  }
+
+  .aboutGrid {
+    grid-template-columns: 1fr;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .aboutCard {
+    text-align: center;
+  }
+}
+@media (max-width: 768px) {
+  .aboutSection {
+    padding: 4.5rem 1.5rem;
+  }
+
+  .aboutBadge {
+    font-size: 0.7rem;
+  }
+
+  .aboutTitle {
+    font-size: 1.85rem;
+  }
+
+  .aboutText {
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .aboutCard {
+    padding: 1.75rem;
+  }
+}
+@media (max-width: 480px) {
+  .aboutSection::before {
+    background-size: 220px;
+    background-position: center top 80px;
+    opacity: 0.015;
+  }
+
+  .aboutTitle {
+    font-size: 1.65rem;
+  }
+
+  .aboutText {
+    font-size: 0.95rem;
+  }
+}
