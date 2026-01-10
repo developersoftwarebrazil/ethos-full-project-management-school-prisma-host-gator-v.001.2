@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import styles from "./landing.module.scss";
+import styles from "./LandingHeader.module.scss";
 
 export default function LandingHeader() {
   const [open, setOpen] = useState(false);
@@ -29,10 +29,10 @@ export default function LandingHeader() {
         </nav>
 
         <div className={styles.area}>
-          <Link href="/auth/login" className={styles.areaAluno}>
+          <Link href="/auth/login" className={styles.areaStudent}>
             Área do aluno
           </Link>
-          <Link href="/auth/login" className={styles.entrar}>
+          <Link href="/auth/login" className={styles.btnEnter}>
             Entrar
           </Link>
         </div>
@@ -54,7 +54,7 @@ export default function LandingHeader() {
           <Link href="#">Quem somos</Link>
           <Link href="#">Fale conosco</Link>
 
-          <Link href="/auth/login" className={styles.areaAluno}>
+          <Link href="/auth/login" className={styles.areaStudent}>
             Área do aluno
           </Link>
           <Link href="/auth/login" className={styles.entrar}>
