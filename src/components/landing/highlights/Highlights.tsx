@@ -1,4 +1,4 @@
-import styles from "./landing.module.scss";
+import styles from "./Highlights.module.scss";
 
 export default function Highlights() {
   return (

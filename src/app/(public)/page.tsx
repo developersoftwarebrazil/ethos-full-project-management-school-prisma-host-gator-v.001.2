@@ -1,6 +1,6 @@
 import Hero from "@/components/landing/hero/Hero";
 import About from "@/components/landing/about/About";
-import Highlights from "@/components/landing/Highlights";
+import Highlights from "@/components/landing/highlights/Highlights";
 import Benefits from "@/components/landing/benefits/Benefits";
 import FAQ from "@/components/landing/FAQ";
 import CTA from "@/components/landing/CTA";

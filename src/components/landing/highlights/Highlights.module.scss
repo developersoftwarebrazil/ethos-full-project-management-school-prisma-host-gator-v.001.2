@@ -1,0 +1,184 @@
+/* ================= PRICING ================= */
+
+.pricing {
+  background: #020617;
+  color: white;
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.pricing::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: url("/assets/ethos-icon.svg");
+  background-repeat: no-repeat;
+  background-position: right -180px center;
+  background-size: clamp(320px, 45vw, 460px);
+
+  opacity: 0.025;
+  filter: blur(0.4px);
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sectionSubtitle {
+  color: #c7d2fe;
+  margin-bottom: 3rem;
+}
+.pricingGrid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+.pricingCardMonth,
+.pricingCardFull,
+.pricingCardYear {
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  text-align: left;
+  position: relative;
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 2rem;
+
+    li {
+      margin-bottom: 0.75rem;
+      color: #e5e7eb;
+    }
+  }
+
+  button {
+    width: 100%;
+    background: #fb5;
+    color: #020617;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+}
+.pricingCardMonth {
+  background: #1e293b;
+}
+.pricingCardFull button {
+  background: #fb5;
+  color: #020617;
+}
+
+.pricingCardYear {
+  background: #1e293b;
+}
+.featured {
+  border: 2px solid #7ce04a;
+  transform: scale(1.05);
+}
+.badge {
+  position: absolute;
+  top: -12px;
+  right: 16px;
+  background: #7ce04a;
+  color: #020617;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.price {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+// ================= RESPONSIVE =================
+@media (max-width: 1200px) {
+  .pricing {
+    padding: 4.5rem 2rem;
+  }
+
+  .price {
+    font-size: 1.9rem;
+  }
+}
+@media (max-width: 1024px) {
+  .pricing::before {
+    background-position: center top 120px;
+    background-size: 380px;
+    opacity: 0.02;
+  }
+
+  .pricingGrid {
+    grid-template-columns: 1fr;
+    max-width: 640px;
+  }
+
+  .pricingCardMonth,
+  .pricingCardFull,
+  .pricingCardYear {
+    text-align: center;
+  }
+
+  .pricingCardMonth ul,
+  .pricingCardFull ul,
+  .pricingCardYear ul {
+    text-align: left;
+    max-width: 420px;
+    margin: 0 auto 2rem;
+  }
+
+  .featured {
+    transform: none;
+  }
+}
+@media (max-width: 768px) {
+  .pricing {
+    padding: 4rem 1.5rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 1rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .pricingCardMonth,
+  .pricingCardFull,
+  .pricingCardYear {
+    padding: 2rem 1.5rem;
+  }
+
+  .price {
+    font-size: 1.75rem;
+  }
+}
+@media (max-width: 480px) {
+  .pricing::before {
+    background-size: 220px;
+    background-position: center top 90px;
+    opacity: 0.015;
+  }
+
+  .badge {
+    top: -10px;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  .price {
+    font-size: 1.6rem;
+  }
+}
