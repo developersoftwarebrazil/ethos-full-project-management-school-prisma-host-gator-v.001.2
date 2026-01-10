@@ -39,7 +39,7 @@ export default function Contact() {
         <span className={styles.contactBadge}>Contato</span>
 
         <h2 className={styles.contactTitle}>
-          Entre em contato com a <span>Ethos CPAC</span>
+          Entre em contato com a <span>ETHOS CPAC</span>
         </h2>
 
         <p className={styles.contactSubtitle}>
