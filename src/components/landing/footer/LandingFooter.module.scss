@@ -1,0 +1,178 @@
+
+/* ================= FOOTER ================= */
+.footer {
+  background: #0e1117;
+  color: #c9d1d9;
+  padding: 64px 24px 24px;
+}
+
+.footerContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 48px;
+}
+
+.footerBrand {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.logoRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brandName {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.contactList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.95rem;
+  }
+}
+
+.footerLinks,
+.footerSocial,
+.footerPayment {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  a {
+    color: #c9d1d9;
+    text-decoration: none;
+    font-size: 0.95rem;
+
+    &:hover {
+      color: #58a6ff;
+    }
+  }
+}
+
+.socialIcons {
+  display: flex;
+  gap: 12px;
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #161b22;
+    color: #c9d1d9;
+
+    &:hover {
+      background: #58a6ff;
+      color: #0e1117;
+    }
+  }
+}
+
+.footerBottom {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid #21262d;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #8b949e;
+}
+//================= RESPONSIVE ================= */
+@media (max-width: 1200px) {
+  .footer {
+    padding: 56px 24px 24px;
+  }
+
+  .footerContainer {
+    gap: 40px;
+  }
+}
+@media (max-width: 1024px) {
+  .footerContainer {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 36px;
+  }
+
+  .contactList li {
+    font-size: 0.9rem;
+  }
+}
+@media (max-width: 768px) {
+  .footer {
+    padding: 48px 20px 24px;
+  }
+
+  .footerContainer {
+    gap: 32px;
+  }
+
+  .footerBrand {
+    align-items: center;
+    text-align: center;
+  }
+
+  .logoRow {
+    justify-content: center;
+  }
+
+  .contactList {
+    align-items: center;
+
+    li {
+      justify-content: center;
+      text-align: center;
+    }
+  }
+
+  .footerLinks,
+  .footerSocial,
+  .footerPayment {
+    align-items: center;
+    text-align: center;
+  }
+
+  .socialIcons {
+    justify-content: center;
+  }
+}
+@media (max-width: 480px) {
+  .footer {
+    padding: 40px 16px 20px;
+  }
+
+  .footerContainer {
+    gap: 28px;
+  }
+
+  .brandName {
+    font-size: 1rem;
+  }
+
+  .footerBottom {
+    font-size: 0.8rem;
+    padding-top: 12px;
+  }
+}
