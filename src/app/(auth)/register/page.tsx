@@ -15,6 +15,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import styles from "@/styles/account/register/Register.module.scss";
 
 const RegisterPage = () => {
   const router = useRouter();
@@ -53,9 +54,8 @@ const RegisterPage = () => {
         return;
       }
 
-      // Usuário criado com sucesso
       router.push("/login");
-    } catch (err) {
+    } catch {
       setError("Erro inesperado ao criar usuário");
     } finally {
       setLoading(false);
@@ -63,66 +63,64 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-ethosSkyLight">
-      {/* ================================
-           🔐 REGISTRO LOCAL (ATIVO)
-         ================================ */}
-      <form
-        onSubmit={handleRegister}
-        className="bg-white p-12 rounded-md shadow-2xl flex flex-col gap-3 w-[360px]"
-      >
-        <h1 className="text-xl font-bold flex items-center gap-2">
-          <Image src="/logo-ETHOS.png" alt="Logo" width={24} height={24} />
-          ETHOS CPAC
-        </h1>
+    <section className={styles.registerSection}>
+      <div className={styles.registerContainer}>
+        <div className={styles.card}>
+          <header className={styles.header}>
+            <Image
+              src="/logo-ETHOS.png"
+              alt="ETHOS"
+              width={42}
+              height={42}
+              priority
+            />
+            <h1>
+              Criar <span>Superusuário</span>
+            </h1>
+            <p>Acesso administrativo ao sistema</p>
+          </header>
 
-        <h2 className="text-gray-400">Criar superusuário</h2>
+          {error && <p className={styles.error}>{error}</p>}
 
-        {error && <p className="text-sm text-red-500">{error}</p>}
+          <form onSubmit={handleRegister} className={styles.form}>
+            <div className={styles.field}>
+              <label>Nome completo</label>
+              <input
+                type="text"
+                placeholder="Administrador"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
 
-        <div className="flex flex-col gap-2">
-          <label className="text-xs text-gray-500">Nome completo</label>
-          <input
-            type="text"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="p-2 rounded-md ring-1 ring-gray-300"
-            placeholder="Administrador"
-          />
+            <div className={styles.field}>
+              <label>Usuário</label>
+              <input
+                type="text"
+                placeholder="admin"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className={styles.field}>
+              <label>Senha</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+
+            <button type="submit" disabled={loading}>
+              {loading ? "Criando..." : "Criar usuário"}
+            </button>
+          </form>
         </div>
-
-        <div className="flex flex-col gap-2">
-          <label className="text-xs text-gray-500">Nome de usuário</label>
-          <input
-            type="text"
-            required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="p-2 rounded-md ring-1 ring-gray-300"
-            placeholder="admin"
-          />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label className="text-xs text-gray-500">Senha</label>
-          <input
-            type="password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="p-2 rounded-md ring-1 ring-gray-300"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-blue-500 disabled:bg-blue-300 text-white my-2 rounded-md text-sm p-[10px] uppercase"
-        >
-          {loading ? "Criando..." : "Criar usuário"}
-        </button>
-      </form>
+      </div>
 
       {/* ================================
            🔁 CLERK SIGN-UP (DESATIVADO)
@@ -134,7 +132,7 @@ const RegisterPage = () => {
         </SignUp.Step>
       </SignUp.Root>
       */}
-    </div>
+    </section>
   );
 };
 

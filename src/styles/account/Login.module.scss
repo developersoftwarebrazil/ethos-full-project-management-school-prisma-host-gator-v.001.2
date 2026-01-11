@@ -1,0 +1,196 @@
+/* ================= LOGIN PAGE ================= */
+
+.loginPage {
+  min-height: 100vh;
+  padding: 6rem 2rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(180deg, #020617 0%, #0e0e55 100%);
+  position: relative;
+}
+
+.loginPage > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Background icon (igual contact) */
+.loginPage::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: url("/assets/ethos-icon.svg");
+  background-repeat: no-repeat;
+  background-position: right -140px bottom -120px;
+  background-size: clamp(280px, 40vw, 420px);
+
+  opacity: 0.025;
+  filter: blur(0.4px);
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ================= LOGIN CARD ================= */
+
+.loginCard {
+  width: 100%;
+  max-width: 380px;
+
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 20px;
+
+  padding: 2.75rem 2.5rem;
+
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ================= HEADER ================= */
+
+.loginHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: white;
+}
+
+.loginSubtitle {
+  font-size: 0.95rem;
+  color: #cbd5f5;
+  margin-bottom: 0.5rem;
+}
+
+/* ================= ERROR ================= */
+
+.loginError {
+  font-size: 0.85rem;
+  color: #f87171;
+}
+
+/* ================= FIELDS ================= */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #e5e7eb;
+  }
+
+  input {
+    background: #020617;
+    border: 1px solid #334155;
+    border-radius: 10px;
+
+    padding: 0.75rem 0.85rem;
+
+    color: white;
+    font-size: 0.95rem;
+
+    transition: all 0.25s ease;
+
+    &::placeholder {
+      color: #64748b;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #fb5;
+      box-shadow: 0 0 0 2px rgba(251, 187, 85, 0.25);
+    }
+  }
+}
+
+/* ================= BUTTON ================= */
+
+.loginButton {
+  margin-top: 1.25rem;
+
+  width: 100%;
+  background: #fb5;
+  color: #020617;
+
+  border: none;
+  border-radius: 12px;
+
+  padding: 0.9rem;
+
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(251, 187, 85, 0.35);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+  .loginPage {
+    padding: 5rem 2rem;
+  }
+
+  .loginPage::before {
+    background-position: center bottom -90px;
+    background-size: 360px;
+    opacity: 0.02;
+  }
+}
+
+@media (max-width: 768px) {
+  .loginPage {
+    padding: 4rem 1.5rem;
+  }
+
+  .loginCard {
+    padding: 2.25rem 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginPage::before {
+    background-size: 220px;
+    background-position: center bottom -50px;
+    opacity: 0.015;
+  }
+
+  .loginCard {
+    padding: 2rem 1.5rem;
+  }
+
+  .loginHeader {
+    font-size: 1.15rem;
+  }
+
+  .loginButton {
+    font-size: 0.9rem;
+    padding: 0.85rem;
+  }
+}
