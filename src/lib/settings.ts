@@ -21,3 +21,5 @@ export const routeAccessMap: RouteAccessMap = {
   "/list/events": ["admin", "teacher", "student", "parent"],
   "/list/announcements": ["admin", "teacher", "student", "parent"],
 };
+
+export const AUTH_COOKIE_NAME = "session";

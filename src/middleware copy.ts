@@ -19,9 +19,6 @@ import { routeAccessMap } from "./lib/settings";
 const AUTH_DISABLED = process.env.DISABLE_AUTH === "true";
 const ENABLE_REGISTER = process.env.ENABLE_REGISTER === "true";
 
-// Nome oficial do cookie de autenticação
-const AUTH_COOKIE_NAME = "session";
-
 /**
  * =========================================================
  * 📦 TIPOS
@@ -43,6 +40,7 @@ const PUBLIC_ROUTES = [
   "/",               // landing page
   "/login",          // alias
   "/auth/login",     // login real
+  "/logout",          // sobre o sistema
 ];
 
 /**
@@ -71,9 +69,7 @@ export default function middleware(req: NextRequest) {
    * =====================================================
    */
   if (AUTH_DISABLED) {
-    if (process.env.NODE_ENV !== "production") {
-      console.log("⚠️ AUTH DESATIVADO | Liberando:", pathname);
-    }
+    console.log("⚠️ AUTH DESATIVADO | Liberando:", pathname);
     return NextResponse.next();
   }
 
@@ -91,7 +87,7 @@ export default function middleware(req: NextRequest) {
    * 🔐 RECUPERA COOKIE DE SESSÃO
    * =====================================================
    */
-  const rawSession = req.cookies.get(AUTH_COOKIE_NAME)?.value;
+  const rawSession = req.cookies.get("session")?.value;
 
   let role = "";
   let userId: string | null = null;
@@ -102,33 +98,21 @@ export default function middleware(req: NextRequest) {
       role = parsed.role ?? "";
       userId = parsed.userId ?? null;
     } catch (err) {
-      console.error("❌ Cookie de sessão inválido, limpando...", err);
-
-      // 🔥 Cookie corrompido → logout silencioso
-      const res = NextResponse.redirect(new URL("/", req.url));
-      res.cookies.set({
-        name: AUTH_COOKIE_NAME,
-        value: "",
-        maxAge: 0,
-        path: "/",
-      });
-      return res;
+      console.error("❌ Erro ao parsear cookie de sessão", err);
     }
   }
 
   /**
    * =====================================================
-   * 🧪 DEBUG (APENAS EM DEV)
+   * 🧪 DEBUG
    * =====================================================
    */
-  if (process.env.NODE_ENV !== "production") {
-    console.log("### MIDDLEWARE DEBUG ###");
-    console.log("URL:", pathname);
-    console.log("Role:", role || "NONE");
-    console.log("UserId:", userId || "NONE");
-    console.log("Session:", rawSession ? "OK" : "NULL");
-    console.log("ENABLE_REGISTER:", ENABLE_REGISTER);
-  }
+  console.log("### MIDDLEWARE DEBUG ###");
+  console.log("URL:", pathname);
+  console.log("Role:", role || "NONE");
+  console.log("UserId:", userId || "NONE");
+  console.log("Session:", rawSession ? "OK" : "NULL");
+  console.log("ENABLE_REGISTER:", ENABLE_REGISTER);
 
   /**
    * =====================================================
@@ -142,7 +126,7 @@ export default function middleware(req: NextRequest) {
       return NextResponse.redirect(url);
     }
 
-    if (rawSession && role) {
+    if (rawSession) {
       const url = req.nextUrl.clone();
       url.pathname = `/${role}`;
       return NextResponse.redirect(url);
@@ -157,6 +141,7 @@ export default function middleware(req: NextRequest) {
    * =====================================================
    */
   if (!rawSession && !isPublicRoute) {
+    console.log("🔒 Guest em rota protegida → landing page");
     const url = req.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);
@@ -181,6 +166,7 @@ export default function middleware(req: NextRequest) {
   for (const { route, allowedRoles } of protectedRoutes) {
     if (pathname.startsWith(route)) {
       if (!allowedRoles.includes(role)) {
+        console.log("⛔ Acesso negado:", route);
         const url = req.nextUrl.clone();
         url.pathname = role ? `/${role}` : "/";
         return NextResponse.redirect(url);
