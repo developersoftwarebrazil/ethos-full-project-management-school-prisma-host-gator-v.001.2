@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { cookies } from "next/headers";
+import prisma from "@/lib/prisma";
 
 /**
  * ================================
@@ -10,21 +11,15 @@ import { cookies } from "next/headers";
  * 2) Comente a lógica de auth local
  * ================================
  */
-
 // import { currentUser } from "@clerk/nextjs/server";
 
 /**
  * ================================
- * 🔐 ROLES VÁLIDOS (FONTE DA VERDADE)
+ * 🔐 ROLES VÁLIDOS
  * ================================
  */
 const VALID_ROLES = ["admin", "teacher", "student", "parent"] as const;
 type Role = (typeof VALID_ROLES)[number];
-
-type SessionData = {
-  id?: string;
-  role?: string;
-};
 
 /**
  * ================================
@@ -48,8 +43,19 @@ const menuItems = [
       { icon: "/result.png", label: "Resultados", href: "/list/results", visible: ["admin", "teacher", "student", "parent"] },
       { icon: "/attendance.png", label: "Presença", href: "/list/attendances", visible: ["admin", "teacher", "student", "parent"] },
       { icon: "/calendar.png", label: "Eventos", href: "/list/events", visible: ["admin", "teacher", "student", "parent"] },
-      { icon: "/message.png", label: "Mensagens", href: "/list/messages", visible: ["admin", "teacher", "student", "parent"] },
-      { icon: "/announcement.png", label: "Anúncios", href: "/list/announcements", visible: ["admin", "teacher", "student", "parent"] },
+      { icon: "/message.png", label: "Mensagens", href: "/list/messages", visible: ["admin"] , badge: "contacts"},
+    ],
+  },
+  {
+    title: "ADMIN",
+    items: [
+      {
+        icon: "/mail.png",
+        label: "Contatos",
+        href: "/admin/contacts",
+        visible: ["admin"],
+        badge: "contacts",
+      },
     ],
   },
   {
@@ -80,7 +86,7 @@ const Menu = async () => {
 
   if (sessionCookie) {
     try {
-      const parsed: SessionData = JSON.parse(sessionCookie);
+      const parsed = JSON.parse(sessionCookie);
       const parsedRole = parsed.role?.toLowerCase();
 
       if (parsedRole && VALID_ROLES.includes(parsedRole as Role)) {
@@ -91,22 +97,21 @@ const Menu = async () => {
     }
   }
 
-  /**
-   * ================================
-   * 🔁 CLERK (REFERÊNCIA FUTURA)
-   * ================================
-   */
-  /*
-  const user = await currentUser();
-  const clerkRole = user?.publicMetadata.role?.toString().toLowerCase();
-
-  if (clerkRole && VALID_ROLES.includes(clerkRole as Role)) {
-    role = clerkRole as Role;
-  }
-  */
-
   // 🚫 Sem role válido → não renderiza menu
   if (!role) return null;
+
+  /**
+   * ================================
+   * 🔔 BADGES (ADMIN)
+   * ================================
+   */
+  let unreadContacts = 0;
+
+  if (role === "admin") {
+    unreadContacts = await prisma.contact.count({
+      where: { isRead: false },
+    });
+  }
 
   return (
     <div className="mt-4 text-sm">
@@ -122,10 +127,16 @@ const Menu = async () => {
               <Link
                 key={item.label}
                 href={item.href}
-                className="flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
+                className="relative flex items-center justify-center lg:justify-start gap-4 text-gray-500 py-2 md:px-2 rounded-md hover:bg-lamaSkyLight"
               >
                 <Image src={item.icon} alt="" width={20} height={20} />
                 <span className="hidden lg:block">{item.label}</span>
+
+                {item.badge === "contacts" && unreadContacts > 0 && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
+                    {unreadContacts}
+                  </span>
+                )}
               </Link>
             ))}
         </div>
