@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { routeAccessMap } from "./lib/settings";
+import { routeAccessMap } from "../src/lib/settings";
 
 /**
  * =========================================================

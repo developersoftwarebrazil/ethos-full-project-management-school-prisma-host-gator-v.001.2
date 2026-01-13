@@ -179,6 +179,8 @@ model Contact {
   message   String
   createdAt DateTime @default(now())
   isRead    Boolean  @default(false)
+   reply     String?
+  repliedAt DateTime?
 }
 
 model User {
