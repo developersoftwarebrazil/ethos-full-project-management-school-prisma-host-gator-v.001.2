@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { ActionButtons } from "./ActionButtons";
+import { ActionButtons } from "../src/app/(dashboard)/admin/contacts/ActionButtons";
 
 export default async function AdminContactsPage() {
   const contacts = await prisma.contact.findMany({
