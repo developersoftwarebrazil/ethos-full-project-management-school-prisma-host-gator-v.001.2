@@ -43,6 +43,10 @@ export { createLesson } from "./school/lesson.action";
 export { updateLesson } from "./school/lesson.action";
 export { deleteLesson } from "./school/lesson.action";
 
+export { createExam } from "./school/exams.actions";  
+export { updateExam } from "./school/exams.actions";
+export { deleteExam } from "./school/exams.actions";
+
 // ================================
 // 🧓 LEGADO (TEMPORÁRIO)
 // ================================

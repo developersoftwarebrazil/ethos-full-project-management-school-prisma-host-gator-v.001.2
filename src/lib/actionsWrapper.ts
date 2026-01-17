@@ -3,7 +3,6 @@
 
 import {
   // deleteTeacher,
-  deleteExam,
   deleteAssignment,
   deleteResult,
   deleteEvent,
@@ -16,6 +15,7 @@ import {
   deleteGrade,
   deleteSubject,
   deleteLesson,
+  deleteExam,
   deleteTeacher, 
   deleteParent,
   deleteStudent,
