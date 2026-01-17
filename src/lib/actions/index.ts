@@ -13,10 +13,7 @@ import { create } from "domain";
 // ================================
 export * from "@/lib/actions";
 
-export { createGrade } from "./school/grade.actions";
-export { updateGrade } from "./school/grade.actions";
-export { deleteGrade } from "./school/grade.actions";
-
+// 📕 PERSONS
 export { createTeacher } from "./users/teacher.actions";
 export { updateTeacher } from "./users/teacher.actions";
 export { deleteTeacher } from "./users/teacher.actions";
@@ -28,6 +25,19 @@ export { deleteStudent } from "./users/student.action";
 export { createParent } from "./users/parent.action";
 export { updateParent } from "./users/parent.action";
 export { deleteParent } from "./users/parent.action";
+
+// 📕 SCHOOLS
+export { createGrade } from "./school/grade.actions";
+export { updateGrade } from "./school/grade.actions";
+export { deleteGrade } from "./school/grade.actions";
+
+export { createClass } from "./school/class.action";
+export { updateClass } from "./school/class.action";
+export { deleteClass } from "./school/class.action";
+
+export { createSubject } from "./school/subjects.action";
+export { updateSubject } from "./school/subjects.action";
+export { deleteSubject } from "./school/subjects.action";
 
 // ================================
 // 🧓 LEGADO (TEMPORÁRIO)

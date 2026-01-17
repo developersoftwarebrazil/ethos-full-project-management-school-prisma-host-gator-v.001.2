@@ -2,8 +2,6 @@
 "use server";
 
 import {
-  deleteSubject,
-  deleteClass,
   // deleteTeacher,
   deleteExam,
   deleteLesson,
@@ -15,7 +13,9 @@ import {
 } from "./actions"; // ajuste o caminho se necessário
 
 import { 
+  deleteClass,
   deleteGrade,
+  deleteSubject,
   deleteTeacher, 
   deleteParent,
   deleteStudent,

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import InputField from "./base/InputField";
 import { subjectSchema, SubjectSchema } from "@/lib/formValidationSchemas";
-import { createSubject, updateSubject } from "@/lib/actions";
+import { createSubject, updateSubject } from "@/lib/actions/index";
 import { useFormState } from "react-dom";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { toast } from "react-toastify";
