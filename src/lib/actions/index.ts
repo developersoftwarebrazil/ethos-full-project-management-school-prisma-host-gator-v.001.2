@@ -51,6 +51,10 @@ export { createAssignment } from "./school/assignment.action";
 export { updateAssignment } from "./school/assignment.action";
 export { deleteAssignment } from "./school/assignment.action";
 
+export { createResult } from "./school/result.action";
+export { updateResult } from "./school/result.action";
+export { deleteResult } from "./school/result.action";
+
 // ================================
 // 🧓 LEGADO (TEMPORÁRIO)
 // ================================

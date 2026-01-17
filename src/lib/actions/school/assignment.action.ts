@@ -1,8 +1,7 @@
-import { Assignment } from '@prisma/client';
 "use server";
 
 import { AssignmentSchema } from "@/lib/formValidationSchemas";
-import { hashPassword } from "@/lib/passwords";
+
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { requireAuth } from '@/lib/auth';

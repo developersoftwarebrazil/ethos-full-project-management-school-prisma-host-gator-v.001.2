@@ -2,13 +2,14 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import InputField from "./base/InputField";
-import { resultSchema, ResultSchema } from "@/lib/formValidationSchemas";
-import { createResult, updateResult } from "@/lib/actions";
-import { useFormState } from "react-dom";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
+
+import InputField from "./base/InputField";
+import { resultSchema, ResultSchema } from "@/lib/formValidationSchemas";
+import { createResult, updateResult } from "@/lib/actions/index";
+import { useFormState } from "react-dom";
 
 const ResultForm = ({
   type,
@@ -21,12 +22,22 @@ const ResultForm = ({
   setOpen: Dispatch<SetStateAction<boolean>>;
   relatedData?: any;
 }) => {
+  const router = useRouter();
+
+  // ✅ react-hook-form com defaultValues corretos
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ResultSchema>({
     resolver: zodResolver(resultSchema),
+    defaultValues: {
+      id: data?.id,
+      score: data?.score,
+      studentId: data?.studentId ?? "",
+      examId: data?.examId ?? "",
+      assignmentId: data?.assignmentId ?? "",
+    },
   });
 
   const [state, formAction] = useFormState(
@@ -37,39 +48,31 @@ const ResultForm = ({
     }
   );
 
+  // ✅ submit manual (mantendo seu padrão)
   const onSubmit = handleSubmit(async (formData) => {
-    try {
-      const result =
-        type === "create"
-          ? await createResult(state, formData) // currentState opcional
-          : await updateResult(state, formData);
+    const result =
+      type === "create"
+        ? await createResult(state, formData)
+        : await updateResult(state, formData);
 
-      if (result.success) {
-        toast(
-          `O resultado foi ${type === "create" ? "criado" : "atualizado"}!`
-        );
-        setOpen(false); // fecha o modal
-        router.refresh(); // atualiza a página
-      } else {
-        toast.error("Algo deu errado!");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Erro ao salvar o resultado!");
+    if (result.success) {
+      toast(
+        `O resultado foi ${type === "create" ? "criado" : "atualizado"}!`
+      );
+      setOpen(false);
+      router.refresh();
+    } else {
+      toast.error("Algo deu errado!");
     }
   });
 
-  const router = useRouter();
-
   useEffect(() => {
     if (state.success) {
-      toast(`O resultado foi ${type === "create" ? "criado" : "atualizado"}!`);
       setOpen(false);
       router.refresh();
     }
-  }, [state, router, type, setOpen]);
+  }, [state, router, setOpen]);
 
-  // Dados relacionados: students, exams, assignments
   const { students, exams, assignments } = relatedData;
 
   return (
@@ -83,19 +86,17 @@ const ResultForm = ({
         <InputField
           label="Nota"
           name="score"
-          defaultValue={data?.score}
           register={register}
-          error={errors?.score}
+          error={errors.score}
         />
 
-        {/* ID IF UPDATE */}
-        {data && (
+        {/* ID (somente update) */}
+        {type === "update" && (
           <InputField
             label="Id"
             name="id"
-            defaultValue={data?.id}
             register={register}
-            error={errors?.id}
+            error={errors.id}
             hidden
           />
         )}
@@ -106,48 +107,38 @@ const ResultForm = ({
           <select
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
             {...register("studentId")}
-            defaultValue={data?.studentId}
           >
             <option value="">Selecione</option>
             {students.map((s: any) => (
-              <option
-                key={s.id}
-                value={s.id}
-                selected={data && s.id === data.studentId}
-              >
+              <option key={s.id} value={s.id}>
                 {s.name} {s.surname}
               </option>
             ))}
           </select>
-          {errors.studentId?.message && (
+          {errors.studentId && (
             <p className="text-xs text-red-400">
-              {errors.studentId.message.toString()}
+              {errors.studentId.message}
             </p>
           )}
         </div>
 
         {/* EXAM */}
         <div className="flex flex-col gap-2 w-full md:w-1/4">
-          <label className="text-xs text-gray-500">Prova (Exam)</label>
+          <label className="text-xs text-gray-500">Prova</label>
           <select
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
             {...register("examId")}
-            defaultValue={data?.examId || ""}
           >
             <option value="">Nenhum</option>
             {exams.map((exam: any) => (
-              <option
-                key={exam.id}
-                value={exam.id}
-                selected={data && exam.id === data.examId}
-              >
+              <option key={exam.id} value={exam.id}>
                 {exam.title}
               </option>
             ))}
           </select>
-          {errors.examId?.message && (
+          {errors.examId && (
             <p className="text-xs text-red-400">
-              {errors.examId.message.toString()}
+              {errors.examId.message}
             </p>
           )}
         </div>
@@ -158,28 +149,25 @@ const ResultForm = ({
           <select
             className="ring-[1.5px] ring-gray-300 p-2 rounded-md text-sm w-full"
             {...register("assignmentId")}
-            defaultValue={data?.assignmentId || ""}
           >
             <option value="">Nenhum</option>
             {assignments.map((a: any) => (
-              <option
-                key={a.id}
-                value={a.id}
-                selected={data && a.id === data.assignmentId}
-              >
+              <option key={a.id} value={a.id}>
                 {a.title}
               </option>
             ))}
           </select>
-          {errors.assignmentId?.message && (
+          {errors.assignmentId && (
             <p className="text-xs text-red-400">
-              {errors.assignmentId.message.toString()}
+              {errors.assignmentId.message}
             </p>
           )}
         </div>
       </div>
 
-      {state.error && <span className="text-red-500">Algo deu errado!</span>}
+      {state.error && (
+        <span className="text-red-500">Algo deu errado!</span>
+      )}
 
       <button className="bg-blue-400 text-white p-2 rounded-md">
         {type === "create" ? "Criar" : "Atualizar"}
