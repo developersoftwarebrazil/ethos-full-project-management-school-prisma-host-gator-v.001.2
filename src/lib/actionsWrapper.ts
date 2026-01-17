@@ -4,7 +4,6 @@
 import {
   // deleteTeacher,
   deleteExam,
-  deleteLesson,
   deleteAssignment,
   deleteResult,
   deleteEvent,
@@ -16,6 +15,7 @@ import {
   deleteClass,
   deleteGrade,
   deleteSubject,
+  deleteLesson,
   deleteTeacher, 
   deleteParent,
   deleteStudent,

@@ -39,6 +39,10 @@ export { createSubject } from "./school/subjects.action";
 export { updateSubject } from "./school/subjects.action";
 export { deleteSubject } from "./school/subjects.action";
 
+export { createLesson } from "./school/lesson.action";
+export { updateLesson } from "./school/lesson.action";
+export { deleteLesson } from "./school/lesson.action";
+
 // ================================
 // 🧓 LEGADO (TEMPORÁRIO)
 // ================================
