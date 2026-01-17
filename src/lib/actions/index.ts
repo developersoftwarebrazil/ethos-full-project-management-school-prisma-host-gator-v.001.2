@@ -55,6 +55,10 @@ export { createResult } from "./school/result.action";
 export { updateResult } from "./school/result.action";
 export { deleteResult } from "./school/result.action";
 
+export  {createEvent} from "./school/event.action";
+export {updateEvent} from "./school/event.action";
+export {deleteEvent} from "./school/event.action"
+
 // ================================
 // 🧓 LEGADO (TEMPORÁRIO)
 // ================================
