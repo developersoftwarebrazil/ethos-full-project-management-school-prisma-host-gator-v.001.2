@@ -10,7 +10,7 @@ export default async function AttendanceSinglePage({ params }: Props) {
   const attendance = await prisma.attendance.findUnique({
     where: { id },
     include: {
-      student: { select: { id: true, name: true, surname: true, email: true } },
+      student: { select: { id: true, name: true, surname: true } },
       lesson: {
         select: {
           id: true,

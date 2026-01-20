@@ -27,10 +27,10 @@ export const createTeacher = async (
     await prisma.teacher.create({
       data: {
         id: user.id,
-        username: data.username,
+        // username: data.username,
         name: data.name,
         surname: data.surname,
-        email: data.email || null,
+        // email: data.email || null,
         phone: data.phone || null,
         address: data.address,
         img: data.img || null,

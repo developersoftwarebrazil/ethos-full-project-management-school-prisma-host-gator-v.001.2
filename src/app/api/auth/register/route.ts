@@ -9,10 +9,10 @@ export async function POST(req: Request) {
     const body = await req.json();
     console.log("📦 [REGISTER] Body recebido:", body);
 
-    const { username, name, password, role } = body;
+    const { username, name,email, password, role } = body;
 
     // 🔴 Validação
-    if (!username || !name || !password) {
+    if (!username || !name || !email  || !password) {
       console.log("🔴 [REGISTER] Dados inválidos");
       return NextResponse.json(
         { message: "Username, nome e senha são obrigatórios" },
@@ -47,6 +47,7 @@ export async function POST(req: Request) {
       data: {
         name,
         username,
+        email,
         password: hashedPassword,
         role: role ?? "USER", // default
       },

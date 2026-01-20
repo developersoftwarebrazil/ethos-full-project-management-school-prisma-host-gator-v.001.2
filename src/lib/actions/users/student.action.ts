@@ -76,10 +76,10 @@ export const createStudent = async (
     await prisma.student.create({
       data: {
         id: user.id,
-        username: data.username,
+        // username: data.username,
         name: data.name,
         surname: data.surname,
-        email: data.email || null,
+        // email: data.email || null,
         phone: data.phone || null,
         address: data.address,
         img: data.img || null,
@@ -139,10 +139,10 @@ export const updateStudent = async (
       },
       data: {
         ...(data.password !== "" && { password: data.password }),
-        username: data.username,
+        // username: data.username,
         name: data.name,
         surname: data.surname,
-        email: data.email || null,
+        // email: data.email || null,
         phone: data.phone || null,
         address: data.address,
         img: data.img || null,

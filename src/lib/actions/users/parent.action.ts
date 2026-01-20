@@ -37,10 +37,10 @@ export const createParent = async (
       data: {
         // id: user.id, // quando reativar Clerk
         id: parentId, // temporário sem Clerk
-        username: data.username,
+        // username: data.username,
         name: data.name,
         surname: data.surname,
-        email: data.email || null,
+        // email: data.email || null,
         phone: data.phone ?? "",
         address: data.address,
         students: {
@@ -86,10 +86,10 @@ export const updateParent = async (
       },
       data: {
         ...(data.password !== "" && { password: data.password }),
-        username: data.username,
+        // username: data.username,
         name: data.name,
         surname: data.surname,
-        email: data.email || null,
+        // email: data.email || null,
         phone: data.phone ?? "",
         address: data.address,
         students: {

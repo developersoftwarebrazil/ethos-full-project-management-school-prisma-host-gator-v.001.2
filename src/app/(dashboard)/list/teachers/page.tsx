@@ -99,11 +99,11 @@ const TeacherListPage = async ({
         />
         <div className="flex flex-col">
           <h3 className="font-semibold">{item.name}</h3>
-          <p className="text-xs text-gray-500">{item.email}</p>
+          {/* <p className="text-xs text-gray-500">{item.email}</p> */}
         </div>
       </td>
 
-      <td className="hidden md:table-cell">{item.username}</td>
+      {/* <td className="hidden md:table-cell">{item.username}</td> */}
 
       <td className="hidden md:table-cell">
         {item.subjects.map((s) => s.name).join(", ")}

@@ -14,10 +14,8 @@ model Admin {
 
 model Student {
   id          String       @id
-  username    String       @unique
   name        String
   surname     String
-  email       String?      @unique
   phone       String?      @unique
   address     String
   img         String?
@@ -34,14 +32,13 @@ model Student {
   class       Class        @relation(fields: [classId], references: [id])
   grade       Grade        @relation(fields: [gradeId], references: [id])
   parent      Parent       @relation(fields: [parentId], references: [id])
+  users       User[]
 }
 
 model Teacher {
   id          String    @id
-  username    String    @unique
   name        String
   surname     String
-  email       String?   @unique
   phone       String?   @unique
   address     String
   img         String?
@@ -53,18 +50,18 @@ model Teacher {
   classes     Class[]
   lessons     Lesson[]
   subjects    Subject[] @relation("SubjectToTeacher")
+  users       User[]
 }
 
 model Parent {
   id        String    @id
-  username  String    @unique
   name      String
   surname   String
-  email     String?   @unique
   phone     String    @unique
   address   String
   createdAt DateTime  @default(now())
   students  Student[]
+  users     User[]
 }
 
 model Grade {
@@ -200,16 +197,24 @@ model Notification {
 
 model User {
   id        String   @id @default(uuid())
-  email     String?  @unique
-  name      String
-  role      Role
-  createdAt DateTime @default(now())
-  password  String
   username  String   @unique
+  name      String
+  email     String?  @unique
+  role      Role
+  password  String
+  createdAt DateTime @default(now())
 
-    // 🔐 RESET PASSWORD
-  resetToken         String?
-  resetTokenExpires  DateTime?
+  // 🔐 RESET PASSWORD
+  resetToken        String?
+  resetTokenExpires DateTime?
+
+  // 🔗 RELAÇÕES
+  teacher   Teacher? @relation(fields: [teacherId], references: [id])
+  student   Student? @relation(fields: [studentId], references: [id])
+  parent    Parent?  @relation(fields: [parentId], references: [id])
+  teacherId String?
+  studentId String?
+  parentId  String?
 }
 
 enum UserSex {
