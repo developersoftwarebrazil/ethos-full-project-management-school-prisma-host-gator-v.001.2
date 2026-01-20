@@ -51,3 +51,36 @@ export async function sendReplyEmail({
     throw error;
   }
 }
+export async function sendResetPasswordEmail({
+  to,
+  name,
+  resetUrl,
+}: {
+  to: string;
+  name: string;
+  resetUrl: string;
+}) {
+  const fromEmail =
+    process.env.SENDGRID_FROM_EMAIL || "no-reply@ethos.com";
+
+  await sgMail.send({
+    to,
+    from: fromEmail,
+    subject: "Redefinição de senha - Ethos",
+    html: `
+      <p>Olá <strong>${name}</strong>,</p>
+
+      <p>Recebemos uma solicitação para redefinir sua senha.</p>
+
+      <p>
+        <a href="${resetUrl}">
+          Clique aqui para criar uma nova senha
+        </a>
+      </p>
+
+      <p>Este link expira em 1 hora.</p>
+
+      <p>Se você não solicitou isso, ignore este email.</p>
+    `,
+  });
+}

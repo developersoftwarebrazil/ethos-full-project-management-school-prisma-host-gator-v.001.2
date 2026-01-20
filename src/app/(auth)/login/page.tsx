@@ -19,7 +19,6 @@ import { useState } from "react";
 
 import styles from "@/styles/account/login/Login.module.scss";
 
-
 const LoginPage = () => {
   const router = useRouter();
 
@@ -105,63 +104,59 @@ const LoginPage = () => {
   */
 
   return (
-
-<div className={styles.loginPage}>
-  {/* ================================
+    <div className={styles.loginPage}>
+      {/* ================================
        🔐 LOGIN LOCAL (ATIVO)
      ================================ */}
-  <form onSubmit={handleLogin} className={styles.loginCard}>
-    <h1 className={styles.loginHeader}>
-      <Image src="/logo-ETHOS.png" alt="Logo" width={24} height={24} />
-      ETHOS CPAC
-    </h1>
+      <form onSubmit={handleLogin} className={styles.loginCard}>
+        <h1 className={styles.loginHeader}>
+          <Image src="/logo-ETHOS.png" alt="Logo" width={24} height={24} />
+          ETHOS CPAC
+        </h1>
 
-    <h2 className={styles.loginSubtitle}>Entre com sua conta</h2>
+        <h2 className={styles.loginSubtitle}>Entre com sua conta</h2>
 
-    {error && <p className={styles.loginError}>{error}</p>}
+        {error && <p className={styles.loginError}>{error}</p>}
 
-    <div className={styles.field}>
-      <label>Nome de usuário</label>
-      <input
-        type="text"
-        required
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="ex: admin"
-      />
-    </div>
+        <div className={styles.field}>
+          <label>Nome de usuário</label>
+          <input
+            type="text"
+            required
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="ex: admin"
+          />
+        </div>
 
-    <div className={styles.field}>
-      <label>Senha</label>
-      <input
-        type="password"
-        required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-    </div>
+        <div className={styles.field}>
+          <label>Senha</label>
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
-    <button
-      type="submit"
-      disabled={loading}
-      className={styles.loginButton}
-    >
-      {loading ? "Entrando..." : "Entrar"}
-    </button>
-  </form>
+        <button type="submit" disabled={loading} className={styles.loginButton}>
+          {loading ? "Entrando..." : "Entrar"}
+        </button>
+        <p className={styles.loginHelper}>
+          <a href="/forgot-password">Esqueceu sua senha?</a>
+        </p>
+      </form>
 
-  {/* ================================
+      {/* ================================
        🔁 CLERK UI (DESATIVADO)
      ================================ */}
-  {/*
+      {/*
   <SignIn.Root>
     <SignIn.Step name="start">...</SignIn.Step>
   </SignIn.Root>
   */}
-</div>
-
+    </div>
   );
-
 };
 
 export default LoginPage;

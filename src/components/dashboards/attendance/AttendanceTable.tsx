@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFormState } from "react-dom";
-import { deleteAttendance } from "@/lib/actions";
+import { deleteAttendance } from "@/lib/actions/index";
 import AttendanceForm from "@/components/forms/AttendanceForm";
 import Link from "next/link";
 

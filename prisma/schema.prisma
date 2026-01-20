@@ -206,6 +206,10 @@ model User {
   createdAt DateTime @default(now())
   password  String
   username  String   @unique
+
+    // 🔐 RESET PASSWORD
+  resetToken         String?
+  resetTokenExpires  DateTime?
 }
 
 enum UserSex {

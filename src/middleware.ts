@@ -40,10 +40,15 @@ type LocalSession = {
  * "/" aponta para src/app/(public)/page.tsx (landing)
  */
 const PUBLIC_ROUTES = [
-  "/",               // landing page
-  "/login",          // alias
-  "/auth/login",     // login real
+  "/",                     // landing
+  "/login",
+  "/auth/login",
+  "/forgot-password",
+  "/auth/forgot-password",
+  "/reset-password",
+  "/auth/reset-password",
 ];
+
 
 /**
  * =========================================================
@@ -54,7 +59,7 @@ const protectedRoutes = Object.entries(routeAccessMap).map(
   ([route, allowedRoles]) => ({
     route,
     allowedRoles,
-  })
+  }),
 );
 
 /**
@@ -83,7 +88,7 @@ export default function middleware(req: NextRequest) {
    * =====================================================
    */
   const isPublicRoute = PUBLIC_ROUTES.some(
-    (route) => pathname === route || pathname.startsWith(route + "/")
+    (route) => pathname === route || pathname.startsWith(route + "/"),
   );
 
   /**
