@@ -152,7 +152,6 @@ const VideoLessonForm = ({ type, data, relatedData }: VideoLessonFormProps) => {
         </CldUploadWidget> */}
 
         <CldUploadWidget
-          // cloudName="ethoscpac"
           uploadPreset="video_lessons"
           options={{ resourceType: "video" }}
           onSuccess={(res) => console.log("SUCESSO:", res)}
