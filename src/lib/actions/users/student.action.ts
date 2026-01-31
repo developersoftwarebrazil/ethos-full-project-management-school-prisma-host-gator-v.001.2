@@ -76,6 +76,7 @@ export const createStudent = async (
     await prisma.student.create({
       data: {
         id: user.id,
+        userId: user.id,
         // username: data.username,
         name: data.name,
         surname: data.surname,

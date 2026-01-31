@@ -23,6 +23,7 @@ export type FormContainerProps = {
     | "subject"
     | "class"
     | "lesson"
+    | "videoLesson"
     | "exam"
     | "assignment"
     | "result"
@@ -121,6 +122,28 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
           classes: await prisma.class.findMany({
             select: { id: true, name: true },
           }),
+        };
+        break;
+      case "videoLesson":
+        if (!currentUserId || role !== "teacher") {
+          throw new Error("Acesso negado");
+        }
+
+        relatedData = {
+          classes: await prisma.class.findMany({
+            where: {
+              lessons: {
+                some: { teacherId: currentUserId },
+              },
+            },
+            select: { id: true, name: true },
+          }),
+
+          subjects: await prisma.subject.findMany({
+            select: { id: true, name: true },
+          }),
+
+          teacherId: currentUserId, // 👈 IMPORTANTE
         };
         break;
 

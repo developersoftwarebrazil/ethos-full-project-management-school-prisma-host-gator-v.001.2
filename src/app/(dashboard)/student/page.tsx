@@ -1,15 +1,5 @@
-/**
- * ================================
- * 🔁 CLERK (DESATIVADO TEMPORARIAMENTE)
- * Quando voltar a usar Clerk:
- * 1) Descomente o import abaixo
- * 2) Use auth() no lugar da lógica de cookies
- * ================================
- */
-// import { auth } from "@clerk/nextjs/server";
-
 import Announcements from "@/components/dashboards/announcements/Announcements";
-import EventCalendar from "@/components/dashboards/calendar/EventCalendar";
+import VideoLessonsBlock from "@/components/dashboards/video-lessons/VideoLessonsBlock";
 import prisma from "@/lib/prisma";
 import dynamic from "next/dynamic";
 import { cookies } from "next/headers";
@@ -17,95 +7,76 @@ import { redirect } from "next/navigation";
 
 const BigCalendarContainer = dynamic(
   () => import("@/components/dashboards/calendar/BigCalendarContainer"),
-  { ssr: false }
+  { ssr: false },
 );
 
 const StudentPage = async () => {
   /**
    * ================================
-   * 🔐 AUTH LOCAL (SEM CLERK)
+   * 🔐 AUTH LOCAL
    * ================================
    */
   const cookieStore = cookies();
   const session = cookieStore.get("session");
 
-  let userId: string | null = null;
+  if (!session) redirect("/login");
 
-  if (session) {
-    try {
-      const parsed = JSON.parse(session.value);
-      userId = parsed.userId ?? null; // 🔥 correção importante
-    } catch {
-      userId = null;
-    }
-  }
-
-  // 🔒 NÃO autenticado → login
-  if (!userId) {
+  let parsed;
+  try {
+    parsed = JSON.parse(session.value);
+  } catch {
     redirect("/login");
   }
 
-  /**
-   * ================================
-   * 🔁 CLERK (REFERÊNCIA FUTURA)
-   * ================================
-   */
-  // const { userId } = auth();
-  // if (!userId) redirect("/login");
+  const { id: userId, role } = parsed;
 
-  /**
-   * ================================
-   * 📚 BUSCA DA TURMA DO ALUNO
-   * ================================
-   */
-  const classItem = await prisma.class.findFirst({
-    where: {
-      students: {
-        some: { id: userId },
-      },
-    },
-  });
-
-  /**
-   * ⚠️ ALUNO SEM TURMA
-   * NÃO renderiza página em branco
-   */
-  if (!classItem) {
-    return (
-      <div className="p-8">
-        <div className="bg-white rounded-md p-6 shadow">
-          <h1 className="text-xl font-semibold text-red-500">
-            Nenhuma turma encontrada
-          </h1>
-          <p className="text-gray-500 mt-2">
-            Você ainda não está vinculado a nenhuma turma.
-            <br />
-            Entre em contato com a coordenação.
-          </p>
-        </div>
-      </div>
-    );
+  if (role !== "student") {
+    redirect("/unauthorized");
   }
 
   /**
    * ================================
-   * ✅ DASHBOARD NORMAL
+   * 🎥 VIDEOAULAS DO ALUNO
    * ================================
+   * Regra comum:
+   * - aulas da turma do aluno
    */
+  const student = await prisma.student.findFirst({
+    where: { userId },
+    select: { classId: true },
+  });
+
+  if (!student) redirect("/unauthorized");
+
+  const videoLessons = await prisma.videoLesson.findMany({
+    where: {
+      classId: student.classId,
+    },
+    take: 5,
+    orderBy: { createdAt: "desc" },
+    include: {
+      subject: true,
+      teacher: true,
+    },
+  });
+
   return (
-    <div className="p-4 flex gap-4 flex-col xl:flex-row">
+    <div className="flex-1 p-4 flex gap-4 flex-col xl:flex-row">
       {/* LEFT */}
       <div className="w-full xl:w-2/3">
         <div className="h-full bg-white p-4 rounded-md">
-          <h1 className="text-xl font-semibold">Agenda ({classItem.name})</h1>
-
-          <BigCalendarContainer type="classId" id={classItem.id} />
+          <h1 className="text-xl font-semibold">Minha Agenda</h1>
+          <BigCalendarContainer type="classId" id={student.classId} />
         </div>
       </div>
 
       {/* RIGHT */}
       <div className="w-full xl:w-1/3 flex flex-col gap-8">
-        <EventCalendar />
+        <VideoLessonsBlock
+          title="Últimas Videoaulas"
+          lessons={videoLessons}
+          role="student"
+        />
         <Announcements />
       </div>
     </div>

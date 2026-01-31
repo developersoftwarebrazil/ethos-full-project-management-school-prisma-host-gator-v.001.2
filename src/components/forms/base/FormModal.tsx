@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 
 import { deleteActionMap } from "@/lib/actionsWrapper";
 import { FormContainerProps } from "./FormContainer";
+import { setDayOfYear } from "date-fns";
+import VideoLessonForm from "../VideoLessonForm";
 
 // FORMS (LAZY LOAD)
 const TeacherForm = dynamic(() => import("../TeacherForm"), {
@@ -32,6 +34,9 @@ const ExamForm = dynamic(() => import("../ExamForm"), {
 const LessonForm = dynamic(() => import("../LessonForm"), {
   loading: () => <h1>Loading...</h1>,
 });
+const VidelLessonForm =dynamic(()=>import ("../VideoLessonForm"),{
+   loading: () => <h1>Loading...</h1>,
+})
 const GradeForm = dynamic(() => import("../GradeForm"), {
   loading: () => <h1>Loading...</h1>,
 });
@@ -80,6 +85,9 @@ const forms: {
   ),
   lesson: (setOpen, type, data, relatedData) => (
     <LessonForm {...{ type, data, setOpen, relatedData }} />
+  ),
+  videoLesson:(setOpen, type, data, relatedData) => (
+    <VideoLessonForm {...{ type, data, setOpen, relatedData }} />
   ),
   grade: (setOpen, type, data, relatedData) => (
     <GradeForm {...{ type, data, setOpen, relatedData }} />

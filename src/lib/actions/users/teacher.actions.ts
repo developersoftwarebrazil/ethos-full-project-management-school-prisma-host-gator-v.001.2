@@ -51,37 +51,48 @@ export const createTeacher = async (
     return { success: false, error: true };
   }
 };
-
 export const updateTeacher = async (
-  currentState: CurrentState,
+  _currentState: CurrentState,
   data: TeacherSchema
 ) => {
   if (!data.id) return { success: false, error: true };
 
   try {
-    const userUpdateData: any = {
-      username: data.username,
-    };
+    /**
+     * =====================================================
+     * 🔐 UPDATE USER (username / password OPCIONAIS)
+     * =====================================================
+     */
+    const userUpdateData: any = {};
+
+    if (data.username?.trim()) {
+      userUpdateData.username = data.username;
+    }
 
     if (data.password?.trim()) {
       userUpdateData.password = await hashPassword(data.password);
     }
 
-    await prisma.user.update({
-      where: { id: data.id },
-      data: userUpdateData,
-    });
+    if (Object.keys(userUpdateData).length > 0) {
+      await prisma.user.update({
+        where: { id: data.id },
+        data: userUpdateData,
+      });
+    }
 
+    /**
+     * =====================================================
+     * 👨‍🏫 UPDATE TEACHER (SEM username / email)
+     * =====================================================
+     */
     const teacherUpdateData: any = {
-      username: data.username,
       name: data.name,
       surname: data.surname,
-      email: data.email || null,
       phone: data.phone || null,
       address: data.address,
       bloodType: data.bloodType,
       sex: data.sex,
-      birthday: data.birthday,
+      birthday: data.birthday || null,
     };
 
     if (data.img !== undefined) {
@@ -107,6 +118,63 @@ export const updateTeacher = async (
     return { success: false, error: true };
   }
 };
+
+
+// export const updateTeacher = async (
+//   currentState: CurrentState,
+//   data: TeacherSchema
+// ) => {
+//   if (!data.id) return { success: false, error: true };
+
+//   try {
+//     const userUpdateData: any = {
+//       username: data.username,
+//     };
+
+//     if (data.password?.trim()) {
+//       userUpdateData.password = await hashPassword(data.password);
+//     }
+
+//     await prisma.user.update({
+//       where: { id: data.id },
+//       data: userUpdateData,
+//     });
+
+//     const teacherUpdateData: any = {
+//       username: data.username,
+//       name: data.name,
+//       surname: data.surname,
+//       email: data.email || null,
+//       phone: data.phone || null,
+//       address: data.address,
+//       bloodType: data.bloodType,
+//       sex: data.sex,
+//       birthday: data.birthday,
+//     };
+
+//     if (data.img !== undefined) {
+//       teacherUpdateData.img = data.img;
+//     }
+
+//     if (data.subjects) {
+//       teacherUpdateData.subjects = {
+//         set: data.subjects.map((id) => ({
+//           id: parseInt(id),
+//         })),
+//       };
+//     }
+
+//     await prisma.teacher.update({
+//       where: { id: data.id },
+//       data: teacherUpdateData,
+//     });
+
+//     return { success: true, error: false };
+//   } catch (err) {
+//     console.error("❌ updateTeacher:", err);
+//     return { success: false, error: true };
+//   }
+// };
 
 // export const deleteTeacher = async (
 //   currentState: CurrentState,

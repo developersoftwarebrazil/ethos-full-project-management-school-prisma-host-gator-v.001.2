@@ -36,21 +36,41 @@ const SingleTeacherPage = async ({
         _count: { subjects: number; lessons: number; classes: number };
       })
     | null = await prisma.teacher.findUnique({
-    where: { id },
-    include: {
-      _count: {
-        select: {
-          subjects: true,
-          lessons: true,
-          classes: true,
-        },
+  where: { id },
+  include: {
+    users: {
+      select: {
+        email: true,
+        username: true,
       },
     },
-  });
+    _count: {
+      select: {
+        subjects: true,
+        lessons: true,
+        classes: true,
+      },
+    },
+  },
+});
+    
+  //   await prisma.teacher.findUnique({
+  //   where: { id },
+  //   include: {
+  //     _count: {
+  //       select: {
+  //         subjects: true,
+  //         lessons: true,
+  //         classes: true,
+  //       },
+  //     },
+  //   },
+  // });
 
   if (!teacher) {
     return notFound();
   }
+  
   return (
     <div className="flex-1 p-4 flex flex-col gap-4 xl:flex-row">
       {/* LEFT */}
@@ -93,7 +113,7 @@ const SingleTeacherPage = async ({
                 </div>
                 {/* <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <Image src="/mail.png" alt="" width={14} height={14} />
-                  <span>{teacher.email || "-"}</span>
+                  <span>{teacher.users?.email || "-"}</span>
                 </div> */}
                 <div className="w-full md:w-1/3 lg:w-full 2xl:w-1/3 flex items-center gap-2">
                   <Image src="/phone.png" alt="" width={14} height={14} />

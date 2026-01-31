@@ -13,44 +13,64 @@ model Admin {
 }
 
 model Student {
-  id          String       @id
-  name        String
-  surname     String
-  phone       String?      @unique
-  address     String
-  img         String?
-  bloodType   String
-  sex         UserSex
-  createdAt   DateTime     @default(now())
-  parentId    String
-  classId     Int
-  gradeId     Int
-  birthday    DateTime
-  description String?
-  attendances Attendance[]
-  results     Result[]
-  class       Class        @relation(fields: [classId], references: [id])
-  grade       Grade        @relation(fields: [gradeId], references: [id])
-  parent      Parent       @relation(fields: [parentId], references: [id])
-  users       User[]
+  id              String           @id
+  userId          String           @unique
+  name            String
+  surname         String
+  phone           String?          @unique
+  address         String
+  img             String?
+  bloodType       String
+  sex             UserSex
+  createdAt       DateTime         @default(now())
+  parentId        String
+  classId         Int
+  gradeId         Int
+  birthday        DateTime
+  description     String?
+  attendances     Attendance[]
+  results         Result[]
+  class           Class            @relation(fields: [classId], references: [id])
+  grade           Grade            @relation(fields: [gradeId], references: [id])
+  parent          Parent           @relation(fields: [parentId], references: [id])
+  users           User[]
+  // videoLessons    VideoLesson[]
+  enrollments     Enrollment[]
+  payments        Payment[]
+  monthlyPayments MonthlyPayment[]
+  // studentPayments StudentPayment[]
 }
 
+// model StudentPayment {
+//   id        String  @id @default(cuid())
+//   studentId Int
+//   month     Int
+//   year      Int
+//   paid      Boolean @default(false)
+
+//   student Student @relation(fields: [studentId], references: [id])
+
+//   @@unique([studentId, month, year])
+// }
+
 model Teacher {
-  id          String    @id
-  name        String
-  surname     String
-  phone       String?   @unique
-  address     String
-  img         String?
-  bloodType   String
-  sex         UserSex
-  createdAt   DateTime  @default(now())
-  birthday    DateTime
-  description String?
-  classes     Class[]
-  lessons     Lesson[]
-  subjects    Subject[] @relation("SubjectToTeacher")
-  users       User[]
+  id           String        @id
+  name         String
+  surname      String
+  phone        String?       @unique
+  address      String
+  img          String?
+  bloodType    String
+  sex          UserSex
+  createdAt    DateTime      @default(now())
+  birthday     DateTime
+  description  String?
+  classes      Class[]
+  lessons      Lesson[]
+  subjects     Subject[]     @relation("SubjectToTeacher")
+  couses       Course[]
+  videoLessons VideoLesson[]
+  users        User[]
 }
 
 model Parent {
@@ -73,24 +93,27 @@ model Grade {
 }
 
 model Class {
-  id            Int            @id @default(autoincrement())
-  name          String         @unique
-  capacity      Int
-  supervisorId  String?
-  gradeId       Int
-  announcements Announcement[]
-  grade         Grade          @relation(fields: [gradeId], references: [id])
-  supervisor    Teacher?       @relation(fields: [supervisorId], references: [id])
-  events        Event[]
-  lessons       Lesson[]
-  students      Student[]
+  id              Int              @id @default(autoincrement())
+  name            String           @unique
+  capacity        Int
+  supervisorId    String?
+  gradeId         Int
+  announcements   Announcement[]
+  grade           Grade            @relation(fields: [gradeId], references: [id])
+  supervisor      Teacher?         @relation(fields: [supervisorId], references: [id])
+  events          Event[]
+  lessons         Lesson[]
+  students        Student[]
+  videoLessons    VideoLesson[]
+  monthlyPayments MonthlyPayment[]
 }
 
 model Subject {
-  id       Int       @id @default(autoincrement())
-  name     String    @unique
-  lessons  Lesson[]
-  teachers Teacher[] @relation("SubjectToTeacher")
+  id           Int           @id @default(autoincrement())
+  name         String        @unique
+  lessons      Lesson[]
+  teachers     Teacher[]     @relation("SubjectToTeacher")
+  videoLessons VideoLesson[]
 }
 
 model Lesson {
@@ -102,12 +125,37 @@ model Lesson {
   subjectId   Int
   classId     Int
   teacherId   String
+  courseId    String?
   assignments Assignment[]
   attendances Attendance[]
   exams       Exam[]
   class       Class        @relation(fields: [classId], references: [id])
   subject     Subject      @relation(fields: [subjectId], references: [id])
   teacher     Teacher      @relation(fields: [teacherId], references: [id])
+  course      Course?      @relation(fields: [courseId], references: [id])
+}
+
+model VideoLesson {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+
+  videoUrl String
+  duration Int?
+  isActive Boolean @default(true)
+
+  teacherId String
+  publicId  String
+  classId   Int
+  subjectId Int
+
+  teacher Teacher @relation(fields: [teacherId], references: [id])
+  class   Class   @relation(fields: [classId], references: [id])
+  subject Subject @relation(fields: [subjectId], references: [id])
+  // student Student @relation(fields: [studentId], references: [id])
+
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
 }
 
 model Exam {
@@ -139,6 +187,36 @@ model Result {
   assignment   Assignment? @relation(fields: [assignmentId], references: [id])
   exam         Exam?       @relation(fields: [examId], references: [id])
   student      Student     @relation(fields: [studentId], references: [id])
+}
+
+model Course {
+  id          String       @id @default(uuid())
+  name        String
+  teachers    Teacher[]
+  lessons     Lesson[]
+  enrollments Enrollment[]
+}
+
+model Enrollment {
+  id        String @id @default(uuid())
+  studentId String
+  courseId  String
+
+  isActive Boolean @default(true)
+
+  student Student @relation(fields: [studentId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+}
+
+model Payment {
+  id        String        @id @default(uuid())
+  studentId String
+  courseId  String
+  month     Int
+  year      Int
+  status    PaymentStatus
+
+  student Student @relation(fields: [studentId], references: [id])
 }
 
 model Attendance {
@@ -217,6 +295,23 @@ model User {
   parentId  String?
 }
 
+model MonthlyPayment {
+  id        String @id @default(uuid())
+  studentId String
+  classId   Int
+
+  month  Int
+  year   Int
+  status PaymentStatus
+
+  student Student @relation(fields: [studentId], references: [id])
+  class   Class   @relation(fields: [classId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@unique([studentId, classId, month, year])
+}
+
 enum UserSex {
   MALE
   FEMALE
@@ -243,4 +338,10 @@ enum Role {
   teacher
   student
   parent
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
+  LATE
 }

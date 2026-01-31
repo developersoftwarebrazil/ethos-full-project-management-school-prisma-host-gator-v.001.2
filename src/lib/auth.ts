@@ -96,3 +96,16 @@ export async function requireUserId(): Promise<string> {
 
   return userId;
 }
+
+export async function requireTeacher(userId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    include: { teacher: true },
+  });
+
+  if (!user || user.role !== "teacher" || !user.teacher) {
+    throw new Error("Acesso negado");
+  }
+
+  return user.teacher;
+}
