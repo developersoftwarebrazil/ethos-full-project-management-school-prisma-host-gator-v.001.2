@@ -3,29 +3,9 @@ import { NextResponse } from "next/server";
 import { requireStudent } from "@/lib/auth/require-student";
 import prisma from "@/lib/prisma";
 
-
 export async function GET() {
-  const user = await requireStudent();
-
-  // 🔒 user precisa estar vinculado a um Student
-  if (!user.studentId) {
-    return NextResponse.json(
-      { error: "Student not linked to user" },
-      { status: 403 }
-    );
-  }
-
-  const student = await prisma.student.findUnique({
-    where: { id: user.studentId },
-    select: { classId: true },
-  });
-
-  if (!student) {
-    return NextResponse.json(
-      { error: "Student not found" },
-      { status: 404 }
-    );
-  }
+  // 🔐 Student autenticado (já validado)
+  const student = await requireStudent();
 
   // 📅 Usa UTC para evitar bug de virada de mês
   const now = new Date();
@@ -35,11 +15,11 @@ export async function GET() {
   // 💰 Verifica pagamento mensal
   const payment = await prisma.monthlyPayment.findFirst({
     where: {
-      studentId: user.studentId,
+      studentId: student.id,
       classId: student.classId,
       month,
       year,
-      status: "PAID", // enum PaymentStatus
+      status: "PAID",
     },
   });
 
@@ -61,11 +41,13 @@ export async function GET() {
     include: {
       subject: true,
       teacher: {
-        select: { name: true, surname: true },
+        select: {
+          name: true,
+          surname: true,
+        },
       },
     },
   });
 
   return NextResponse.json(lessons);
 }
-

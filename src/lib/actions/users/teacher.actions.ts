@@ -6,6 +6,7 @@ import { TeacherSchema } from "@/lib/formValidationSchemas";
 
 type CurrentState = { success: boolean; error: boolean };
 
+
 export const createTeacher = async (
   _currentState: CurrentState,
   data: TeacherSchema

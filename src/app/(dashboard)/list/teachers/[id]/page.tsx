@@ -7,6 +7,7 @@ import Performance from "@/components/dashboards/performance/Performance";
 import prisma from "@/lib/prisma";
 // import { auth } from "@clerk/nextjs/server";
 import { Teacher } from "@prisma/client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -38,7 +39,7 @@ const SingleTeacherPage = async ({
     | null = await prisma.teacher.findUnique({
   where: { id },
   include: {
-    users: {
+    user: {
       select: {
         email: true,
         username: true,
