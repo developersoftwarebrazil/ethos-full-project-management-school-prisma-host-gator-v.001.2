@@ -12,33 +12,64 @@ model Admin {
   username String @unique
 }
 
+// model Student {
+//   id              String           @id
+//   userId          String           @unique
+//   name            String
+//   surname         String
+//   phone           String?          @unique
+//   address         String
+//   img             String?
+//   bloodType       String
+//   sex             UserSex
+//   createdAt       DateTime         @default(now())
+//   parentId        String
+//   classId         Int
+//   gradeId         Int
+//   birthday        DateTime
+//   description     String?
+//   attendances     Attendance[]
+//   results         Result[]
+//   class           Class            @relation(fields: [classId], references: [id])
+//   grade           Grade            @relation(fields: [gradeId], references: [id])
+//   parent          Parent           @relation(fields: [parentId], references: [id])
+//   users           User[]
+//   // videoLessons    VideoLesson[]
+//   enrollments     Enrollment[]
+//   payments        Payment[]
+//   monthlyPayments MonthlyPayment[]
+//   // studentPayments StudentPayment[]
+// }
 model Student {
-  id              String           @id
-  userId          String           @unique
-  name            String
-  surname         String
-  phone           String?          @unique
-  address         String
-  img             String?
-  bloodType       String
-  sex             UserSex
-  createdAt       DateTime         @default(now())
-  parentId        String
-  classId         Int
-  gradeId         Int
-  birthday        DateTime
-  description     String?
+  id     String @id
+  userId String @unique
+
+  name        String
+  surname     String
+  phone       String?  @unique
+  address     String
+  img         String?
+  bloodType   String
+  sex         UserSex
+  birthday    DateTime
+  description String?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  parentId String
+  classId  Int
+  gradeId  Int
+
+  parent Parent @relation(fields: [parentId], references: [id])
+  class  Class  @relation(fields: [classId], references: [id])
+  grade  Grade  @relation(fields: [gradeId], references: [id])
+
   attendances     Attendance[]
   results         Result[]
-  class           Class            @relation(fields: [classId], references: [id])
-  grade           Grade            @relation(fields: [gradeId], references: [id])
-  parent          Parent           @relation(fields: [parentId], references: [id])
-  users           User[]
-  // videoLessons    VideoLesson[]
   enrollments     Enrollment[]
   payments        Payment[]
   monthlyPayments MonthlyPayment[]
-  // studentPayments StudentPayment[]
 }
 
 // model StudentPayment {
@@ -53,35 +84,61 @@ model Student {
 //   @@unique([studentId, month, year])
 // }
 
+// model Teacher {
+//   id           String        @id
+//   name         String
+//   surname      String
+//   phone        String?       @unique
+//   address      String
+//   img          String?
+//   bloodType    String
+//   sex          UserSex
+//   createdAt    DateTime      @default(now())
+//   birthday     DateTime
+//   description  String?
+//   classes      Class[]
+//   lessons      Lesson[]
+//   subjects     Subject[]     @relation("SubjectToTeacher")
+//   couses       Course[]
+//   videoLessons VideoLesson[]
+//   users        User[]
+// }
 model Teacher {
-  id           String        @id
-  name         String
-  surname      String
-  phone        String?       @unique
-  address      String
-  img          String?
-  bloodType    String
-  sex          UserSex
-  createdAt    DateTime      @default(now())
-  birthday     DateTime
-  description  String?
+  id     String @id @default(uuid())
+  userId String @unique
+
+  name        String
+  surname     String
+  phone       String?  @unique
+  address     String
+  img         String?
+  bloodType   String
+  sex         UserSex
+  birthday    DateTime
+  description String?
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
   classes      Class[]
   lessons      Lesson[]
   subjects     Subject[]     @relation("SubjectToTeacher")
   couses       Course[]
   videoLessons VideoLesson[]
-  users        User[]
 }
 
 model Parent {
-  id        String    @id
+  id     String @id
+  userId String @unique
+
   name      String
   surname   String
-  phone     String    @unique
+  phone     String   @unique
   address   String
-  createdAt DateTime  @default(now())
-  students  Student[]
-  users     User[]
+  createdAt DateTime @default(now())
+
+  user     User      @relation(fields: [userId], references: [id])
+  students Student[]
 }
 
 model Grade {
@@ -141,9 +198,16 @@ model VideoLesson {
   description String?
 
   videoUrl String
-  duration Int?
+  duration Float?
+
   isActive Boolean @default(true)
 
+  // 🔐 autoria
+  authorId   String
+  authorName String
+  authorRole String
+
+  // 👨‍🏫 relacionamento atual
   teacherId String
   publicId  String
   classId   Int
@@ -152,7 +216,6 @@ model VideoLesson {
   teacher Teacher @relation(fields: [teacherId], references: [id])
   class   Class   @relation(fields: [classId], references: [id])
   subject Subject @relation(fields: [subjectId], references: [id])
-  // student Student @relation(fields: [studentId], references: [id])
 
   published Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -273,6 +336,27 @@ model Notification {
   createdAt DateTime @default(now())
 }
 
+// model User {
+//   id        String   @id @default(uuid())
+//   username  String   @unique
+//   name      String
+//   email     String?  @unique
+//   role      Role
+//   password  String
+//   createdAt DateTime @default(now())
+
+//   // 🔐 RESET PASSWORD
+//   resetToken        String?
+//   resetTokenExpires DateTime?
+
+//   // 🔗 RELAÇÕES
+//   teacher   Teacher? @relation(fields: [teacherId], references: [id])
+//   student   Student? @relation(fields: [studentId], references: [id])
+//   parent    Parent?  @relation(fields: [parentId], references: [id])
+//   teacherId String?
+//   studentId String?
+//   parentId  String?
+// }
 model User {
   id        String   @id @default(uuid())
   username  String   @unique
@@ -282,17 +366,13 @@ model User {
   password  String
   createdAt DateTime @default(now())
 
-  // 🔐 RESET PASSWORD
   resetToken        String?
   resetTokenExpires DateTime?
 
-  // 🔗 RELAÇÕES
-  teacher   Teacher? @relation(fields: [teacherId], references: [id])
-  student   Student? @relation(fields: [studentId], references: [id])
-  parent    Parent?  @relation(fields: [parentId], references: [id])
-  teacherId String?
-  studentId String?
-  parentId  String?
+  // 🔗 perfis (1–1)
+  teacher Teacher?
+  student Student?
+  parent  Parent?
 }
 
 model MonthlyPayment {

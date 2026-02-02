@@ -6,6 +6,7 @@
 // import { auth } from "@clerk/nextjs/server";
 
 import Announcements from "@/components/dashboards/announcements/Announcements";
+import VideoLessonModal from "@/components/dashboards/video-lessons/VideoLessonModal";
 import VideoLessonsBlock from "@/components/dashboards/video-lessons/VideoLessonsBlock";
 import VideoLessonForm from "@/components/forms/VideoLessonForm";
 
@@ -87,7 +88,7 @@ const subjects = await prisma.subject.findMany({
 
       {/* RIGHT */}
       <div className="w-full xl:w-1/3 flex flex-col gap-8">
-      <VideoLessonForm relatedData={{ classes, subjects }} />
+      <VideoLessonModal relatedData={{ classes, subjects }} />
        <VideoLessonsBlock
         title="Minhas Videoaulas"
         lessons={videoLessons}

@@ -67,6 +67,10 @@ export { createAnnouncement } from "./school/announcement.action";
 export { updateAnnouncement } from "./school/announcement.action";
 export { deleteAnnouncement } from "./school/announcement.action";
 
+//📕 VIDEOS
+export {createVideoLesson} from "./videos/video.actions";
+
+
 // ================================
 // 🧓 LEGADO (TEMPORÁRIO)
 // ================================

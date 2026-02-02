@@ -7,10 +7,15 @@ import { TeacherSchema } from "@/lib/formValidationSchemas";
 type CurrentState = { success: boolean; error: boolean };
 
 export const createTeacher = async (
-  currentState: CurrentState,
+  _currentState: CurrentState,
   data: TeacherSchema
 ) => {
   try {
+    /**
+     * =====================================================
+     * 🔐 CREATE USER
+     * =====================================================
+     */
     const hashedPassword = data.password
       ? await hashPassword(data.password)
       : "";
@@ -19,24 +24,32 @@ export const createTeacher = async (
       data: {
         username: data.username,
         name: data.name,
+        email: data.email || null,
         password: hashedPassword,
         role: "teacher",
       },
     });
 
+    /**
+     * =====================================================
+     * 👨‍🏫 CREATE TEACHER (LINKADO AO USER)
+     * =====================================================
+     */
     await prisma.teacher.create({
       data: {
-        id: user.id,
-        // username: data.username,
         name: data.name,
         surname: data.surname,
-        // email: data.email || null,
         phone: data.phone || null,
         address: data.address,
         img: data.img || null,
         bloodType: data.bloodType,
         sex: data.sex,
-        birthday: data.birthday,
+        birthday: data.birthday || null,
+
+        user: {
+          connect: { id: user.id },
+        },
+
         subjects: {
           connect: data.subjects?.map((id) => ({
             id: parseInt(id),
@@ -51,6 +64,52 @@ export const createTeacher = async (
     return { success: false, error: true };
   }
 };
+
+// export const createTeacher = async (
+//   currentState: CurrentState,
+//   data: TeacherSchema
+// ) => {
+//   try {
+//     const hashedPassword = data.password
+//       ? await hashPassword(data.password)
+//       : "";
+
+//     const user = await prisma.user.create({
+//       data: {
+//         username: data.username,
+//         name: data.name,
+//         password: hashedPassword,
+//         role: "teacher",
+//       },
+//     });
+
+//     await prisma.teacher.create({
+//       data: {
+//         id: user.id,
+//         // username: data.username,
+//         name: data.name,
+//         surname: data.surname,
+//         // email: data.email || null,
+//         phone: data.phone || null,
+//         address: data.address,
+//         img: data.img || null,
+//         bloodType: data.bloodType,
+//         sex: data.sex,
+//         birthday: data.birthday,
+//         subjects: {
+//           connect: data.subjects?.map((id) => ({
+//             id: parseInt(id),
+//           })),
+//         },
+//       },
+//     });
+
+//     return { success: true, error: false };
+//   } catch (err) {
+//     console.error("❌ createTeacher:", err);
+//     return { success: false, error: true };
+//   }
+// };
 export const updateTeacher = async (
   _currentState: CurrentState,
   data: TeacherSchema

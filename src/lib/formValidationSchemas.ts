@@ -261,3 +261,15 @@ export const announcementSchema = z.object({
     .refine((val) => val === null || val > 0, "Selecione uma turma válida"),
 });
 export type AnnouncementSchema = z.infer<typeof announcementSchema>;
+
+export const videoLessonSchema = z.object({
+  title: z.string().min(1, "Título obrigatório"),
+  description: z.string().optional(),
+  classId: z.coerce.number().min(1, "Selecione a turma"),
+  subjectId: z.coerce.number().min(1, "Selecione a disciplina"),
+  videoUrl: z.string().url(),
+  publicId: z.string(),
+  duration: z.number().nullable(),
+});
+
+export type VideoLessonSchema = z.infer<typeof videoLessonSchema>;

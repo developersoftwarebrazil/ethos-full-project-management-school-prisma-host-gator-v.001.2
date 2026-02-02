@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "VideoLesson" ALTER COLUMN "duration" SET DATA TYPE DOUBLE PRECISION;
