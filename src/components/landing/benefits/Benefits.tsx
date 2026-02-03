@@ -10,8 +10,8 @@ export default function Benefits() {
           Por que usar o <span>ETHOS</span>?
         </h2>
 
-        <p className={styles.benefitsSubtitle}>
-          Uma plataforma pensada para instituições que buscam{" "}
+        <p className={styles.benefitsSubtitle}>          
+          Uma plataforma pensada para profissionais que buscam{" "}
           <strong>organização, eficiência e evolução digital</strong>.
         </p>
 
