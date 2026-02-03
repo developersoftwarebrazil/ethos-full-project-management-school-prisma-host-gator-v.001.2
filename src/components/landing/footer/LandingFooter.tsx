@@ -46,13 +46,17 @@ export default function LandingFooter() {
               <MapPin size={16} />
               <span>
                 <a
-                  href="https://www.google.com/maps/search/?api=1&query=Avenida+José+Camargo+Arruda,+270,+Fernandópolis,+SP"
+                  href="https://www.google.com/maps/search/?api=1&query=Rua+João+Batista+Santanna,+215,+Bonfin+Paulista+Ribeirão+Preto,+SP"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Avenida José Camargo Arruda, 270
+                  Rua João Batista Santanna, 215
                   <br />
-                  Fernandópolis - SP
+                  Bonfim Paulista
+                  <br />
+                  Ribeirão Preto - SP
+                  <br />
+                  CEP 14022-320
                 </a>
               </span>
             </li>
