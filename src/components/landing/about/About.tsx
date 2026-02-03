@@ -7,7 +7,7 @@ export default function About() {
         <span className={styles.aboutBadge}>Sobre a plataforma</span>
 
         <h2 className={styles.aboutTitle}>
-          O que é o <span>ETHOS</span>?
+          QUEM <span>Somos</span>?
         </h2>
 
         <p className={styles.aboutSubtitle}>
