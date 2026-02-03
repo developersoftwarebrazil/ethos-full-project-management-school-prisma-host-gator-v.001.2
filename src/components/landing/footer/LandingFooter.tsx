@@ -52,7 +52,7 @@ export default function LandingFooter() {
                 >
                   Rua João Batista Santanna, 215
                   <br />
-                  Bonfim Paulista
+                  Reserva Sul Resort
                   <br />
                   Ribeirão Preto - SP
                   <br />
