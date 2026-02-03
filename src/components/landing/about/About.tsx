@@ -1,3 +1,4 @@
+
 import styles from "./About.module.scss";
 
 export default function About() {
@@ -42,7 +43,8 @@ export default function About() {
           que lhe permitirá conhecer novas dimensões de si mesmo!
         </p>
 
-        <div className={styles.aboutGrid}>
+        {/* Grid com 4 colunas */}
+        <div className={styles.aboutGridFour}>
           <div className={styles.aboutCard}>
             <span className={styles.aboutIcon}>📚</span>
             <h3>Base Teórica</h3>
@@ -71,8 +73,6 @@ export default function About() {
     </section>
   );
 }
-
-
 
 // import styles from "./About.module.scss";
 
