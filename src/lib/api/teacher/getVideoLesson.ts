@@ -1,5 +1,3 @@
-"use server";
-
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth/get-current-user";
 
@@ -10,23 +8,10 @@ export async function getTeacherVideoLesson(id: string) {
     return null;
   }
 
-  // 🔎 buscar teacher real
-  const teacher = await prisma.teacher.findUnique({
-    where: {
-      userId: user.id,
-    },
-  });
-
-  if (!teacher) {
-    console.error("Teacher não encontrado para user:", user.id);
-    return null;
-  }
-
-  // ✅ filtro CORRETO
   const lesson = await prisma.videoLesson.findFirst({
     where: {
       id,
-      teacherId: teacher.id,
+      teacherId: user.id, // ✅ AGORA BATE
     },
   });
 

@@ -1,4 +1,6 @@
+
 // src/lib/auth/get-current-user.ts
+import "server-only";
 import { cookies } from "next/headers";
 import prisma from "../prisma";
 

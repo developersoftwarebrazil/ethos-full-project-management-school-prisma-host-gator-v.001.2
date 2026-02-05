@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function POST(req: Request) {
@@ -10,25 +10,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
     }
 
-    const parsed = JSON.parse(session.value);
-    console.log("SESSION PARSED:", parsed);
-
-    const { userId, role } = parsed;
+    const { userId, role } = JSON.parse(session.value);
 
     if (role !== "teacher") {
       return NextResponse.json({ error: "Acesso negado" }, { status: 403 });
     }
 
-    /**
-     * =====================================================
-     * 👨‍🏫 BUSCA DO PROFESSOR (CORRETA)
-     * =====================================================
-     * Teacher.userId === session.userId
-     */
     const teacher = await prisma.teacher.findUnique({
-      where: {
-        userId,
-      },
+      where: { userId },
     });
 
     if (!teacher) {
@@ -48,13 +37,12 @@ export async function POST(req: Request) {
         subjectId: Number(body.subjectId),
         videoUrl: body.videoUrl,
         publicId: body.publicId,
-        duration:
-          body.duration !== undefined ? Number(body.duration) : null,
+        duration: body.duration ? Number(body.duration) : null,
 
-        // 👨‍🏫 FK correta
+        // ✅ FK correta
         teacherId: teacher.id,
 
-        // 🔐 autoria
+        // 🔐 snapshot
         authorId: userId,
         authorName: teacher.name,
         authorRole: role,
@@ -67,6 +55,78 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Erro interno" }, { status: 500 });
   }
 }
+
+
+
+// import { NextResponse } from "next/server";
+// import { cookies } from "next/headers";
+// import prisma from "@/lib/prisma";
+
+// export async function POST(req: Request) {
+//   try {
+//     const session = cookies().get("session");
+
+//     if (!session) {
+//       return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
+//     }
+
+//     const parsed = JSON.parse(session.value);
+//     console.log("SESSION PARSED:", parsed);
+
+//     const { userId, role } = parsed;
+
+//     if (role !== "teacher") {
+//       return NextResponse.json({ error: "Acesso negado" }, { status: 403 });
+//     }
+
+//     /**
+//      * =====================================================
+//      * 👨‍🏫 BUSCA DO PROFESSOR (CORRETA)
+//      * =====================================================
+//      * Teacher.userId === session.userId
+//      */
+//     const teacher = await prisma.teacher.findUnique({
+//       where: {
+//         userId,
+//       },
+//     });
+
+//     if (!teacher) {
+//       return NextResponse.json(
+//         { error: "Perfil de professor não encontrado" },
+//         { status: 403 }
+//       );
+//     }
+
+//     const body = await req.json();
+
+//     const videoLesson = await prisma.videoLesson.create({
+//       data: {
+//         title: body.title,
+//         description: body.description,
+//         classId: Number(body.classId),
+//         subjectId: Number(body.subjectId),
+//         videoUrl: body.videoUrl,
+//         publicId: body.publicId,
+//         duration:
+//           body.duration !== undefined ? Number(body.duration) : null,
+
+//         // 👨‍🏫 FK correta
+//         teacherId: teacher.id,
+
+//         // 🔐 autoria
+//         authorId: userId,
+//         authorName: teacher.name,
+//         authorRole: role,
+//       },
+//     });
+
+//     return NextResponse.json(videoLesson, { status: 201 });
+//   } catch (error) {
+//     console.error("❌ ERRO API VIDEO:", error);
+//     return NextResponse.json({ error: "Erro interno" }, { status: 500 });
+//   }
+// }
 
 
 // import prisma from "@/lib/prisma";

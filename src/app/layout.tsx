@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.scss";
+import Script from "next/script";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -37,11 +38,22 @@ export default function RootLayout({
 }>) {
   return (
     // <ClerkProvider>
-      <html lang="en">
-        <body className={inter.className}>
-          {children} <ToastContainer position="bottom-right" theme="dark" />
-        </body>
-      </html>
+    <html lang="en">
+      <body className={inter.className}>
+        {children} <ToastContainer position="bottom-right" theme="dark" />
+         {/* Video.js (OBRIGATÓRIO) */}
+        <Script
+          src="https://unpkg.com/video.js/dist/video.min.js"
+          strategy="beforeInteractive"
+        />
+
+        {/* Cloudinary Player */}
+        <Script
+          src="https://unpkg.com/cloudinary-video-player/dist/cld-video-player.min.js"
+          strategy="afterInteractive"
+        />
+      </body>
+    </html>
     // </ClerkProvider>
   );
 }

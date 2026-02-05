@@ -20,7 +20,7 @@ export default function VideoLessonsBlock({ title, lessons, role }: Props) {
         <h1 className="text-xl font-semibold">{title}</h1>
 
         <Link
-          href={`/${role}/video-lessons`}
+          href={`/${role}/video-lesson`}
           className="text-sm text-ethosPurple font-medium"
         >
           Ver todas →
@@ -46,7 +46,7 @@ export default function VideoLessonsBlock({ title, lessons, role }: Props) {
               </div>
 
               <Link
-                href={`/${role}/video-lessons/${lesson.id}`}
+                href={`/${role}/video-lesson/${lesson.id}`}
                 className="text-xs px-3 py-1 rounded-full bg-ethosSky"
               >
                 {role === "teacher" ? "Gerenciar" : "Assistir"}
