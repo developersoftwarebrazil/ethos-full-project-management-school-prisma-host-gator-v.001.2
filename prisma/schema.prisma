@@ -104,8 +104,8 @@ model Student {
 //   users        User[]
 // }
 model Teacher {
-  id     String @id @default(uuid())
-  userId String @unique
+  id     String @id 
+  // userId String @unique
 
   name        String
   surname     String
@@ -118,7 +118,7 @@ model Teacher {
   description String?
   createdAt   DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
 
   classes      Class[]
   lessons      Lesson[]

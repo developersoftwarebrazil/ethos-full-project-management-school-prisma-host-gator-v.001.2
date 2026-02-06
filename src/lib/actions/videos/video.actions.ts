@@ -13,7 +13,7 @@ export async function getTeacherVideoLesson(id: string) {
   // 🔎 buscar teacher real
   const teacher = await prisma.teacher.findUnique({
     where: {
-      userId: user.id,
+      id: user.id,
     },
   });
 
