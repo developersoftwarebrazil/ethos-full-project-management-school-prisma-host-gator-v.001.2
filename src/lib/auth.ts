@@ -5,6 +5,7 @@ import prisma from "@/lib/prisma";
 type LocalSession = {
   userId: string;
   role: string;
+  // username: string;
 };
 
 type AuthUser = {

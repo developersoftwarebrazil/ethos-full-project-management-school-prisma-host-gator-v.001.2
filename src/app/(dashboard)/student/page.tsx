@@ -42,7 +42,7 @@ const StudentPage = async () => {
    * - aulas da turma do aluno
    */
   const student = await prisma.student.findFirst({
-    where: { userId },
+    where: {id: userId },
     select: { classId: true },
   });
 

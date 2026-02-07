@@ -42,6 +42,7 @@ export async function loginAction(
     JSON.stringify({
       userId: user.id,
       role: user.role,
+      username: user.username,
     }),
     {
       httpOnly: true,

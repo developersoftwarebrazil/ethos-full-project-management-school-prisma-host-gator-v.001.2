@@ -9,14 +9,14 @@ export async function requireStudent() {
     throw new Error("Not authenticated");
   }
 
-  const { userId, role } = JSON.parse(session.value);
+  const { id, role } = JSON.parse(session.value);
 
   if (role !== "student") {
     throw new Error("Not a student");
   }
 
   const student = await prisma.student.findUnique({
-    where: { userId },
+    where: { id },
   });
 
   if (!student) {

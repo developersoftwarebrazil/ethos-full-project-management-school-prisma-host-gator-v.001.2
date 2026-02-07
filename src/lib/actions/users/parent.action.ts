@@ -87,11 +87,7 @@ export const createParent = async (
         surname: data.surname,
         phone: data.phone ?? "",
         address: data.address,
-
-        user: {
-          connect: { id: user.id },
-        },
-
+        
         students: {
           connect: data.student?.map((studentId: string) => ({
             id: studentId,
@@ -182,7 +178,7 @@ export const updateParent = async (
 
     // 👨‍👩‍👧 atualiza PARENT
     await prisma.parent.update({
-      where: { userId: data.id },
+      where: { id: data.id },
       data: {
         name: data.name,
         surname: data.surname,
@@ -236,7 +232,7 @@ export const deleteParent = async (
   try {
     await prisma.$transaction(async (tx) => {
       await tx.parent.delete({
-        where: { userId: id },
+        where: { id: id },
       });
 
       await tx.user.delete({

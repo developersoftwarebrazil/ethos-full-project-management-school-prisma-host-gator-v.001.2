@@ -10,15 +10,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Não autenticado" }, { status: 401 });
     }
 
-    const { id, role } = JSON.parse(session.value);
+    const { userId, role } = JSON.parse(session.value);
 
     if (role !== "teacher") {
       return NextResponse.json({ error: "Acesso negado" }, { status: 403 });
     }
 
     const teacher = await prisma.teacher.findUnique({
-      where: { id },
-    });
+      where: { id: userId },
+    });   
 
     if (!teacher) {
       return NextResponse.json(
@@ -43,7 +43,7 @@ export async function POST(req: Request) {
         teacherId: teacher.id,
 
         // 🔐 snapshot
-        authorId: id,
+        authorId: userId,
         authorName: teacher.name,
         authorRole: role,
       },
