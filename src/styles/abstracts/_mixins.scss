@@ -1,1 +1,23 @@
 // flex, glass, helpers
+@use "typography-tokens" as t;
+
+@mixin font-token($token) {
+  $cfg: map-get(t.$fonts, $token);
+
+  font-family: map-get($cfg, family);
+  font-weight: map-get($cfg, weight);
+  font-size: map-get($cfg, size);
+  line-height: map-get($cfg, line);
+
+  @if map-get($cfg, caps) {
+    text-transform: uppercase;
+  }
+
+  @if map-get($cfg, spacing) {
+    letter-spacing: map-get($cfg, spacing);
+  }
+
+  @if map-has-key($cfg, style) and map-get($cfg, style) == italic {
+    font-style: italic;
+  }
+}

@@ -1,0 +1,108 @@
+/* ================= FONT STACKS ================= */
+
+$font-stack-display: "Chathura", cursive;
+$font-stack-primary: "Roboto", sans-serif;
+$font-stack-secondary: "Open Sans", sans-serif;
+
+/* ================= FONT TOKENS ================= */
+
+$fonts: (
+  font-0-xxxl: (
+    family: $font-stack-display,
+    weight: 400,
+    size: 128px,
+    line: 132px,
+    caps: false,
+    spacing: 20px,
+  ),
+
+  font-0-xxl: (
+    family: $font-stack-display,
+    weight: 400,
+    size: 64px,
+    line: 72px,
+    caps: true,
+    spacing: 20px,
+  ),
+
+  font-1-xxl: (
+    family: $font-stack-primary,
+    weight: 600,
+    size: 64px,
+    line: 72px,
+    caps: false,
+    spacing: null,
+  ),
+
+  font-2-xxl: (
+    family: $font-stack-secondary,
+    weight: 600,
+    size: 64px,
+    line: 72px,
+    caps: false,
+    spacing: null,
+  ),
+
+  font-1-xl: (
+    family: $font-stack-primary,
+    weight: 400,
+    size: 32px,
+    line: 40px,
+    caps: false,
+    spacing: 1.5%,
+  ),
+
+  font-2-xl: (
+    family: $font-stack-secondary,
+    weight: 400,
+    size: 32px,
+    line: 40px,
+    caps: false,
+    spacing: 1.5%,
+  ),
+
+  font-1-l: (
+    family: $font-stack-primary,
+    weight: 400,
+    size: 24px,
+    line: 36px,
+    caps: false,
+    spacing: null,
+  ),
+
+  font-1-m: (
+    family: $font-stack-primary,
+    weight: 500,
+    size: 18px,
+    line: 24px,
+    caps: false,
+    spacing: null,
+  ),
+
+  font-1-s: (
+    family: $font-stack-primary,
+    weight: 400,
+    size: 16px,
+    line: 24px,
+    caps: false,
+    spacing: null,
+  ),
+
+  font-1-xs: (
+    family: $font-stack-primary,
+    weight: 400,
+    size: 14px,
+    line: 20px,
+    caps: false,
+    spacing: null,
+  ),
+
+  font-1-xxs: (
+    family: $font-stack-primary,
+    weight: 400,
+    size: 12px,
+    line: 18px,
+    caps: false,
+    spacing: null,
+  )
+);

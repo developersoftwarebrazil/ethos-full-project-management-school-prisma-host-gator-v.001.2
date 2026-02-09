@@ -1,6 +1,7 @@
+import "./globals.scss";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.scss";
 import Script from "next/script";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ToastContainer } from "react-toastify";

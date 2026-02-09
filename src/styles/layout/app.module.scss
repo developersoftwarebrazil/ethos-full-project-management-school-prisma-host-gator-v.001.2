@@ -1,0 +1,9 @@
+@use "@/styles/abstracts/variables" as v;
+
+#app-root {
+  min-height: 100vh;
+  display: flex;
+  background-color: v.$background;
+  color: v.$text;
+  font-family: var(--font-inter);
+}

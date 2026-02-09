@@ -1,1 +1,51 @@
-// cores, espaçamentos, z-index
+/* ================= COLORS ================= */
+
+/* Base Site Colors */
+$bl01: #97c7fc;
+$bl02: #8abce5;
+$bl03: #67a4e5;
+$bl04: #4796ca;
+$bl05: #5989b2;
+$bl06: #205080;
+$bl07: #0f3366;
+$bl08: #011f53;
+$bl09: #001138;
+$bl10: #000319;
+$bl11: #000003;
+
+/* Account Settings */
+$gr01: #2491b2;
+$gr02: #206980;
+$gr03: #0f5266;
+$gr04: #02261f;
+
+/* Backgrounds */
+$grl01: #fcffff;
+$grl02: #e5fbff;
+$grl03: #bff0ff;
+
+/* ================= SPACING ================= */
+
+$space-004: 0.25rem;
+$space-008: 0.5rem;
+$space-012: 0.75rem;
+$space-016: 1rem;
+$space-020: 1.25rem;
+$space-024: 1.5rem;
+$space-032: 2rem;
+$space-036: 2.25rem;
+$space-040: 2.5rem;
+$space-048: 3rem;
+$space-060: 3.75rem;
+$space-072: 4.5rem;
+$space-080: 5rem;
+$space-120: 7.5rem;
+$space-160: 10rem;
+$space-200: 12.5rem;
+$space-240: 15rem;
+
+/* ================= TEXT COLORS ================= */
+
+$text-primary: $bl09;
+$text-secondary: $bl06;
+$text-inverse: $grl01;
